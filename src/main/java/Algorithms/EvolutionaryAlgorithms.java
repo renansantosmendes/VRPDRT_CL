@@ -26,7 +26,6 @@ import static Algorithms.Algorithms.IteratedLocalSearch;
 import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
 import static Algorithms.Algorithms.generateInitialPopulation;
 import static Algorithms.Algorithms.generateInitialPopulation2;
-import static Algorithms.Algorithms.normalizeObjectiveFunctions;
 import static Algorithms.Algorithms.rebuildSolution;
 import static Algorithms.Algorithms.perturbation;
 import static Algorithms.Methods.printPopulation;
@@ -49,6 +48,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.normalizeObjectiveFunctionsForSolutions;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
 
 /**
  *
@@ -151,7 +158,7 @@ public class EvolutionaryAlgorithms {
         List<List<Solution>> nonDominatedFronts = new ArrayList<>();
         String folderName, fileName;
         LocalDateTime time = LocalDateTime.now();
-        folderName = "AlgorithmsResults_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "Algorithm_Normalization_Test" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -176,8 +183,8 @@ public class EvolutionaryAlgorithms {
 
                 //printPopulation(population);
                 //normalizeObjectiveFunctionsValues(population);
-                normalizeAggregatedObjectiveFunctions(population);
-                normalizeObjectiveFunctions(population);
+                //normalizeObjectiveFunctions(population);
+                normalizeObjectiveFunctionsForSolutions(population);
                 evaluateAggregatedObjectiveFunctionsNormalized(population);
 
                 dominanceAlgorithm(population, nonDominatedSolutions);
@@ -198,9 +205,12 @@ public class EvolutionaryAlgorithms {
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 //normalizeObjectiveFunctionsValues(fileWithSolutions);
-                normalizeAggregatedObjectiveFunctions(fileWithSolutions);
+                normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
+                evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
+                
+                normalizeObjectiveFunctionsForSolutions(offspring);
+                evaluateAggregatedObjectiveFunctionsNormalized(offspring);
                 //normalizeObjectiveFunctions(fileWithSolutions);
-                //evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 for (Solution s : fileWithSolutions) {
                     saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
@@ -230,8 +240,7 @@ public class EvolutionaryAlgorithms {
 
                     updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
-                    normalizeAggregatedObjectiveFunctions(fileWithSolutions);
-                    normalizeObjectiveFunctions(fileWithSolutions);
+                    normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
                     evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
                     //normalizeObjectiveFunctions(fileWithSolutions);
                     reducePopulation(population, nonDominatedFronts, maximumSize);
@@ -243,8 +252,10 @@ public class EvolutionaryAlgorithms {
                     mutation2Shuffle(offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
                     //normalizeObjectiveFunctionsValues(offspring);
                     normalizeAggregatedObjectiveFunctions(offspring);
-                    normalizeObjectiveFunctions(offspring);
+                    
+                    normalizeObjectiveFunctionsForSolutions(offspring);
                     evaluateAggregatedObjectiveFunctionsNormalized(offspring);
+                    
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
                     for (Solution s : fileWithSolutions) {
@@ -441,7 +452,7 @@ public class EvolutionaryAlgorithms {
         double minObjective1 = population.stream()
                 .mapToDouble(Solution::getAggregatedObjective1Normalized)
                 .min().getAsDouble();
-        
+
         double maxObjective2 = population.stream()
                 .mapToDouble(Solution::getAggregatedObjective2Normalized)
                 .max().getAsDouble();

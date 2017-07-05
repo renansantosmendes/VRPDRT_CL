@@ -53,8 +53,8 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 100;
-        Integer maximumNumberOfExecutions = 1;
+        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfExecutions = 5;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
 
@@ -75,7 +75,7 @@ public class VRPDRT {
                 timeWindows, currentTime, lastNode));
 //System.out.println(solution);
         //solution.getSetOfRoutes().forEach(route -> System.out.println(route.getRequestAttendanceList()));
-        solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+        //solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
         //solution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
 
@@ -87,10 +87,10 @@ public class VRPDRT {
         //individualSolution.getSetOfRoutes().forEach(System.out::println);
         //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-//        NSGAII(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
-//                timeWindows, currentTime, lastNode);
+        NSGAII(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
+                timeWindows, currentTime, lastNode);
 
         //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();
 //        InstanceData data = new InstanceData(instanceName, nodesData, adjacenciesData);
