@@ -181,11 +181,12 @@ public class EvolutionaryAlgorithms {
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
-                //printPopulation(population);
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
                 normalizeObjectiveFunctionsForSolutions(population);
                 evaluateAggregatedObjectiveFunctionsNormalized(population);
+
+                //printPopulation(population);
 
                 dominanceAlgorithm(population, nonDominatedSolutions);
                 maximumSize = population.size();
@@ -207,7 +208,7 @@ public class EvolutionaryAlgorithms {
                 //normalizeObjectiveFunctionsValues(fileWithSolutions);
                 normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
                 evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
-                
+
                 normalizeObjectiveFunctionsForSolutions(offspring);
                 evaluateAggregatedObjectiveFunctionsNormalized(offspring);
                 //normalizeObjectiveFunctions(fileWithSolutions);
@@ -252,10 +253,10 @@ public class EvolutionaryAlgorithms {
                     mutation2Shuffle(offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
                     //normalizeObjectiveFunctionsValues(offspring);
                     normalizeAggregatedObjectiveFunctions(offspring);
-                    
+
                     normalizeObjectiveFunctionsForSolutions(offspring);
                     evaluateAggregatedObjectiveFunctionsNormalized(offspring);
-                    
+
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
                     for (Solution s : fileWithSolutions) {
@@ -282,13 +283,37 @@ public class EvolutionaryAlgorithms {
             }
 
             new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            System.out.println("S-Metric = " + hypervolume(finalPareto));
+            System.out.println("Final Pareto");
+            finalPareto.forEach(u -> System.out.println(u.getAggregatedObjective1() + "\t" + u.getAggregatedObjective2()));
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
 //                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return finalPareto;
+    }
 
+    public static double hypervolume(List<Solution> solutions) {
+        solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
+        //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
+
+        double x_nadir = 1;
+        double y_nadir = 1;
+
+        List<Double> volumes = new ArrayList<>();
+
+        for (int i = 0; i < solutions.size(); i++) {
+            if(i == 0){
+                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
+                        *(y_nadir - solutions.get(i).getAggregatedObjective2()));
+            }else{
+                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
+                        *(solutions.get(i - 1).getAggregatedObjective2() - solutions.get(i).getAggregatedObjective2()));
+            }
+        }
+        
+        return volumes.stream().mapToDouble(Double::valueOf).sum();
     }
 
     public static void SPEA2(List<Solution> Pop, List<Solution> Q, Integer TamPop, Integer TamArq, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
