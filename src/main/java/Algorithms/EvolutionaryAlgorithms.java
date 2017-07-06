@@ -24,7 +24,7 @@ import static Algorithms.Algorithms.*;
  */
 public class EvolutionaryAlgorithms {
 
-    public static void MOGA(List<Solution> Pop, Integer TamPop, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
+    public static void MOGA(List<Double> parameters, List<Solution> Pop, Integer TamPop, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m,
             List<List<Long>> d, List<List<Long>> c, Long TimeWindows, Long currentTime, Integer lastNode) {
         String diretorio, nomeArquivo;
@@ -57,7 +57,7 @@ public class EvolutionaryAlgorithms {
                 initializePopulation(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
                 for (int i = 0; i < TamPop; i++) {
                     Solution s = new Solution();
-                    s.setSolution(vizinhoAleatorio(Pop.get(i), i, i + 1, 1, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                    s.setSolution(vizinhoAleatorio(parameters, Pop.get(i), i, i + 1, 1, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
                     Pop.get(i).setSolution(s);
                 }
 
@@ -75,7 +75,7 @@ public class EvolutionaryAlgorithms {
                 while (GerAtual < MaxGer) {
                     updateSolutionsFile(Pop, arquivo, TamMax);
                     populationSorting(Pop);
-                    mutation2Shuffle(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
+                    mutation2Shuffle(parameters, Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
                     dominanceAlgorithm(Pop, naoDominados);
                     updateSolutionsFile(Pop, arquivo, TamMax);
                     fitnessEvaluationForMultiObjectiveOptimization(Pop);
@@ -101,7 +101,7 @@ public class EvolutionaryAlgorithms {
 
     }
 
-    public static List<Solution> NSGAII(Integer populationSize, Integer maximumNumberOfGenerations,
+    public static double NSGAII(List<Double> parameters, Integer populationSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
             List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
             Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
@@ -117,9 +117,9 @@ public class EvolutionaryAlgorithms {
         List<Integer> parents = new ArrayList<>();
         List<Solution> parentsAndOffspring = new ArrayList();
         List<List<Solution>> nonDominatedFronts = new ArrayList<>();
-        double hypervolume;
+        double hypervolume = 0;
         String folderName, fileName;
-        
+
         LocalDateTime time = LocalDateTime.now();
         folderName = "Algorithm_Normalization_Test" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
@@ -147,10 +147,9 @@ public class EvolutionaryAlgorithms {
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
                 normalizeObjectiveFunctionsForSolutions(population);
-                evaluateAggregatedObjectiveFunctionsNormalized(population);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters,population);
 
                 //printPopulation(population);
-
                 dominanceAlgorithm(population, nonDominatedSolutions);
                 maximumSize = population.size();
                 offspring.addAll(population);
@@ -159,21 +158,21 @@ public class EvolutionaryAlgorithms {
 
                 rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
 
-                twoPointsCrossover(offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests,
+                twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests,
                         requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode,
                         requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes,
                         vehicleCapacity, timeWindows);
 
-                mutation2Shuffle(offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode,
+                mutation2Shuffle(parameters, offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode,
                         requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 //normalizeObjectiveFunctionsValues(fileWithSolutions);
                 normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters,fileWithSolutions);
 
                 normalizeObjectiveFunctionsForSolutions(offspring);
-                evaluateAggregatedObjectiveFunctionsNormalized(offspring);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters,offspring);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 for (Solution s : fileWithSolutions) {
@@ -205,20 +204,21 @@ public class EvolutionaryAlgorithms {
                     updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
                     normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                    evaluateAggregatedObjectiveFunctionsNormalized(fileWithSolutions);
+                    evaluateAggregatedObjectiveFunctionsNormalized(parameters,fileWithSolutions);
                     //normalizeObjectiveFunctions(fileWithSolutions);
                     reducePopulation(population, nonDominatedFronts, maximumSize);
                     offspring.clear();
 
                     offspring.addAll(population);
                     rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
-                    twoPointsCrossover(offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests, requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes, vehicleCapacity, timeWindows);
-                    mutation2Shuffle(offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+
+                    twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests, requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes, vehicleCapacity, timeWindows);
+                    mutation2Shuffle(parameters, offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
                     //normalizeObjectiveFunctionsValues(offspring);
                     normalizeAggregatedObjectiveFunctions(offspring);
 
                     normalizeObjectiveFunctionsForSolutions(offspring);
-                    evaluateAggregatedObjectiveFunctionsNormalized(offspring);
+                    evaluateAggregatedObjectiveFunctionsNormalized(parameters,offspring);
 
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
@@ -245,7 +245,7 @@ public class EvolutionaryAlgorithms {
                 printStreamForCombinedPareto.print(individual + "\n");
             }
 
-            new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            //new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
             hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
             System.out.println("Final Pareto");
@@ -255,13 +255,9 @@ public class EvolutionaryAlgorithms {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return finalPareto;
+        return hypervolume;
     }
 
-    
-    
-    
-    
     public static double smetric(List<Solution> solutions) {
         solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
         //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
@@ -272,19 +268,19 @@ public class EvolutionaryAlgorithms {
         List<Double> volumes = new ArrayList<>();
 
         for (int i = 0; i < solutions.size(); i++) {
-            if(i == 0){
+            if (i == 0) {
                 volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
-                        *(y_nadir - solutions.get(i).getAggregatedObjective2()));
-            }else{
+                        * (y_nadir - solutions.get(i).getAggregatedObjective2()));
+            } else {
                 volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
-                        *(solutions.get(i - 1).getAggregatedObjective2() - solutions.get(i).getAggregatedObjective2()));
+                        * (solutions.get(i - 1).getAggregatedObjective2() - solutions.get(i).getAggregatedObjective2()));
             }
         }
-        
+
         return volumes.stream().mapToDouble(Double::valueOf).sum();
     }
 
-    public static void SPEA2(List<Solution> Pop, List<Solution> Q, Integer TamPop, Integer TamArq, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
+    public static void SPEA2(List<Double> parameters, List<Solution> Pop, List<Solution> Q, Integer TamPop, Integer TamArq, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m,
             List<List<Long>> d, List<List<Long>> c, Long TimeWindows, Long currentTime, Integer lastNode) {
 
@@ -337,11 +333,11 @@ public class EvolutionaryAlgorithms {
                     //System.out.println("Pais = " + pais);
                     //A população P(t + 1) é gerada com base em A(t + 1)
                     //System.out.println(arquivo.size());
-                    onePointCrossover(Pop, arquivo, TamMax, Pc, pais, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
+                    onePointCrossover(parameters, Pop, arquivo, TamMax, Pc, pais, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
                     //Cruzamento2Pontos(Pop, arquivo, TamMax, Pc, pais, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
                     //System.out.println(arquivo.size());
                     //Mutacao(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-                    mutation2Opt(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
+                    mutation2Opt(parameters, Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
                     //MutacaoShuffle(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
                     //Mutacao2Shuffle(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
 
@@ -1600,7 +1596,7 @@ public class EvolutionaryAlgorithms {
         }
     }
 
-    public static Solution MOVND(Solution s_0, List<Request> listRequests, List<Request> P, Set<Integer> K, List<Request> U,
+    public static Solution MOVND(List<Double> parameters, Solution s_0, List<Request> listRequests, List<Request> P, Set<Integer> K, List<Request> U,
             Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout, List<List<Long>> d, List<List<Long>> c,
             Integer n, Integer Qmax, Long TimeWindows) {
 
@@ -1616,7 +1612,7 @@ public class EvolutionaryAlgorithms {
 
         while (k <= r) {
             System.out.println("k = " + k);
-            s.setSolution(firstImprovementInMultiObjectiveOptimization(s_0, k, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+            s.setSolution(firstImprovementInMultiObjectiveOptimization(parameters, s_0, k, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
             //System.out.println(s);
             //s.setSolution(bestImprovementInMultiObjectiveOptimization(s_0,k,listRequests,P,K,U,Pin,Pout, d, c, n, Qmax,TimeWindows));
             if (((s.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (s.getAggregatedObjective2() < melhor.getAggregatedObjective2())) || ((s.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (s.getAggregatedObjective2() == melhor.getAggregatedObjective2()))
@@ -1631,7 +1627,7 @@ public class EvolutionaryAlgorithms {
         return melhor;
     }
 
-    public static void buscaLocal(List<Solution> arquivo, List<Request> listRequests, List<Request> P, Set<Integer> K,
+    public static void buscaLocal(List<Double> parameters, List<Solution> arquivo, List<Request> listRequests, List<Request> P, Set<Integer> K,
             List<Request> U, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout, List<List<Long>> d,
             List<List<Long>> c, Integer n, Integer Qmax, Long TimeWindows) {
         Random rnd = new Random();
@@ -1650,13 +1646,13 @@ public class EvolutionaryAlgorithms {
 //            arquivo.get(posicao).setSolution(s);
             int posicao = rnd.nextInt(naoDominados.size());
             System.out.println(posicao);
-            Solution s = new Solution(MOVND(naoDominados.get(posicao), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+            Solution s = new Solution(MOVND(parameters, naoDominados.get(posicao), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
             arquivo.add(s);
         }
 
     }
 
-    public static Solution MOILS(Solution s_0, List<Request> listRequests, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
+    public static Solution MOILS(List<Double> parameters, Solution s_0, List<Request> listRequests, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
             Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m, List<List<Long>> d,
             List<List<Long>> c, Long TimeWindows) {
         //Solução inicial já é gerada pelo GA
@@ -1667,7 +1663,7 @@ public class EvolutionaryAlgorithms {
         int MAXITER = 20;
 
         //BuscaLocal
-        s.setSolution(MOVND(s_0, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+        s.setSolution(MOVND(parameters, s_0, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
         //s.setSolution(firstImprovementAlgorithm(s_0,2,listRequests,P,K,U,Pin,Pout, d, c, n, Qmax,TimeWindows));
         int cont = 0;
         while (cont < MAXITER) {
@@ -1676,11 +1672,11 @@ public class EvolutionaryAlgorithms {
             System.out.println("Interação MOILS = " + cont);
 
             //Perturbação
-            s_linha.setSolution(perturbation(s, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
+            s_linha.setSolution(perturbation(parameters, s, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
             //System.out.println("Apos perturbação s'= " + s_linha);
 
             //BuscaLocal
-            s_2linha.setSolution(MOVND(s_linha, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+            s_2linha.setSolution(MOVND(parameters, s_linha, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
             //s_2linha.setSolution(firstImprovementAlgorithm(s_0,2,listRequests,P,K,U,Pin,Pout, d, c, n, Qmax,TimeWindows));
             //System.out.println("Apos busca local s'' = " + s_2linha);
             //CriterioAceitacao
@@ -1711,7 +1707,7 @@ public class EvolutionaryAlgorithms {
         return s_0;
     }
 
-    public static Solution firstImprovementInMultiObjectiveOptimization(Solution s, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
+    public static Solution firstImprovementInMultiObjectiveOptimization(List<Double> parameters, Solution s, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
             List<Request> U, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
             List<List<Long>> d, List<List<Long>> c, Integer n, Integer Qmax, Long TimeWindows) {
         Solution melhor = new Solution(s);
@@ -1738,7 +1734,7 @@ public class EvolutionaryAlgorithms {
                         if (vizinho.get(i) != vizinho.get(j)) {
                             Collections.swap(vizinho, i, j);
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI TROCA-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1760,7 +1756,7 @@ public class EvolutionaryAlgorithms {
                         if (vizinho.get(i) != j) {
                             vizinho.set(i, j);
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI INSERCAO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1783,7 +1779,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.remove(i);
                             vizinho.add(j, original.get(i));
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1852,7 +1848,7 @@ public class EvolutionaryAlgorithms {
                         vizinho.add(posicao2, original.get(posicao1));
                     }
 
-                    aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                    aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                     if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                         //System.out.println("ACHEI ALEATORIA-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1879,7 +1875,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.addAll(contador, nosRetirados);
                             contador++;
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1906,7 +1902,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.addAll(contador, nosRetirados);
                             contador++;
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1924,7 +1920,7 @@ public class EvolutionaryAlgorithms {
         return melhor;
     }
 
-    public static Solution bestImprovementInMultiObjectiveOptimization(Solution s, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
+    public static Solution bestImprovementInMultiObjectiveOptimization(List<Double> parameters, Solution s, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
             List<Request> U, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
             List<List<Long>> d, List<List<Long>> c, Integer n, Integer Qmax, Long TimeWindows) {
         Solution melhor = new Solution(s);
@@ -1951,7 +1947,7 @@ public class EvolutionaryAlgorithms {
                         if (vizinho.get(i) != vizinho.get(j)) {
                             Collections.swap(vizinho, i, j);
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI TROCA-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1973,7 +1969,7 @@ public class EvolutionaryAlgorithms {
                         if (vizinho.get(i) != j) {
                             vizinho.set(i, j);
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI INSERCAO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -1996,7 +1992,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.remove(i);
                             vizinho.add(j, original.get(i));
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -2065,7 +2061,7 @@ public class EvolutionaryAlgorithms {
                         vizinho.add(posicao2, original.get(posicao1));
                     }
 
-                    aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                    aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                     if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                         //System.out.println("ACHEI ALEATORIA-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -2091,7 +2087,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.addAll(contador, nosRetirados);
                             contador++;
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());
@@ -2117,7 +2113,7 @@ public class EvolutionaryAlgorithms {
                             vizinho.addAll(contador, nosRetirados);
                             contador++;
 
-                            aux.setSolution(rebuildSolution(new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                            aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                             if ((aux.getAggregatedObjective1() < melhor.getAggregatedObjective1()) && (aux.getAggregatedObjective2() < melhor.getAggregatedObjective2())) {
                                 //System.out.println("ACHEI MOVIMENTO-> "+aux.getfObjetivo()+" "+ aux.getNonAttendedRequestsList().size());

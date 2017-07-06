@@ -37,7 +37,7 @@ public class SolutionGeneratorForAggregationTree {
     private int numberOfSolutionsPerInstance;
     private int idealNumberOfSolutions = 10000;
 
-    public void generateSolutionsForAggregationTree() throws FileNotFoundException {
+    public void generateSolutionsForAggregationTree(List<Double> parameters) throws FileNotFoundException {
         this.numberOfInstances = this.vehicleCapacities.length * this.nodesDistance.length
                 * this.numberOfRequests.length * this.timeWindows.length;
         this.numberOfSolutionsPerInstance = 10000 / this.numberOfInstances + 1;
@@ -63,7 +63,7 @@ public class SolutionGeneratorForAggregationTree {
 
                         System.out.println("Instance configuration = " + requestsInstance + "-" + vehicleCapacityForInstance
                                 + "-" + nodesInstance + "-" + adjacenciesInstance);
-                        generateSolution(requestsInstance, vehicleCapacityForInstance, nodesInstance, adjacenciesInstance,
+                        generateSolution(parameters, requestsInstance, vehicleCapacityForInstance, nodesInstance, adjacenciesInstance,
                                 printStreamForObjectives, printStreamForSolutions);
 
                     }
@@ -72,7 +72,7 @@ public class SolutionGeneratorForAggregationTree {
         }
     }
 
-    private void generateSolution(String requestsInstance, int vehicleCapacityForInstance, String nodesInstance,
+    private void generateSolution(List<Double> parameters, String requestsInstance, int vehicleCapacityForInstance, String nodesInstance,
             String adjacenciesInstance, PrintStream printStreamForObjectives, PrintStream printStreamForSolutions)
             throws FileNotFoundException {
         final Long timeWindows = (long) 3;
@@ -112,7 +112,7 @@ public class SolutionGeneratorForAggregationTree {
         Solution solution1 = new Solution();
 
         for (int i = 0; i < numberOfSolutionsPerInstance; i++) {//numberOfSolutionsPerInstance
-            solution1.setSolution(perturbation(solution, listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode,
+            solution1.setSolution(perturbation(parameters, solution, listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode,
                     numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes,
                     distanceBetweenNodes, timeWindows));
             //System.out.println(solution1);
