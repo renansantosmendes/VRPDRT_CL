@@ -5,57 +5,18 @@
  */
 package Algorithms;
 
-import static Algorithms.Algorithms.RVND;
-import static Algorithms.Algorithms.geraPesos;
-import static Algorithms.Methods.Fitness;
-import static Algorithms.Methods.vizinhoAleatorio;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import ProblemRepresentation.Request;
-import ProblemRepresentation.Solution;
-import static Algorithms.Algorithms.IteratedLocalSearch;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.generateInitialPopulation;
-import static Algorithms.Algorithms.generateInitialPopulation2;
-import static Algorithms.Algorithms.rebuildSolution;
-import static Algorithms.Algorithms.perturbation;
-import static Algorithms.Methods.printPopulation;
-import static Algorithms.Methods.rouletteWheelSelectionAlgorithm;
-import static Algorithms.Methods.populationSorting;
-import static Algorithms.Methods.onePointCrossover;
-import static Algorithms.Methods.twoPointsCrossover;
-import static Algorithms.Methods.copyBestSolution;
-import static Algorithms.Methods.insertBestIndividualInPopulation;
-import static Algorithms.Methods.firstImprovementAlgorithm;
-import static Algorithms.Methods.bestImprovementAlgorithm;
-import static Algorithms.Methods.mutation2Shuffle;
-import static Algorithms.Methods.mutation2Opt;
-import static Algorithms.Methods.mutacaoShuffle;
-import static Algorithms.Methods.mutationSwap;
-import static Algorithms.Methods.inicializePopulation;
+import static Algorithms.Algorithms.*;
+import static Algorithms.Methods.*;
+import java.io.*;
+import java.util.*;
+import ProblemRepresentation.*;
+import static Algorithms.Algorithms.*;
+import static Algorithms.Methods.*;
 import AlgorithmsResults.ResultsGraphicsForMultiObjectiveOptimization;
-import InstanceReaderWithMySQL.NodeDAO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.stream.Collectors;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.normalizeObjectiveFunctionsForSolutions;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctionsNormalized;
+import static Algorithms.Algorithms.*;
 
 /**
  *
@@ -156,7 +117,9 @@ public class EvolutionaryAlgorithms {
         List<Integer> parents = new ArrayList<>();
         List<Solution> parentsAndOffspring = new ArrayList();
         List<List<Solution>> nonDominatedFronts = new ArrayList<>();
+        double hypervolume;
         String folderName, fileName;
+        
         LocalDateTime time = LocalDateTime.now();
         folderName = "Algorithm_Normalization_Test" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
@@ -283,7 +246,8 @@ public class EvolutionaryAlgorithms {
             }
 
             new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
-            System.out.println("S-Metric = " + hypervolume(finalPareto));
+            hypervolume = smetric(finalPareto);
+            System.out.println("S-Metric = " + hypervolume);
             System.out.println("Final Pareto");
             finalPareto.forEach(u -> System.out.println(u.getAggregatedObjective1() + "\t" + u.getAggregatedObjective2()));
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
@@ -294,7 +258,11 @@ public class EvolutionaryAlgorithms {
         return finalPareto;
     }
 
-    public static double hypervolume(List<Solution> solutions) {
+    
+    
+    
+    
+    public static double smetric(List<Solution> solutions) {
         solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
         //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
 

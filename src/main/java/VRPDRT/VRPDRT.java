@@ -53,7 +53,7 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfGenerations = 20;
         Integer maximumNumberOfExecutions = 5;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
@@ -87,6 +87,7 @@ public class VRPDRT {
         //individualSolution.getSetOfRoutes().forEach(System.out::println);
         //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+        
         NSGAII(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
