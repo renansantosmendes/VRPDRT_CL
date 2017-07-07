@@ -17,6 +17,7 @@ import java.io.IOException;
 import Algorithms.*;
 import static Algorithms.AlgorithmsCalibration.NSGAII_Calibration;
 import static Algorithms.AlgorithmsCalibration.generateLambdas;
+import static Algorithms.AlgorithmsCalibration.vnd;
 import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.NSGAII;
@@ -88,11 +89,11 @@ public class VRPDRT {
         //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         List<Double> parameters = new ArrayList<>();
-//        parameters.add(0.15);
-//        parameters.add(0.05);
-//        parameters.add(0.30);
-//        parameters.add(0.10);
-//        parameters.add(0.40);
+        parameters.add(0.20);
+        parameters.add(0.20);
+        parameters.add(0.20);
+        parameters.add(0.20);
+        parameters.add(0.20);
 //        
 //        NSGAII(parameters,populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
 //                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
@@ -112,7 +113,11 @@ public class VRPDRT {
 //        new Controller(mainScreen);
 //        mainScreen.setVisible(true);
 //        mainScreen.configureMainScreen();
-        NSGAII_Calibration(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+//        NSGAII_Calibration(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+//                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+//                timeWindows, currentTime, lastNode);
+        vnd(parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);
