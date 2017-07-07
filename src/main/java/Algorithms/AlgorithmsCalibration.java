@@ -85,9 +85,9 @@ public class AlgorithmsCalibration {
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);
         int k = 1;
-        int r = 3;
+        int r = 4;
         double newHypervolume;
-        while (k < r) {
+        while (k <= r) {
             //encontrar melhor vizinho s' em N_k(s)
             //se f(s') > f(s) -> s = s' e k = 1
             //entao -> k++
@@ -139,6 +139,13 @@ public class AlgorithmsCalibration {
                 break;
             case 3:
                 delta = 0.03;
+                hypervolume = addVariation(delta, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                        listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                        listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+                        timeWindows, currentTime, lastNode);
+                break;
+            case 4:
+                delta = 0.1;
                 hypervolume = addVariation(delta, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                         listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                         listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
