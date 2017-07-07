@@ -17,6 +17,7 @@ import java.io.IOException;
 import Algorithms.*;
 import static Algorithms.AlgorithmsCalibration.NSGAII_Calibration;
 import static Algorithms.AlgorithmsCalibration.generateLambdas;
+import static Algorithms.AlgorithmsCalibration.ils;
 import static Algorithms.AlgorithmsCalibration.vnd;
 import Controller.Controller;
 import View.MainScreen;
@@ -37,8 +38,8 @@ public class VRPDRT {
     static Set<Integer> Pmenos = new HashSet<>();
     static Set<Integer> setOfNodes = new HashSet<>();
     static int numberOfNodes;
-    static Map<Integer, List<Request>> requestsWichBoardsInNode = new HashMap<>();
-    static Map<Integer, List<Request>> requestsWichLeavesInNode = new HashMap<>();
+    static Map<Integer, List<Request>> requestsWhichBoardsInNode = new HashMap<>();
+    static Map<Integer, List<Request>> requestsWhichLeavesInNode = new HashMap<>();
     static List<Integer> loadIndexList = new LinkedList<>();
     static Set<Integer> setOfVehicles = new HashSet<>();
     static List<Request> listOfNonAttendedRequests = new ArrayList<>();
@@ -64,7 +65,7 @@ public class VRPDRT {
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
         numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, listOfRequests, distanceBetweenNodes,
-                timeBetweenNodes, Pmais, Pmenos, requestsWichBoardsInNode, requestsWichLeavesInNode, setOfNodes,
+                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
                 numberOfNodes, loadIndexList);
 
         Algorithms.printProblemInformations(listOfRequests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
@@ -72,7 +73,7 @@ public class VRPDRT {
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
         Solution solution = new Solution(Algorithms.greedyConstructive(0.20, 0.15, 0.55, 0.10, listOfRequests.subList(0, 10),
-                requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode));
 //System.out.println(solution);
@@ -117,10 +118,8 @@ public class VRPDRT {
 //                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
 //                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
 //                timeWindows, currentTime, lastNode);
-        vnd(parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-                timeWindows, currentTime, lastNode);
+        ils(listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, setOfVehicles, listOfNonAttendedRequests,
+                requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
     }
 
 }
