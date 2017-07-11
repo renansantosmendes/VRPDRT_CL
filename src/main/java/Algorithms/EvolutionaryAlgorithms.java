@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import static Algorithms.Algorithms.*;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -147,7 +148,7 @@ public class EvolutionaryAlgorithms {
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
                 normalizeObjectiveFunctionsForSolutions(population);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters,population);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters, population);
 
                 //printPopulation(population);
                 dominanceAlgorithm(population, nonDominatedSolutions);
@@ -169,10 +170,10 @@ public class EvolutionaryAlgorithms {
 
                 //normalizeObjectiveFunctionsValues(fileWithSolutions);
                 normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters,fileWithSolutions);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters, fileWithSolutions);
 
                 normalizeObjectiveFunctionsForSolutions(offspring);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters,offspring);
+                evaluateAggregatedObjectiveFunctionsNormalized(parameters, offspring);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 for (Solution s : fileWithSolutions) {
@@ -204,7 +205,7 @@ public class EvolutionaryAlgorithms {
                     updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
                     normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                    evaluateAggregatedObjectiveFunctionsNormalized(parameters,fileWithSolutions);
+                    evaluateAggregatedObjectiveFunctionsNormalized(parameters, fileWithSolutions);
                     //normalizeObjectiveFunctions(fileWithSolutions);
                     reducePopulation(population, nonDominatedFronts, maximumSize);
                     offspring.clear();
@@ -218,7 +219,7 @@ public class EvolutionaryAlgorithms {
                     normalizeAggregatedObjectiveFunctions(offspring);
 
                     normalizeObjectiveFunctionsForSolutions(offspring);
-                    evaluateAggregatedObjectiveFunctionsNormalized(parameters,offspring);
+                    evaluateAggregatedObjectiveFunctionsNormalized(parameters, offspring);
 
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
@@ -249,7 +250,11 @@ public class EvolutionaryAlgorithms {
             hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
             System.out.println("Final Pareto");
-            finalPareto.forEach(u -> System.out.println(u.getAggregatedObjective1() + "\t" + u.getAggregatedObjective2()));
+            DecimalFormat formatator = new DecimalFormat("0.0000");
+            finalPareto.forEach(u -> System.out.println(
+                    formatator.format(u.getAggregatedObjective1()).replace(",", ".")
+                    + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
+            );
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
 //                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");
         } catch (FileNotFoundException e) {

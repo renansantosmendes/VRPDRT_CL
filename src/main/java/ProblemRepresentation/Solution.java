@@ -594,14 +594,14 @@ public class Solution implements Comparable<Solution> {
 
     @Override
     public String toString() {
-        DecimalFormat df = new DecimalFormat("0.000");
+        DecimalFormat df = new DecimalFormat("0.0000");
 
 //        String s = df.format(aggregatedObjective1) + "\t" + df.format(aggregatedObjective2) + "\t" +/*aggregatedObjective1Normalized + "\t"+ 
 //                aggregatedObjective2Normalized + "\t"+*/ totalDistance + "\t" + totalDeliveryDelay
 //                + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t" + numberOfVehicles
 //                + "\t" + totalTravelTime + "\t" + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t"
 //                + "\t" + df.format(totalOccupationRate) + "\t";
-        String s = df.format(aggregatedObjective1) + "\t" + df.format(aggregatedObjective2) + "\t" + totalDistance + "\t" 
+        String s = df.format(aggregatedObjective1).replace(",", ".") + "\t" + df.format(aggregatedObjective2).replace(",", ".") + "\t" + totalDistance + "\t" 
                 + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t" 
                 + numberOfVehicles + "\t";
 

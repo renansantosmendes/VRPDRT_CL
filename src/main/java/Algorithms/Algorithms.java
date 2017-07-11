@@ -239,9 +239,9 @@ public class Algorithms {
     }
 
     public static void normalizeObjectiveFunctionsForSolution(Solution solution) {
-        solution.normalizeTotalDistance(0, 10000000);
-        solution.normalizeTotalDeliveryDelay(0, 10000);
-        solution.normalizeTotalRouteTimeChargeBanlance(0, 1000);
+        solution.normalizeTotalDistance(70000, 300000);
+        solution.normalizeTotalDeliveryDelay(0, 1000);
+        solution.normalizeTotalRouteTimeChargeBanlance(0, 500);
         solution.normalizeNumberOfNonAttendedRequests(0, 50);
         solution.normalizeNumberOfVehicles(0, 50);
         solution.normalizeTotalTravelTime(0, 10000);
