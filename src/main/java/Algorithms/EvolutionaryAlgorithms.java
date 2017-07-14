@@ -102,7 +102,7 @@ public class EvolutionaryAlgorithms {
 
     }
 
-    public static double NSGAII(List<Double> parameters, Integer populationSize, Integer maximumNumberOfGenerations,
+    public static double NSGAII(String instanceName, List<Double> parameters, Integer populationSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
             List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
             Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
@@ -122,7 +122,7 @@ public class EvolutionaryAlgorithms {
         String folderName, fileName;
 
         LocalDateTime time = LocalDateTime.now();
-        folderName = "Algorithm_Normalization_Test" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//5FO//NSGA-II//"+instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -246,7 +246,7 @@ public class EvolutionaryAlgorithms {
                 printStreamForCombinedPareto.print(individual + "\n");
             }
 
-            //new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
             hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
             System.out.println("Final Pareto");

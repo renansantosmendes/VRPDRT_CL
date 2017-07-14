@@ -89,17 +89,17 @@ public class VRPDRT {
         //individualSolution.getSetOfRoutes().forEach(System.out::println);
         //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-        List<Double> parameters = new ArrayList<>();
-        parameters.add(0.20);
-        parameters.add(0.20);
-        parameters.add(0.20);
-        parameters.add(0.20);
-        parameters.add(0.20);
-//        
-//        NSGAII(parameters,populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
-//                timeWindows, currentTime, lastNode);
+        List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739
+        parameters.add(0.0273);
+        parameters.add(0.5208);
+        parameters.add(0.0161);
+        parameters.add(0.3619);
+        parameters.add(0.0739);
+        
+        NSGAII(instanceName, parameters,populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
+                timeWindows, currentTime, lastNode);
 
         //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();
 //        InstanceData data = new InstanceData(instanceName, nodesData, adjacenciesData);
@@ -115,11 +115,11 @@ public class VRPDRT {
 //        mainScreen.setVisible(true);
 //        mainScreen.configureMainScreen();
 //        NSGAII_Calibration(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                listOfRequests, requestsWichBoardsInNode, requestsWichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
 //                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
 //                timeWindows, currentTime, lastNode);
-        ils(listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, setOfVehicles, listOfNonAttendedRequests,
-                requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+//        ils(listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, setOfVehicles, listOfNonAttendedRequests,
+//                requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
     }
 
 }
