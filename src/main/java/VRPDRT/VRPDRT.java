@@ -51,13 +51,13 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        String instanceName = "r050n12tw05";
+        String instanceName = "r100n12tw05";
         String nodesData = "bh_n12s";
         String adjacenciesData = "bh_adj_n12s";
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 3;
+        Integer maximumNumberOfGenerations = 20;
         Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;

@@ -229,7 +229,7 @@ public class Algorithms {
             solution.normalizeTotalDistance(0, 10000000);
             solution.normalizeTotalDeliveryDelay(0, 10000);
             solution.normalizeTotalRouteTimeChargeBanlance(0, 1000);
-            solution.normalizeNumberOfNonAttendedRequests(0, 50);
+            solution.normalizeNumberOfNonAttendedRequests(0, 100);
             solution.normalizeNumberOfVehicles(0, 50);
             solution.normalizeTotalTravelTime(0, 10000);
             solution.normalizeTotalWaintingTime(0, 10000);
