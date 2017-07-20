@@ -20,6 +20,12 @@ import java.util.*;
  * @author renansantos
  */
 public class AlgorithmsCalibration {
+    private static List<Double> nadirPoint = new ArrayList<>();
+    
+    public AlgorithmsCalibration(){
+        nadirPoint.add(1000000.0);
+        nadirPoint.add(1000000.0);
+    }
 
     public static void NSGAII_Calibration(String instanceName, Integer populationSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
@@ -38,7 +44,7 @@ public class AlgorithmsCalibration {
             parameters.addAll(new ArrayList<>(generateLambdas()));
 
             //executing the NSGA-II algorithm
-            hypervolume = NSGAII(instanceName, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+            hypervolume = NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                     listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                     listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                     timeWindows, currentTime, lastNode);
@@ -80,7 +86,7 @@ public class AlgorithmsCalibration {
             List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
             Long timeWindows, Long currentTime, Integer lastNode) throws IOException {
 
-        double oldHypervolume = NSGAII(instanceName, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+        double oldHypervolume = NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);
@@ -220,12 +226,12 @@ public class AlgorithmsCalibration {
                     newParameters.set(j, y);
                 }
 
-                oldHypervolume = NSGAII(instanceName, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                oldHypervolume = NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                         listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                         listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                         timeWindows, currentTime, lastNode);
 
-                newHypervolume = NSGAII(instanceName, newParameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                newHypervolume = NSGAII(instanceName, newParameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                         listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                         listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                         timeWindows, currentTime, lastNode);
@@ -270,7 +276,7 @@ public class AlgorithmsCalibration {
             parameters.set(i, x);
             parameters.set(j, y);
         }
-        double hypervolume = NSGAII(instanceName, parameters, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+        double hypervolume = NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);

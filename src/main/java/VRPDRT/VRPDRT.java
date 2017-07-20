@@ -51,16 +51,23 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        String instanceName = "r100n12tw05";
-        String nodesData = "bh_n12s";
-        String adjacenciesData = "bh_adj_n12s";
+        int numberOfRequests = 50;
+        int numberOfNodes = 12;
+        int requestTimeWindows = 10;
+        String instanceSize = "s";
+        String instanceName = "r050n12tw05";
+        String nodesData = "bh_n" + numberOfNodes + instanceSize;
+        String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 20;
-        Integer maximumNumberOfExecutions = 3;
+        Integer maximumNumberOfGenerations = 5;
+        Integer maximumNumberOfExecutions = 2;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
+        List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739
+        List<Double> nadirPoint = new ArrayList<>();
+        
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
@@ -89,16 +96,23 @@ public class VRPDRT {
         //individualSolution.getSetOfRoutes().forEach(System.out::println);
         //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-        List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739
-        parameters.add(0.0273);
-        parameters.add(0.5208);
-        parameters.add(0.0161);
-        parameters.add(0.3619);
-        parameters.add(0.0739);
+//        parameters.add(0.0273);
+//        parameters.add(0.5208);
+//        parameters.add(0.0161);
+//        parameters.add(0.3619);
+//        parameters.add(0.0739);
+        parameters.add(1.0);
+        parameters.add(10.0);
+        parameters.add(12.0);
+        parameters.add(6000.0);
+        parameters.add(300.0);
         
-        NSGAII(instanceName, parameters,populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+        nadirPoint.add(200000.0);
+        nadirPoint.add(100000.0);
+
+        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, 
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);
 
         //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();

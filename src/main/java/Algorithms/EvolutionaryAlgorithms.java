@@ -102,7 +102,7 @@ public class EvolutionaryAlgorithms {
 
     }
 
-    public static double NSGAII(String instanceName, List<Double> parameters, Integer populationSize, Integer maximumNumberOfGenerations,
+    public static double NSGAII(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
             List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
             Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
@@ -118,11 +118,12 @@ public class EvolutionaryAlgorithms {
         List<Integer> parents = new ArrayList<>();
         List<Solution> parentsAndOffspring = new ArrayList();
         List<List<Solution>> nonDominatedFronts = new ArrayList<>();
+        List<List<Double>> hypervolumes = new ArrayList<>();
         double hypervolume = 0;
         String folderName, fileName;
 
         LocalDateTime time = LocalDateTime.now();
-        folderName = "AlgorithmsResults//5FO//NSGA-II//"+instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//5FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -134,6 +135,7 @@ public class EvolutionaryAlgorithms {
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
+                List<Double> listOfHypervolumes = new ArrayList<>();
                 executionNumber = Integer.toString(executionCounter);
                 PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
@@ -223,6 +225,8 @@ public class EvolutionaryAlgorithms {
 
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
+                    listOfHypervolumes.add(smetric(fileWithSolutions, nadirPoint));
+
                     for (Solution s : fileWithSolutions) {
                         saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
                         saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
@@ -238,6 +242,7 @@ public class EvolutionaryAlgorithms {
                 fileWithSolutions.clear();
                 population.clear();
                 nonDominatedFronts.clear();
+                hypervolumes.add(listOfHypervolumes);
             }
 
             dominanceAlgorithm(combinedPareto, finalPareto);
@@ -247,7 +252,9 @@ public class EvolutionaryAlgorithms {
             }
 
             new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
-            hypervolume = smetric(finalPareto);
+
+            hypervolume = smetric(finalPareto, nadirPoint);
+            //hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
             System.out.println("Final Pareto");
             DecimalFormat formatator = new DecimalFormat("0.0000");
@@ -255,12 +262,31 @@ public class EvolutionaryAlgorithms {
                     formatator.format(u.getAggregatedObjective1()).replace(",", ".")
                     + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
             );
+
+            System.out.println("List of Lists = " + hypervolumes);
+
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
 //                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return hypervolume;
+    }
+
+    public static void saveHypervolumesDatas(List<List<Double>> hypervolumes, int maximumNumberOfGenerations,
+            int maximumNumberOfExecutions, String folderName, String fileName) throws FileNotFoundException {
+        PrintStream printStream = new PrintStream(folderName + "/" + fileName + "-Execucao.txt");
+
+        for (int i = 0; i < maximumNumberOfExecutions; i++) {
+            for (int j = 0; j < maximumNumberOfGenerations; j++) {
+
+            }
+        }
+        
+        PrintStream boxplot = new PrintStream(folderName + "/" + fileName + "-Execucao.txt");
+//        for(Double smetric: hypervolumes.get(maximumNumberOfGenerations- 1)){
+//            
+//        }
     }
 
     public static double smetric(List<Solution> solutions) {
@@ -285,6 +311,63 @@ public class EvolutionaryAlgorithms {
         return volumes.stream().mapToDouble(Double::valueOf).sum();
     }
 
+    public static double smetric(List<Solution> solutions, List<Double> nadirPoint) {
+        solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
+        //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
+
+//        double x_nadir = nadirPoint.get(0);
+//        double y_nadir = nadirPoint.get(1);
+        double x_nadir = 1.0;
+        double y_nadir = 1.0;
+        normalizeAggregatedObjectiveFunctions(solutions, nadirPoint);
+
+        List<Double> volumes = new ArrayList<>();
+
+        for (int i = 0; i < solutions.size(); i++) {
+            if (i == 0) {
+                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1Normalized())
+                        * (y_nadir - solutions.get(i).getAggregatedObjective2Normalized()));
+            } else {
+                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1Normalized())
+                        * (solutions.get(i - 1).getAggregatedObjective2Normalized() - solutions.get(i).getAggregatedObjective2Normalized()));
+            }
+        }
+
+        return volumes.stream().mapToDouble(Double::valueOf).sum();
+    }
+
+    public static void normalizeAggregatedObjectiveFunctions(List<Solution> solutions, List<Double> nadirPoint) {
+        solutions.forEach(s -> {
+            s.setAggregatedObjective1Normalized(s.getAggregatedObjective1() / nadirPoint.get(0));
+            s.setAggregatedObjective2Normalized(s.getAggregatedObjective2() / nadirPoint.get(1));
+        });
+    }
+
+//    public static double smetric(List<Solution> solutions, List<Double> nadirPoint) {
+//        solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
+//        //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
+//
+//        double x_nadir = nadirPoint.get(0);
+//        double y_nadir = nadirPoint.get(1);
+//        double maxX = solutions.stream().mapToDouble(Solution::getAggregatedObjective1).max().getAsDouble();
+//        double minX = solutions.stream().mapToDouble(Solution::getAggregatedObjective1).min().getAsDouble();
+//        double maxY = solutions.stream().mapToDouble(Solution::getAggregatedObjective2).max().getAsDouble();
+//        double minY = solutions.stream().mapToDouble(Solution::getAggregatedObjective2).min().getAsDouble();
+//
+//        List<Double> volumes = new ArrayList<>();
+//
+//        for (int i = 0; i < solutions.size(); i++) {
+//            if (i == 0) {
+//                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
+//                        * (y_nadir - solutions.get(i).getAggregatedObjective2()));
+//            } else {
+//                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
+//                        * (solutions.get(i - 1).getAggregatedObjective2() - solutions.get(i).getAggregatedObjective2()));
+//            }
+//        }
+//
+//        return volumes.stream().mapToDouble(Double::valueOf).sum();
+//    }
     public static void SPEA2(List<Double> parameters, List<Solution> Pop, List<Solution> Q, Integer TamPop, Integer TamArq, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m,
             List<List<Long>> d, List<List<Long>> c, Long TimeWindows, Long currentTime, Integer lastNode) {

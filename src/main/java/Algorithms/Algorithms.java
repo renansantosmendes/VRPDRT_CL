@@ -30,6 +30,26 @@ public class Algorithms {
         return data;
     }
 
+    public static void buildInstacesNames(String instanceName, String nodesData, String adjacenciesData,
+            int numberOfRequests, int numberOfNodes, int requestTimeWindows, String instanceSize) {
+        if (numberOfRequests < 100) {
+            if (requestTimeWindows < 10) {
+                instanceName = "r0" + numberOfRequests + "n" + numberOfNodes + "tw0" + requestTimeWindows;
+            } else {
+                instanceName = "r0" + numberOfRequests + "n" + numberOfNodes + "tw" + requestTimeWindows;
+            }
+
+        } else if (requestTimeWindows < 10) {
+            instanceName = "r" + numberOfRequests + "n" + numberOfNodes + "tw0" + requestTimeWindows;
+        } else {
+            instanceName = "r" + numberOfRequests + "n" + numberOfNodes + "tw" + requestTimeWindows;
+        }
+
+//        String instanceName = "r050n12tw10";
+        nodesData = "bh_n" + numberOfNodes + instanceSize;
+        adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
+    }
+
     public static void floydWarshall(List<List<Integer>> c, List<List<Integer>> d, Integer n) {
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
@@ -226,9 +246,19 @@ public class Algorithms {
 
     public static void normalizeObjectiveFunctionsForSolutions(List<Solution> solutions) {
         for (Solution solution : solutions) {
-            solution.normalizeTotalDistance(0, 10000000);
-            solution.normalizeTotalDeliveryDelay(0, 10000);
-            solution.normalizeTotalRouteTimeChargeBanlance(0, 1000);
+//            solution.normalizeTotalDistance(0, 10000000);
+//            solution.normalizeTotalDeliveryDelay(0, 10000);
+//            solution.normalizeTotalRouteTimeChargeBanlance(0, 1000);
+//            solution.normalizeNumberOfNonAttendedRequests(0, 100);
+//            solution.normalizeNumberOfVehicles(0, 50);
+//            solution.normalizeTotalTravelTime(0, 10000);
+//            solution.normalizeTotalWaintingTime(0, 10000);
+//            solution.normalizeDeliveryTimeWindowAntecipation(0, 10000);
+//            solution.normalizeTotalOccupationRate(0, 1);
+
+            solution.normalizeTotalDistance(70000, 300000);
+            solution.normalizeTotalDeliveryDelay(0, 1000);
+            solution.normalizeTotalRouteTimeChargeBanlance(0, 500);
             solution.normalizeNumberOfNonAttendedRequests(0, 100);
             solution.normalizeNumberOfVehicles(0, 50);
             solution.normalizeTotalTravelTime(0, 10000);
@@ -271,15 +301,23 @@ public class Algorithms {
         S.setAggregatedObjective2(S.getTotalWaintingTime());
     }
 
-    public static void evaluateAggregatedObjectiveFunctionsNormalized(List<Double>parameters, Solution S) {
+    public static void evaluateAggregatedObjectiveFunctionsNormalized(List<Double> parameters, Solution S) {
 //        S.setAggregatedObjective1(S.getTotalDistanceNormalized() + S.getTotalDeliveryDelayNormalized() + S.getTotalRouteTimeChargeBanlanceNormalized()
 //                + S.getNumberOfVehiclesNormalized() + S.getNumberOfNonAttendedRequestsNormalized() + S.getTotalTravelTimeNormalized());
 //        S.setAggregatedObjective2(S.getTotalWaintingTimeNormalized());
 
-        S.setAggregatedObjective1(parameters.get(0)* S.getTotalDistanceNormalized() + parameters.get(1) * S.getTotalDeliveryDelayNormalized() 
-                + parameters.get(2) * S.getTotalRouteTimeChargeBanlanceNormalized()
-                + parameters.get(4) * S.getNumberOfVehiclesNormalized());
-        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequestsNormalized());
+//        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistanceNormalized() + parameters.get(1) * S.getTotalDeliveryDelayNormalized()
+//                + parameters.get(2) * S.getTotalRouteTimeChargeBanlanceNormalized()
+//                + parameters.get(4) * S.getNumberOfVehiclesNormalized());
+//        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequestsNormalized());
+//        S.setAggregatedObjective1(1* S.getTotalDistance() + 10 * S.getTotalDeliveryDelay()
+//                + 50 * S.getTotalRouteTimeChargeBanlance()
+//                + 3000 * S.getNumberOfVehicles());
+//        S.setAggregatedObjective2(8000 * S.getNumberOfNonAttendedRequests());
+        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
+                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
+                + parameters.get(4) * S.getNumberOfVehicles());
+        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequests());
     }
 
     public static void evaluateAggregatedObjectiveFunctionsNormalized(List<Double> parameters, List<Solution> solutions) {
