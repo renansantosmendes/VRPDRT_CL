@@ -10,37 +10,24 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.event.ChartChangeEvent;
-import org.jfree.chart.event.ChartChangeListener;
-import org.jfree.chart.event.ChartProgressEvent;
-import org.jfree.chart.event.ChartProgressListener;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
-import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -50,30 +37,28 @@ import org.jfree.util.ShapeUtilities;
  *
  * @author renansantos
  */
-public class ResultsGraphicsForMultiObjectiveOptimization {
+public class ResultsGraphicsForConvergence {
 
-    private List<Solution> population;
-    private JFreeChart paretoCombined;
+    private List<Double> hypervolumeConvergence;
+    private JFreeChart convergence;
     private String folder;
-    private String paretoCombinedFileName;
-    private ChartMouseListener chartMouseListener;
+    private String convergenceFileName;
 
-    public ResultsGraphicsForMultiObjectiveOptimization(List<Solution> population, String folder, String paretoCombinedFileName) throws IOException {
-        this.population = population;
+    public ResultsGraphicsForConvergence(List<Double> hypervolumeConverence, JFreeChart convergence, 
+            String folder, String convergenceFileName) {
+        this.hypervolumeConvergence = hypervolumeConverence;
+        this.convergence = convergence;
         this.folder = folder;
-        this.paretoCombinedFileName = paretoCombinedFileName;
+        this.convergenceFileName = convergenceFileName;
         boolean successForCreateFolder = (new File(folder)).mkdirs();
-        this.buildParetoGraphic();
-        this.showGraphic();
     }
-
-    public void buildParetoGraphic() throws FileNotFoundException, IOException {
-        this.paretoCombined = ChartFactory.createScatterPlot("Combined Pareto Set", "Objective Function 1",
-                "Objective Function 2", createDataset(),
-                PlotOrientation.VERTICAL, true, true, false);
+    
+    public void buildConvergenceGraphic() throws FileNotFoundException, IOException {
+        this.convergence = ChartFactory.createLineChart("Combined Pareto Set", "Objective Function 1",
+                "Objective Function 2", createDataset(), PlotOrientation.VERTICAL, true, true, false);
         Shape serieShape = ShapeUtilities.createDiagonalCross(3, 1);
 
-        XYPlot xyPlot = (XYPlot) paretoCombined.getPlot();
+        XYPlot xyPlot = (XYPlot) this.convergence.getPlot();
         
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
@@ -95,23 +80,22 @@ public class ResultsGraphicsForMultiObjectiveOptimization {
         renderer.setSeriesShape(0, serieShape);
         renderer.setSeriesPaint(0, Color.red);
 
-        this.saveGraphicInFile(new FileOutputStream(folder + "/" + paretoCombinedFileName));
+        this.saveGraphicInFile(new FileOutputStream(folder + "/" + convergenceFileName));
     }
 
     private XYDataset createDataset() {
         XYSeriesCollection result = new XYSeriesCollection();
         XYSeries series = new XYSeries("NSGA-II");
-        for (int i = 0; i < this.population.size(); i++) {
-            double x = population.get(i).getAggregatedObjective1();
-            double y = population.get(i).getAggregatedObjective2();
-            series.add(x, y);
+        for (int i = 0; i < this.hypervolumeConvergence.size(); i++) {
+            double x = this.hypervolumeConvergence.get(i);
+           // series.add(x);
         }
         result.addSeries(series);
         return result;
     }
 
     private void saveGraphicInFile(OutputStream out) throws IOException {
-        ChartUtilities.writeChartAsPNG(out, this.paretoCombined, 1024, 600);
+        ChartUtilities.writeChartAsPNG(out, this.convergence, 1024, 600);
     }
 
     private void showGraphic() throws FileNotFoundException, IOException {
@@ -134,6 +118,8 @@ public class ResultsGraphicsForMultiObjectiveOptimization {
     }
 
     public JPanel getPanel() {
-        return new ChartPanel(paretoCombined);
+        return new ChartPanel(convergence);
     }
+    
+    
 }

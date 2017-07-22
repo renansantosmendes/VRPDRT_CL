@@ -8,7 +8,7 @@ package Algorithms;
 import static Algorithms.Algorithms.*;
 import static Algorithms.EvolutionaryAlgorithms.*;
 import static Algorithms.Methods.*;
-import AlgorithmsResults.ResultsGraphicsForMultiObjectiveOptimization;
+import AlgorithmsResults.ResultsGraphicsForParetoCombinedSet;
 import ProblemRepresentation.*;
 import java.io.*;
 import java.text.DecimalFormat;

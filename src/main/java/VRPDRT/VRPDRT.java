@@ -61,8 +61,8 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 5;
-        Integer maximumNumberOfExecutions = 2;
+        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfExecutions = 4;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739

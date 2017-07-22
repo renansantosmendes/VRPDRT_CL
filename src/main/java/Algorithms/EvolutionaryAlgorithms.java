@@ -12,7 +12,7 @@ import java.util.*;
 import ProblemRepresentation.*;
 import static Algorithms.Algorithms.*;
 import static Algorithms.Methods.*;
-import AlgorithmsResults.ResultsGraphicsForMultiObjectiveOptimization;
+import AlgorithmsResults.ResultsGraphicsForParetoCombinedSet;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -251,7 +251,7 @@ public class EvolutionaryAlgorithms {
                 printStreamForCombinedPareto.print(individual + "\n");
             }
 
-            new ResultsGraphicsForMultiObjectiveOptimization(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
 
             hypervolume = smetric(finalPareto, nadirPoint);
             //hypervolume = smetric(finalPareto);
@@ -264,7 +264,7 @@ public class EvolutionaryAlgorithms {
             );
 
             System.out.println("List of Lists = " + hypervolumes);
-
+            saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
 //                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");
         } catch (FileNotFoundException e) {
@@ -275,18 +275,30 @@ public class EvolutionaryAlgorithms {
 
     public static void saveHypervolumesDatas(List<List<Double>> hypervolumes, int maximumNumberOfGenerations,
             int maximumNumberOfExecutions, String folderName, String fileName) throws FileNotFoundException {
-        PrintStream printStream = new PrintStream(folderName + "/" + fileName + "-Execucao.txt");
+
+        PrintStream boxplot = new PrintStream(folderName + "/" + fileName + "-hypervolume-boxplot.txt");
+        PrintStream convergence = new PrintStream(folderName + "/" + fileName + "-hypervolume-convergence.txt");
+        List<Double> hypervolumeConvergence = new ArrayList<>();
 
         for (int i = 0; i < maximumNumberOfExecutions; i++) {
-            for (int j = 0; j < maximumNumberOfGenerations; j++) {
-
-            }
+            boxplot.print(hypervolumes.get(i).get(maximumNumberOfGenerations - 1) + "\n");
         }
-        
-        PrintStream boxplot = new PrintStream(folderName + "/" + fileName + "-Execucao.txt");
-//        for(Double smetric: hypervolumes.get(maximumNumberOfGenerations- 1)){
-//            
-//        }
+
+        for (int j = 0; j < maximumNumberOfGenerations; j++) {
+            List<Double> hypervolumesForGeneration = new ArrayList<>();
+            for (int i = 0; i < maximumNumberOfExecutions; i++) {
+                hypervolumesForGeneration.add(hypervolumes.get(i).get(j));
+            }
+            double average = hypervolumesForGeneration.stream().mapToDouble(Double::valueOf).average().getAsDouble();
+            convergence.print(average + "\n");
+            hypervolumeConvergence.add(average);
+        }
+
+        showHypervolumeConvergence(hypervolumeConvergence);
+    }
+
+    private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) {
+       
     }
 
     public static double smetric(List<Solution> solutions) {
