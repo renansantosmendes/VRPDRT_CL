@@ -25,9 +25,13 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.PlotChangeListener;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.Dataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -44,22 +48,22 @@ public class ResultsGraphicsForConvergence {
     private String folder;
     private String convergenceFileName;
 
-    public ResultsGraphicsForConvergence(List<Double> hypervolumeConverence, JFreeChart convergence, 
-            String folder, String convergenceFileName) {
-        this.hypervolumeConvergence = hypervolumeConverence;
-        this.convergence = convergence;
+    public ResultsGraphicsForConvergence(List<Double> hypervolumeConvergence, String folder, String convergenceFileName) throws IOException {
+        this.hypervolumeConvergence = hypervolumeConvergence;
         this.folder = folder;
         this.convergenceFileName = convergenceFileName;
         boolean successForCreateFolder = (new File(folder)).mkdirs();
+        this.buildConvergenceGraphic();
+        this.showGraphic();
     }
-    
+
     public void buildConvergenceGraphic() throws FileNotFoundException, IOException {
-        this.convergence = ChartFactory.createLineChart("Combined Pareto Set", "Objective Function 1",
-                "Objective Function 2", createDataset(), PlotOrientation.VERTICAL, true, true, false);
+        this.convergence = ChartFactory.createLineChart("Hypervolume Convergence", "Generation",
+                "Hypervolume", createDataset(), PlotOrientation.VERTICAL, true, true, false);
         Shape serieShape = ShapeUtilities.createDiagonalCross(3, 1);
 
-        XYPlot xyPlot = (XYPlot) this.convergence.getPlot();
-        
+        CategoryPlot xyPlot = (CategoryPlot) this.convergence.getPlot();
+
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
         xyPlot.setRangeGridlinesVisible(true);
@@ -67,30 +71,30 @@ public class ResultsGraphicsForConvergence {
         xyPlot.setDomainGridlinesVisible(true);
         xyPlot.setDomainGridlinePaint(Color.gray);
         xyPlot.setBackgroundPaint(Color.white);
-        xyPlot.setDomainCrosshairLockedOnData(true);
-        
+        //xyPlot.setDomainCrosshairLockedOnData(true);
+
         xyPlot.addChangeListener(new PlotChangeListener() {
             @Override
             public void plotChanged(PlotChangeEvent pce) {
                 System.out.println(pce.getType());
             }
         });
-        
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesShape(0, serieShape);
-        renderer.setSeriesPaint(0, Color.red);
+
+        //XYItemRenderer renderer = xyPlot.getRenderer();
+        //renderer.setSeriesShape(0, serieShape);
+        //renderer.setSeriesPaint(0, Color.red);
 
         this.saveGraphicInFile(new FileOutputStream(folder + "/" + convergenceFileName));
     }
 
-    private XYDataset createDataset() {
-        XYSeriesCollection result = new XYSeriesCollection();
-        XYSeries series = new XYSeries("NSGA-II");
+    private DefaultCategoryDataset createDataset() {
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        XYSeries series = new XYSeries("Hypervolume");
         for (int i = 0; i < this.hypervolumeConvergence.size(); i++) {
             double x = this.hypervolumeConvergence.get(i);
-           // series.add(x);
+            result.addValue(x,"",Integer.toString(i));
         }
-        result.addSeries(series);
+        //result.addSeries(series);
         return result;
     }
 
@@ -120,6 +124,5 @@ public class ResultsGraphicsForConvergence {
     public JPanel getPanel() {
         return new ChartPanel(convergence);
     }
-    
-    
+
 }

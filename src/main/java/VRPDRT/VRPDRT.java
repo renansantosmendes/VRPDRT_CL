@@ -47,7 +47,7 @@ public class VRPDRT {
 
     //-------------------Test--------------------------------
     static Long currentTime;
-    static Integer lastNode;
+    static Integer lastNode;    
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
@@ -62,7 +62,7 @@ public class VRPDRT {
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
         Integer maximumNumberOfGenerations = 10;
-        Integer maximumNumberOfExecutions = 4;
+        Integer maximumNumberOfExecutions = 2;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739

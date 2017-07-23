@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import static Algorithms.Algorithms.*;
+import AlgorithmsResults.ResultsGraphicsForConvergence;
 import java.text.DecimalFormat;
+import org.jfree.chart.JFreeChart;
 
 /**
  *
@@ -298,7 +300,7 @@ public class EvolutionaryAlgorithms {
     }
 
     private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) {
-       
+        new ResultsGraphicsForConvergence(hypervolumeConvergence, "ResultGraphics", "Convergence");
     }
 
     public static double smetric(List<Solution> solutions) {
