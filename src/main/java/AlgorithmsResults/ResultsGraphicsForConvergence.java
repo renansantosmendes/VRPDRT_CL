@@ -92,7 +92,7 @@ public class ResultsGraphicsForConvergence {
         XYSeries series = new XYSeries("Hypervolume");
         for (int i = 0; i < this.hypervolumeConvergence.size(); i++) {
             double x = this.hypervolumeConvergence.get(i);
-            result.addValue(x,"",Integer.toString(i));
+            result.addValue(Math.log(x),"",Integer.toString(i));
         }
         //result.addSeries(series);
         return result;

@@ -276,7 +276,7 @@ public class EvolutionaryAlgorithms {
     }
 
     public static void saveHypervolumesDatas(List<List<Double>> hypervolumes, int maximumNumberOfGenerations,
-            int maximumNumberOfExecutions, String folderName, String fileName) throws FileNotFoundException {
+            int maximumNumberOfExecutions, String folderName, String fileName) throws FileNotFoundException, IOException {
 
         PrintStream boxplot = new PrintStream(folderName + "/" + fileName + "-hypervolume-boxplot.txt");
         PrintStream convergence = new PrintStream(folderName + "/" + fileName + "-hypervolume-convergence.txt");
@@ -299,7 +299,7 @@ public class EvolutionaryAlgorithms {
         showHypervolumeConvergence(hypervolumeConvergence);
     }
 
-    private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) {
+    private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) throws IOException {
         new ResultsGraphicsForConvergence(hypervolumeConvergence, "ResultGraphics", "Convergence");
     }
 

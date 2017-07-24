@@ -30,8 +30,9 @@ public class Algorithms {
         return data;
     }
 
-    public static void buildInstacesNames(String instanceName, String nodesData, String adjacenciesData,
-            int numberOfRequests, int numberOfNodes, int requestTimeWindows, String instanceSize) {
+    public static String buildInstaceName(String nodesData, String adjacenciesData, int numberOfRequests, 
+            int numberOfNodes, int requestTimeWindows, String instanceSize) {
+        String instanceName;
         if (numberOfRequests < 100) {
             if (requestTimeWindows < 10) {
                 instanceName = "r0" + numberOfRequests + "n" + numberOfNodes + "tw0" + requestTimeWindows;
@@ -46,8 +47,9 @@ public class Algorithms {
         }
 
 //        String instanceName = "r050n12tw10";
-        nodesData = "bh_n" + numberOfNodes + instanceSize;
-        adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
+//        nodesData = "bh_n" + numberOfNodes + instanceSize;
+//        adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
+        return instanceName;
     }
 
     public static void floydWarshall(List<List<Integer>> c, List<List<Integer>> d, Integer n) {

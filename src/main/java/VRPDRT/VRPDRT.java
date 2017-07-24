@@ -47,27 +47,27 @@ public class VRPDRT {
 
     //-------------------Test--------------------------------
     static Long currentTime;
-    static Integer lastNode;    
+    static Integer lastNode;
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
         int numberOfRequests = 50;
         int numberOfNodes = 12;
-        int requestTimeWindows = 10;
+        int requestTimeWindows = 5;
         String instanceSize = "s";
-        String instanceName = "r050n12tw05";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
+        String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
+                requestTimeWindows, instanceSize);
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 10;
-        Integer maximumNumberOfExecutions = 2;
+        Integer maximumNumberOfGenerations = 1000;
+        Integer maximumNumberOfExecutions = 30;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739
         List<Double> nadirPoint = new ArrayList<>();
-        
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
@@ -83,7 +83,8 @@ public class VRPDRT {
                 requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode));
-//System.out.println(solution);
+        
+        //System.out.println(solution);
         //solution.getSetOfRoutes().forEach(route -> System.out.println(route.getRequestAttendanceList()));
         //solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
@@ -101,12 +102,13 @@ public class VRPDRT {
 //        parameters.add(0.0161);
 //        parameters.add(0.3619);
 //        parameters.add(0.0739);
-        parameters.add(1.0);
-        parameters.add(10.0);
-        parameters.add(12.0);
-        parameters.add(6000.0);
-        parameters.add(300.0);
-        
+
+        parameters.add(1.0);//1
+        parameters.add((double) requestTimeWindows);//delta_t
+        parameters.add((double) numberOfNodes);//n
+        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
+        parameters.add((double) numberOfRequests * numberOfNodes);//r n
+
         nadirPoint.add(200000.0);
         nadirPoint.add(100000.0);
 
