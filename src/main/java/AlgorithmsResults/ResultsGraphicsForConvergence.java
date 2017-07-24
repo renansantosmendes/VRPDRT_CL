@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
@@ -29,6 +31,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
@@ -62,18 +65,19 @@ public class ResultsGraphicsForConvergence {
                 "Hypervolume", createDataset(), PlotOrientation.VERTICAL, true, true, false);
         Shape serieShape = ShapeUtilities.createDiagonalCross(3, 1);
 
-        CategoryPlot xyPlot = (CategoryPlot) this.convergence.getPlot();
+        CategoryPlot plot = (CategoryPlot) this.convergence.getPlot();
 
-        xyPlot.setDomainCrosshairVisible(true);
-        xyPlot.setRangeCrosshairVisible(true);
-        xyPlot.setRangeGridlinesVisible(true);
-        xyPlot.setRangeGridlinePaint(Color.gray);
-        xyPlot.setDomainGridlinesVisible(true);
-        xyPlot.setDomainGridlinePaint(Color.gray);
-        xyPlot.setBackgroundPaint(Color.white);
+        plot.setDomainCrosshairVisible(true);
+        plot.setRangeCrosshairVisible(true);
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(Color.gray);
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.gray);
+        plot.setBackgroundPaint(Color.white);
+        plot.configureRangeAxes();
+
         //xyPlot.setDomainCrosshairLockedOnData(true);
-
-        xyPlot.addChangeListener(new PlotChangeListener() {
+        plot.addChangeListener(new PlotChangeListener() {
             @Override
             public void plotChanged(PlotChangeEvent pce) {
                 System.out.println(pce.getType());
@@ -83,7 +87,6 @@ public class ResultsGraphicsForConvergence {
         //XYItemRenderer renderer = xyPlot.getRenderer();
         //renderer.setSeriesShape(0, serieShape);
         //renderer.setSeriesPaint(0, Color.red);
-
         this.saveGraphicInFile(new FileOutputStream(folder + "/" + convergenceFileName));
     }
 
@@ -92,7 +95,7 @@ public class ResultsGraphicsForConvergence {
         XYSeries series = new XYSeries("Hypervolume");
         for (int i = 0; i < this.hypervolumeConvergence.size(); i++) {
             double x = this.hypervolumeConvergence.get(i);
-            result.addValue(Math.log(x),"",Integer.toString(i));
+            result.addValue(Math.log(x), "", Integer.toString(i));
         }
         //result.addSeries(series);
         return result;

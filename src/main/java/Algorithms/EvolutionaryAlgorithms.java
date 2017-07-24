@@ -265,7 +265,7 @@ public class EvolutionaryAlgorithms {
                     + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
             );
 
-            System.out.println("List of Lists = " + hypervolumes);
+            //System.out.println("List of Lists = " + hypervolumes);
             saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
 //            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
 //                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");

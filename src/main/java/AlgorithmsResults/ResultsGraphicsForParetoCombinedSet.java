@@ -5,12 +5,16 @@
  */
 package AlgorithmsResults;
 
+import InstanceReaderWithMySQL.NodeDAO;
 import ProblemRepresentation.Solution;
 import java.awt.Color;
 import java.awt.Shape;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,8 +23,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.chart.NumberAxis;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -74,7 +81,7 @@ public class ResultsGraphicsForParetoCombinedSet {
         Shape serieShape = ShapeUtilities.createDiagonalCross(3, 1);
 
         XYPlot xyPlot = (XYPlot) paretoCombined.getPlot();
-        
+
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
         xyPlot.setRangeGridlinesVisible(true);
@@ -83,14 +90,7 @@ public class ResultsGraphicsForParetoCombinedSet {
         xyPlot.setDomainGridlinePaint(Color.gray);
         xyPlot.setBackgroundPaint(Color.white);
         xyPlot.setDomainCrosshairLockedOnData(true);
-        
-        xyPlot.addChangeListener(new PlotChangeListener() {
-            @Override
-            public void plotChanged(PlotChangeEvent pce) {
-                System.out.println(pce.getType());
-            }
-        });
-        
+
         XYItemRenderer renderer = xyPlot.getRenderer();
         renderer.setSeriesShape(0, serieShape);
         renderer.setSeriesPaint(0, Color.red);
@@ -121,6 +121,16 @@ public class ResultsGraphicsForParetoCombinedSet {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //JOptionPane.showMessageDialog(null, "Test - Clicked Point = " + e.getPoint());
+                XYPlot xyPlot = (XYPlot) paretoCombined.getPlot();
+                double x = xyPlot.getDomainCrosshairValue();
+                double y = xyPlot.getRangeCrosshairValue();
+                System.out.println(xyPlot.getDomainCrosshairValue());
+                System.out.println(xyPlot.getRangeCrosshairValue());
+                try {
+                    showSolution(x, y);
+                } catch (IOException ex) {
+                    Logger.getLogger(ResultsGraphicsForParetoCombinedSet.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -134,6 +144,44 @@ public class ResultsGraphicsForParetoCombinedSet {
     }
 
     public JPanel getPanel() {
-        return new ChartPanel(paretoCombined);
+        ChartPanel panel = new ChartPanel(paretoCombined);
+//        panel.addChartMouseListener(new ChartMouseListener() {
+//            @Override
+//            public void chartMouseClicked(ChartMouseEvent cme) {
+//                //JOptionPane.showMessageDialog(null, "Test - Clicked Point = " + e.getPoint());
+//                System.out.println("Clicked = " + cme.getTrigger().getLocationOnScreen());
+//            }
+//
+//            @Override
+//            public void chartMouseMoved(ChartMouseEvent cme) {
+//                
+//            }
+//        });
+//	
+        return panel;
+    }
+
+    private void showSolution(double x, double y) throws IOException {
+        if (x != 0.0 && y != 0.0) {
+            for (Solution solution : population) {
+                if (solution.getAggregatedObjective1() == x && solution.getAggregatedObjective2() == y) {
+                    JOptionPane.showMessageDialog(null, "Solution Information:\n Total Distance = " + solution.getTotalDistance()
+                            + " m\n Total Delivery Delay = " + solution.getTotalDeliveryDelay() + " min \n Charge Balance = "
+                            + solution.getTotalRouteTimeChargeBanlance() + " min \n Non Attended Requests = " + solution.getNumberOfNonAttendedRequests()
+                            + "\n Number of Vehicles = " + solution.getNumberOfVehicles());
+
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    JOptionPane.showConfirmDialog(null, "Do you want to see the routes?", "WARNING", dialogButton);
+                    if (dialogButton == JOptionPane.YES_OPTION) {
+                        String nodesData = "bh_n" + 12 + "s";
+                        String adjacenciesData = "bh_adj_n" + 12 + "s";
+                        solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+                    }
+                    if (dialogButton == JOptionPane.NO_OPTION) {
+                        System.exit(0);
+                    }
+                }
+            }
+        }
     }
 }
