@@ -22,6 +22,7 @@ import static Algorithms.AlgorithmsCalibration.vnd;
 import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.NSGAII;
+import static Algorithms.EvolutionaryAlgorithms.SPEA2;
 
 /**
  *
@@ -66,6 +67,7 @@ public class VRPDRT {
         Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
+        int fileSize = populationSize;
         List<Double> parameters = new ArrayList<>();//0.0273, 0.5208, 0.0161, 0.3619, 0.0739
         List<Double> nadirPoint = new ArrayList<>();
 
@@ -83,13 +85,12 @@ public class VRPDRT {
                 requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode));
-        
+
         //System.out.println(solution);
         //solution.getSetOfRoutes().forEach(route -> System.out.println(route.getRequestAttendanceList()));
         //solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
         //solution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-
         //Algorithms algorithms = new Algorithms(instanceName, nodesData, adjacenciesData);
         //algorithms.getData().getListOfRequests().forEach(System.out::println);
         //Solution individualSolution = new Solution(algorithms.individualConstructive());
@@ -102,20 +103,23 @@ public class VRPDRT {
 //        parameters.add(0.0161);
 //        parameters.add(0.3619);
 //        parameters.add(0.0739);
-
         parameters.add(1.0);//1
         parameters.add((double) requestTimeWindows);//delta_t
         parameters.add((double) numberOfNodes);//n
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
         parameters.add((double) numberOfRequests * numberOfNodes);//r n
 
-        nadirPoint.add(200000.0);
+        nadirPoint.add(300000.0);
         nadirPoint.add(100000.0);
 
-        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-                timeWindows, currentTime, lastNode);
+//        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+//                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+//                timeWindows, currentTime, lastNode);
+        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
+                probabilityOfMutation, probabilityOfCrossover, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
+                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
+                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
         //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();
 //        InstanceData data = new InstanceData(instanceName, nodesData, adjacenciesData);

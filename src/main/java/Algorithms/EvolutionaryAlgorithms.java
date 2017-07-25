@@ -357,116 +357,101 @@ public class EvolutionaryAlgorithms {
         });
     }
 
-//    public static double smetric(List<Solution> solutions, List<Double> nadirPoint) {
-//        solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
-//        //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
-//
-//        double x_nadir = nadirPoint.get(0);
-//        double y_nadir = nadirPoint.get(1);
-//        double maxX = solutions.stream().mapToDouble(Solution::getAggregatedObjective1).max().getAsDouble();
-//        double minX = solutions.stream().mapToDouble(Solution::getAggregatedObjective1).min().getAsDouble();
-//        double maxY = solutions.stream().mapToDouble(Solution::getAggregatedObjective2).max().getAsDouble();
-//        double minY = solutions.stream().mapToDouble(Solution::getAggregatedObjective2).min().getAsDouble();
-//
-//        List<Double> volumes = new ArrayList<>();
-//
-//        for (int i = 0; i < solutions.size(); i++) {
-//            if (i == 0) {
-//                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
-//                        * (y_nadir - solutions.get(i).getAggregatedObjective2()));
-//            } else {
-//                volumes.add((x_nadir - solutions.get(i).getAggregatedObjective1())
-//                        * (solutions.get(i - 1).getAggregatedObjective2() - solutions.get(i).getAggregatedObjective2()));
-//            }
-//        }
-//
-//        return volumes.stream().mapToDouble(Double::valueOf).sum();
-//    }
-    public static void SPEA2(List<Double> parameters, List<Solution> Pop, List<Solution> Q, Integer TamPop, Integer TamArq, Integer MaxGer, double Pm, double Pc, List<Request> listRequests, Map<Integer, List<Request>> Pin,
-            Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m,
-            List<List<Long>> d, List<List<Long>> c, Long TimeWindows, Long currentTime, Integer lastNode) {
+    public static void SPEA2(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize,
+            Integer fileSize, Integer maximumNumberOfGenerations,
+            Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
+            List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
+            Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
+            Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
+            List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
+            Long timeWindows, Long currentTime, Integer lastNode) throws IOException {
 
-        List<Solution> naoDominados = new ArrayList();
-        List<Solution> arquivo = new ArrayList();
-        List<Integer> pais = new ArrayList<>();
-        List<Solution> Pop_linha = new ArrayList();
-        String diretorio, nomeArquivo;
-        diretorio = "\\home\\EMO2017\\SPEA2\\30Exec\\AtualizacaoArquivo\\SegundaExecucao_ConferindoDados";
-        nomeArquivo = "SPEA2-Puro";
-        boolean success = (new File(diretorio)).mkdirs();
+        List<Solution> population = new ArrayList<>();
+        List<Solution> nonDominated = new ArrayList();
+        List<Solution> file = new ArrayList();
+        List<Integer> parents = new ArrayList<>();
+        List<Solution> parentsAndOffspring = new ArrayList();
+        String folderName, fileName;
+        List<List<Double>> hypervolumes = new ArrayList<>();
+        double hypervolume = 0;
+        LocalDateTime time = LocalDateTime.now();
+
+        folderName = "AlgorithmsResults//5FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        fileName = "SPEA2";
+
+        boolean success = (new File(folderName)).mkdirs();
         if (!success) {
-            System.out.println("Diretórios ja existem!");
+            System.out.println("Folder already exists!");
         }
         try {
-            List<Solution> paretoCombinado = new ArrayList<>();
-            for (int cont = 0; cont < 30; cont++) {
-                String numero;
-                int TamMax;
-                double dist[][] = new double[TamPop][TamPop];
-                numero = Integer.toString(cont);
-                PrintStream saida1 = new PrintStream(diretorio + "\\" + nomeArquivo + "-Execucao-" + numero + ".txt");
-                PrintStream saida2 = new PrintStream(diretorio + "\\" + nomeArquivo + "-tamanho_arquivo-" + numero + ".txt");
-                PrintStream saida3 = new PrintStream(diretorio + "\\" + nomeArquivo + "-Execucao-Normalizada-" + numero + ".txt");
-                initializePopulation(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-                normalizeObjectiveFunctionsValues(Pop);
+            List<Solution> combinedPareto = new ArrayList<>();
+            for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
+                List<Double> listOfHypervolumes = new ArrayList<>();
+                String number;
+                int tamMax;
+                double dist[][] = new double[populationSize][populationSize];
+                number = Integer.toString(executionCounter);
+                PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + number + ".txt");
+                PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + number + ".txt");
+                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + number + ".txt");
 
-                TamMax = Pop.size();
-                dominanceAlgorithm(Pop, arquivo);
-                evaluateDistanceBetweenSolutions(Pop, dist);
+                inicializePopulation(population, populationSize, listOfRequests,
+                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
+                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
-                System.out.println("Execução = " + cont);
-                int gerAtual = 0;
-                fitnessEvaluationForSPEA2(Pop, dist, TamPop, TamArq);
+                normalizeObjectiveFunctionsValues(population);
+
+                tamMax = population.size();
+                dominanceAlgorithm(population, file);
+                evaluateDistanceBetweenSolutions(population, dist);
+
+                int actualGeneration = 0;
+                fitnessEvaluationForSPEA2(population, dist, populationSize, fileSize);
                 List<Solution> teste = new ArrayList<>();
-                while (gerAtual < MaxGer) {
-                    fitnessEvaluationForSPEA2(Pop, dist, TamPop, TamArq);
-                    System.out.println("Geração = " + gerAtual);
-                    Pop_linha.addAll(Pop);
-                    Pop_linha.addAll(arquivo);
-                    //System.out.println("Tamanho Pop_linha = " + Pop_linha.size());
-                    dominanceAlgorithm(Pop_linha, naoDominados);
-                    //teste.addAll(naoDominados);
-                    //retiraIguais(teste);
-                    updateSPEA2SolutionsFile(Pop_linha, arquivo, TamArq);
+                System.out.println("Execution = " + executionCounter);
+                while (actualGeneration < maximumNumberOfGenerations) {
+                    fitnessEvaluationForSPEA2(population, dist, populationSize, fileSize);
+                    parentsAndOffspring.addAll(population);
+                    parentsAndOffspring.addAll(file);
+                    dominanceAlgorithm(parentsAndOffspring, nonDominated);
+                    updateSPEA2SolutionsFile(parentsAndOffspring, file, fileSize);
+                    dominanceAlgorithm(file, nonDominated);
+                    rouletteWheelSelectionAlgorithm(parents, file, tamMax);
+                    
+                    onePointCrossover(parameters, file, population, fileSize, probabilityOfCrossover, parents, listOfRequests,
+                            requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode,
+                            requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes,
+                            vehicleCapacity, timeWindows);
 
-                    dominanceAlgorithm(arquivo, naoDominados);
+                    mutation2Opt(parameters, file, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode,
+                            requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
+                            requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
-                    rouletteWheelSelectionAlgorithm(pais, arquivo, TamMax);//a seleção é feita somente no arquivo
-                    //System.out.println("Pais = " + pais);
-                    //A população P(t + 1) é gerada com base em A(t + 1)
-                    //System.out.println(arquivo.size());
-                    onePointCrossover(parameters, Pop, arquivo, TamMax, Pc, pais, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
-                    //Cruzamento2Pontos(Pop, arquivo, TamMax, Pc, pais, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
-                    //System.out.println(arquivo.size());
-                    //Mutacao(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-                    mutation2Opt(parameters, Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-                    //MutacaoShuffle(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-                    //Mutacao2Shuffle(Pop, Pm, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
-
-//                    if ((gerAtual % 200 == 0) && (gerAtual != 0)) {
-//                        buscaLocal(arquivo, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows);
-//                    }
-                    gerAtual++;
-                    Pop_linha.clear();
-                    saveDataInTextFile(naoDominados, saida1, saida2, saida3);
-                    //gravaArquivo(arquivo, saida1, saida2, saida3);
+                    actualGeneration++;
+                    parentsAndOffspring.clear();
+                    //listOfHypervolumes.add(smetric(file, nadirPoint));
+                    listOfHypervolumes.add(smetric(nonDominated, nadirPoint));
+                    saveDataInTextFile(nonDominated, saida1, saida2, saida3);
+                    System.out.println("Generation = " + actualGeneration + "\t" + nonDominated.size());
                 }
-                //ImprimePopulacao(arquivo);
-                paretoCombinado.addAll(arquivo);
-                arquivo.clear();
-                Pop.clear();
-                Pop_linha.clear();
-                System.out.println(arquivo.size());
+                combinedPareto.addAll(file);
+                file.clear();
+                population.clear();
+                parentsAndOffspring.clear();
+                hypervolumes.add(listOfHypervolumes);
             }
-            List<Solution> paretoFinal = new ArrayList<>();
-            dominanceAlgorithm(paretoCombinado, paretoFinal);
-            PrintStream saida4 = new PrintStream(diretorio + "\\ParetoCombinado.txt");
-            PrintStream saida5 = new PrintStream(diretorio + "\\ParetoCombinadoFOs.txt");
-            for (Solution s : paretoFinal) {
-                saida4.print(s + "\n");
-                saida5.print(s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
+            List<Solution> finalPareto = new ArrayList<>();
+            dominanceAlgorithm(combinedPareto, finalPareto);
+            PrintStream saida4 = new PrintStream(folderName + "/ParetoCombinado.txt");
+            PrintStream saida5 = new PrintStream(folderName + "/ParetoCombinadoFOs.txt");
+            for (Solution solution : finalPareto) {
+                saida4.print(solution + "\n");
+                saida5.print(solution.getAggregatedObjective1() + "\t" + solution.getAggregatedObjective2() + "\n");
             }
-            printPopulation(paretoFinal);
+            printPopulation(finalPareto);
+            new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            hypervolume = smetric(finalPareto, nadirPoint);
+            saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
