@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.List;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
@@ -73,6 +74,8 @@ public class ResultsGraphicsForConvergence {
         plot.setRangeGridlinePaint(Color.gray);
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.gray);
+        //plot.setRangeAxis(new ValueAxis("", new TickUnitSource()));
+        
         plot.setBackgroundPaint(Color.white);
         plot.configureRangeAxes();
 
@@ -102,7 +105,7 @@ public class ResultsGraphicsForConvergence {
     }
 
     private void saveGraphicInFile(OutputStream out) throws IOException {
-        ChartUtilities.writeChartAsPNG(out, this.convergence, 1024, 600);
+        ChartUtilities.writeChartAsPNG(out, this.convergence, 800, 600);
     }
 
     private void showGraphic() throws FileNotFoundException, IOException {
@@ -117,11 +120,12 @@ public class ResultsGraphicsForConvergence {
 
         frame.add(graphic);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 480);
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
     }
 
     public JPanel getPanel() {

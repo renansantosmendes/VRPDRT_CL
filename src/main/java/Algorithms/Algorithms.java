@@ -46,9 +46,6 @@ public class Algorithms {
             instanceName = "r" + numberOfRequests + "n" + numberOfNodes + "tw" + requestTimeWindows;
         }
 
-//        String instanceName = "r050n12tw10";
-//        nodesData = "bh_n" + numberOfNodes + instanceSize;
-//        adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         return instanceName;
     }
 
@@ -303,7 +300,7 @@ public class Algorithms {
         S.setAggregatedObjective2(S.getTotalWaintingTime());
     }
 
-    public static void evaluateAggregatedObjectiveFunctionsNormalized(List<Double> parameters, Solution S) {
+    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, Solution S) {
 //        S.setAggregatedObjective1(S.getTotalDistanceNormalized() + S.getTotalDeliveryDelayNormalized() + S.getTotalRouteTimeChargeBanlanceNormalized()
 //                + S.getNumberOfVehiclesNormalized() + S.getNumberOfNonAttendedRequestsNormalized() + S.getTotalTravelTimeNormalized());
 //        S.setAggregatedObjective2(S.getTotalWaintingTimeNormalized());
@@ -322,15 +319,15 @@ public class Algorithms {
         S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequests());
     }
 
-    public static void evaluateAggregatedObjectiveFunctionsNormalized(List<Double> parameters, List<Solution> solutions) {
-        //solutions.forEach(solution -> evaluateAggregatedObjectiveFunctionsNormalized(solution));
+    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Solution> solutions) {
+        //solutions.forEach(solution -> evaluateAggregatedObjectiveFunctions(solution));
         for (Solution solution : solutions) {
-            evaluateAggregatedObjectiveFunctionsNormalized(parameters, solution);
+            evaluateAggregatedObjectiveFunctions(parameters, solution);
         }
     }
 
     public static Solution greedyConstructive(Double alphaD, Double alphaP, Double alphaV, Double alphaT,
-            List<Request> listOfRequests, Map<Integer, List<Request>> requestsWichBoardsInNode,
+            List<Request> requests, Map<Integer, List<Request>> requestsWichBoardsInNode,
             Map<Integer, List<Request>> requestsWichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
             Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
             List<Integer> loadIndex, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
@@ -338,7 +335,7 @@ public class Algorithms {
 
         requestList.clear();
         listOfNonAttendedRequests.clear();
-        requestList.addAll(listOfRequests);
+        requestList.addAll(requests);
 
         //Step 1
         Solution solution = new Solution();
@@ -456,7 +453,7 @@ public class Algorithms {
         }
 
         solution.setNonAttendedRequestsList(listOfNonAttendedRequests);
-        evaluateSolution(solution, distanceBetweenNodes, vehicleCapacity, listOfRequests);
+        evaluateSolution(solution, distanceBetweenNodes, vehicleCapacity, requests);
         solution.setLogger(log);
         solution.linkTheRoutes();
 
@@ -655,7 +652,7 @@ public class Algorithms {
         solution.setTotalWaintingTime(FO7(solution));
         solution.setDeliveryTimeWindowAntecipation(FO8(solution));
         solution.setTotalOccupationRate(FO9(solution, vehicleCapacity));
-        evaluateAggregatedObjectiveFunctions(solution, 1, 1, 1, 1, 1);
+        Algorithms.evaluateAggregatedObjectiveFunctions(solution, 1, 1, 1, 1, 1);
         solution.setObjectiveFunction(FuncaoDeAvaliacao(solution, listOfRequests, distanceBetweenNodes));
     }
 
@@ -933,6 +930,7 @@ public class Algorithms {
         }
         solution.setNonAttendedRequestsList(U);
         evaluateSolution(solution, c, Qmax, listRequests);
+        evaluateAggregatedObjectiveFunctions(parameters, solution);
         solution.setLogger(log);
 
         return solution;
@@ -1941,7 +1939,7 @@ public class Algorithms {
             solution.setTotalWaintingTime(FO7(solution));
             solution.setDeliveryTimeWindowAntecipation(FO8(solution));
             solution.setTotalOccupationRate(FO9(solution, Qmax));
-            evaluateAggregatedObjectiveFunctions(solution, 1, 1, 1, 1, 1);
+            Algorithms.evaluateAggregatedObjectiveFunctions(solution, 1, 1, 1, 1, 1);
             solution.setObjectiveFunction(FuncaoDeAvaliacao(solution, listRequests, c));
             solution.setLogger(log);
             solution.linkTheRoutes();

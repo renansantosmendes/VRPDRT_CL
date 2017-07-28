@@ -120,7 +120,9 @@ public class RequestDAO {
                 Integer requestId = resultSetForRequests.getInt("id");
                 Integer passengerOrigin = resultSetForRequests.getInt("passengerOrigin");
                 Integer passengerDestination = resultSetForRequests.getInt("passengerDestination");
-
+                
+                LocalDateTime teste = LocalDateTime.of(LocalDate.now(), resultSetForRequests.getTime("pickUpTimeWindowLower").toLocalTime());
+                
                 Integer pickUpTimeWindowLower = 60 * (resultSetForRequests.getTime("pickUpTimeWindowLower").toLocalTime().getHour())
                         + resultSetForRequests.getTime("pickUpTimeWindowLower").toLocalTime().getMinute() + valueAdded;
 

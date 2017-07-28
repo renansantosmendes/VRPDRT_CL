@@ -176,8 +176,7 @@ public class ResultsGraphicsForParetoCombinedSet {
                         String nodesData = "bh_n" + 12 + "s";
                         String adjacenciesData = "bh_adj_n" + 12 + "s";
                         solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-                    }
-                    if (dialogButton == JOptionPane.NO_OPTION) {
+                    }else if (dialogButton == JOptionPane.NO_OPTION) {
                         System.exit(0);
                     }
                 }

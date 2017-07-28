@@ -31,7 +31,7 @@ import static Algorithms.EvolutionaryAlgorithms.SPEA2;
 public class VRPDRT {
 
     final static Long timeWindows = (long) 3;
-    static List<Request> listOfRequests = new ArrayList<>();
+    static List<Request> requests = new ArrayList<>();
     static List<List<Integer>> listOfAdjacencies = new LinkedList<>();
     static List<List<Long>> distanceBetweenNodes = new LinkedList<>();
     static List<List<Long>> timeBetweenNodes = new LinkedList<>();
@@ -61,10 +61,10 @@ public class VRPDRT {
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
                 requestTimeWindows, instanceSize);
         final Integer numberOfVehicles = 50;
-        final Integer vehicleCapacity = 4;
-        Integer populationSize = 100;
+        final Integer vehicleCapacity = 3;
+        Integer populationSize = 6;
         Integer maximumNumberOfGenerations = 10;
-        Integer maximumNumberOfExecutions = 3;
+        Integer maximumNumberOfExecutions = 4;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -73,36 +73,13 @@ public class VRPDRT {
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
-        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, listOfRequests, distanceBetweenNodes,
+        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
                 timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
                 numberOfNodes, loadIndexList);
-
-        Algorithms.printProblemInformations(listOfRequests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
-
+        Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
-        Solution solution = new Solution(Algorithms.greedyConstructive(0.20, 0.15, 0.55, 0.10, listOfRequests.subList(0, 10),
-                requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-                timeWindows, currentTime, lastNode));
-
-        //System.out.println(solution);
-        //solution.getSetOfRoutes().forEach(route -> System.out.println(route.getRequestAttendanceList()));
-        //solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-        //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
-        //solution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-        //Algorithms algorithms = new Algorithms(instanceName, nodesData, adjacenciesData);
-        //algorithms.getData().getListOfRequests().forEach(System.out::println);
-        //Solution individualSolution = new Solution(algorithms.individualConstructive());
-        //System.out.println(individualSolution);
-        //individualSolution.getSetOfRoutes().forEach(System.out::println);
-        //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-        //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
-//        parameters.add(0.0273);
-//        parameters.add(0.5208);
-//        parameters.add(0.0161);
-//        parameters.add(0.3619);
-//        parameters.add(0.0739);
+               
         parameters.add(1.0);//1
         parameters.add((double) requestTimeWindows);//delta_t
         parameters.add((double) numberOfNodes);//n
@@ -113,33 +90,15 @@ public class VRPDRT {
         nadirPoint.add(100000.0);
 
 //        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
 //                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
 //                timeWindows, currentTime, lastNode);
         SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
-                probabilityOfMutation, probabilityOfCrossover, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
+                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
                 numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
                 timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
-        //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();
-//        InstanceData data = new InstanceData(instanceName, nodesData, adjacenciesData);
-//        data.readProblemData();
-//        data.getListOfRequests().forEach(System.out::println);
-//        new Controller(args);
-//        MainScreen.main(args);
-//        MainScreen ms = new MainScreen();
-//        ms.setVisible(true);
-//        ms.setLocationRelativeTo(null);
-//        MainScreen mainScreen = new MainScreen();
-//        new Controller(mainScreen);
-//        mainScreen.setVisible(true);
-//        mainScreen.configureMainScreen();
-//        NSGAII_Calibration(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-//                timeWindows, currentTime, lastNode);
-//        ils(listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, setOfVehicles, listOfNonAttendedRequests,
-//                requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+        
     }
 
 }

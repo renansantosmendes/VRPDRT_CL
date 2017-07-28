@@ -106,7 +106,7 @@ public class EvolutionaryAlgorithms {
 
     public static double NSGAII(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
-            List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
+            List<Request> requests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
             Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
             Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
             List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
@@ -145,14 +145,14 @@ public class EvolutionaryAlgorithms {
 
                 int maximumSize;
 
-                inicializePopulation(population, populationSize, listOfRequests,
+                inicializePopulation(population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
                 normalizeObjectiveFunctionsForSolutions(population);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters, population);
+                evaluateAggregatedObjectiveFunctions(parameters, population);
 
                 //printPopulation(population);
                 dominanceAlgorithm(population, nonDominatedSolutions);
@@ -163,21 +163,21 @@ public class EvolutionaryAlgorithms {
 
                 rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
 
-                twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests,
+                twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, requests,
                         requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode,
                         requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes,
                         vehicleCapacity, timeWindows);
 
-                mutation2Shuffle(parameters, offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode,
+                mutation2Shuffle(parameters, offspring, probabilityOfMutation, requests, requestsWhichBoardsInNode,
                         requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 //normalizeObjectiveFunctionsValues(fileWithSolutions);
                 normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters, fileWithSolutions);
+                evaluateAggregatedObjectiveFunctions(parameters, fileWithSolutions);
 
                 normalizeObjectiveFunctionsForSolutions(offspring);
-                evaluateAggregatedObjectiveFunctionsNormalized(parameters, offspring);
+                evaluateAggregatedObjectiveFunctions(parameters, offspring);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 //normalizeObjectiveFunctions(fileWithSolutions);
                 for (Solution s : fileWithSolutions) {
@@ -209,7 +209,7 @@ public class EvolutionaryAlgorithms {
                     updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
                     normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                    evaluateAggregatedObjectiveFunctionsNormalized(parameters, fileWithSolutions);
+                    evaluateAggregatedObjectiveFunctions(parameters, fileWithSolutions);
                     //normalizeObjectiveFunctions(fileWithSolutions);
                     reducePopulation(population, nonDominatedFronts, maximumSize);
                     offspring.clear();
@@ -217,13 +217,13 @@ public class EvolutionaryAlgorithms {
                     offspring.addAll(population);
                     rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
 
-                    twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, listOfRequests, requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes, vehicleCapacity, timeWindows);
-                    mutation2Shuffle(parameters, offspring, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+                    twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, requests, requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes, vehicleCapacity, timeWindows);
+                    mutation2Shuffle(parameters, offspring, probabilityOfMutation, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
                     //normalizeObjectiveFunctionsValues(offspring);
                     normalizeAggregatedObjectiveFunctions(offspring);
 
                     normalizeObjectiveFunctionsForSolutions(offspring);
-                    evaluateAggregatedObjectiveFunctionsNormalized(parameters, offspring);
+                    evaluateAggregatedObjectiveFunctions(parameters, offspring);
 
                     System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
 
@@ -327,10 +327,7 @@ public class EvolutionaryAlgorithms {
 
     public static double smetric(List<Solution> solutions, List<Double> nadirPoint) {
         solutions.sort(Comparator.comparingDouble(Solution::getAggregatedObjective1));
-        //        .thenComparingDouble(Solution::getAggregatedObjective2).reversed());
 
-//        double x_nadir = nadirPoint.get(0);
-//        double y_nadir = nadirPoint.get(1);
         double x_nadir = 1.0;
         double y_nadir = 1.0;
         normalizeAggregatedObjectiveFunctions(solutions, nadirPoint);
@@ -360,7 +357,7 @@ public class EvolutionaryAlgorithms {
     public static void SPEA2(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize,
             Integer fileSize, Integer maximumNumberOfGenerations,
             Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
-            List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
+            List<Request> requests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
             Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
             Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
             List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
@@ -395,11 +392,13 @@ public class EvolutionaryAlgorithms {
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + number + ".txt");
                 PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + number + ".txt");
 
-                inicializePopulation(population, populationSize, listOfRequests,
+                inicializePopulation(population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 normalizeObjectiveFunctionsValues(population);
+                normalizeObjectiveFunctionsForSolutions(population);
+                normalizeAggregatedObjectiveFunctions(population, nadirPoint);
 
                 tamMax = population.size();
                 dominanceAlgorithm(population, file);
@@ -407,29 +406,38 @@ public class EvolutionaryAlgorithms {
 
                 int actualGeneration = 0;
                 fitnessEvaluationForSPEA2(population, dist, populationSize, fileSize);
-                List<Solution> teste = new ArrayList<>();
                 System.out.println("Execution = " + executionCounter);
+
                 while (actualGeneration < maximumNumberOfGenerations) {
                     fitnessEvaluationForSPEA2(population, dist, populationSize, fileSize);
                     parentsAndOffspring.addAll(population);
                     parentsAndOffspring.addAll(file);
                     dominanceAlgorithm(parentsAndOffspring, nonDominated);
                     updateSPEA2SolutionsFile(parentsAndOffspring, file, fileSize);
-                    dominanceAlgorithm(file, nonDominated);
+
+//                    dominanceAlgorithm(file, nonDominated);
                     rouletteWheelSelectionAlgorithm(parents, file, tamMax);
-                    
-                    onePointCrossover(parameters, file, population, fileSize, probabilityOfCrossover, parents, listOfRequests,
+
+                    onePointCrossover(parameters, file, population, fileSize, probabilityOfCrossover, parents, requests,
                             requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode,
                             requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes,
                             vehicleCapacity, timeWindows);
 
-                    mutation2Opt(parameters, file, probabilityOfMutation, listOfRequests, requestsWhichBoardsInNode,
+                    mutation2Opt(parameters, population, probabilityOfMutation, requests, requestsWhichBoardsInNode,
                             requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                             requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
+                    evaluateAggregatedObjectiveFunctions(parameters, file);
+                    evaluateAggregatedObjectiveFunctions(parameters, population);
+                    fitnessEvaluationForSPEA2(file, dist, populationSize, fileSize);
+
+                    normalizeObjectiveFunctionsValues(file);
+                    normalizeObjectiveFunctionsForSolutions(file);
+                    normalizeAggregatedObjectiveFunctions(file, nadirPoint);
+                    dominanceAlgorithm(file, nonDominated);
                     actualGeneration++;
                     parentsAndOffspring.clear();
-                    //listOfHypervolumes.add(smetric(file, nadirPoint));
+//                    listOfHypervolumes.add(smetric(file, nadirPoint));
                     listOfHypervolumes.add(smetric(nonDominated, nadirPoint));
                     saveDataInTextFile(nonDominated, saida1, saida2, saida3);
                     System.out.println("Generation = " + actualGeneration + "\t" + nonDominated.size());
@@ -457,6 +465,48 @@ public class EvolutionaryAlgorithms {
         }
     }
 
+    public static void SPEA3(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize,
+            Integer fileSize, Integer maximumNumberOfGenerations,
+            Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
+            List<Request> listOfRequests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
+            Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
+            Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
+            List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
+            Long timeWindows, Long currentTime, Integer lastNode) throws IOException {
+
+        List<Solution> population = new ArrayList<>();
+        List<Solution> nonDominated = new ArrayList();
+        List<Solution> file = new ArrayList();
+        List<Integer> parents = new ArrayList<>();
+        List<Solution> parentsAndOffspring = new ArrayList();
+        String folderName, fileName;
+        List<List<Double>> hypervolumes = new ArrayList<>();
+        double hypervolume = 0;
+        LocalDateTime time = LocalDateTime.now();
+
+        folderName = "AlgorithmsResults//5FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        fileName = "SPEA2";
+
+        boolean success = (new File(folderName)).mkdirs();
+        if (!success) {
+            System.out.println("Folder already exists!");
+        }
+        try {
+            List<Solution> combinedPareto = new ArrayList<>();
+            for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
+                String number;
+                int tamMax;
+                double dist[][] = new double[populationSize][populationSize];
+                number = Integer.toString(executionCounter);
+                PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + number + ".txt");
+
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void saveDataInTextFile(List<Solution> arquivo, PrintStream saida1, PrintStream saida2, PrintStream saida3) {
         for (Solution s : arquivo) {
             saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
@@ -470,7 +520,7 @@ public class EvolutionaryAlgorithms {
     public static void fitnessEvaluationForSPEA2(List<Solution> Pop, double[][] dist, Integer TamPop, Integer TamArq) {
         Integer k = (int) Math.sqrt(TamPop + TamArq);
         List<Double> lista = new ArrayList<>();
-        double maximo = 0, minimo = 9999999;
+        //double maximo = 0, minimo = 9999999;
         for (int i = 0; i < TamPop; i++) {
             lista.clear();
             for (int j = 0; j < TamPop; j++) {
@@ -479,15 +529,20 @@ public class EvolutionaryAlgorithms {
             Collections.sort(lista);
             double fitness = Pop.get(i).getR() + 1 / (lista.get(k) + 2);//fitness(i) = R(i) + D(i)
             Pop.get(i).setFitness(fitness);
-            if (fitness > maximo) {
-                maximo = fitness;
-            } else if (fitness < minimo) {
-                minimo = fitness;
-            }
+//            if (fitness > maximo) {
+//                maximo = fitness;
+//            } else if (fitness < minimo) {
+//                minimo = fitness;
+//            }
         }
+
+        double maximo = Pop.stream().mapToDouble(Solution::getFitness).max().getAsDouble();
+        double minimo = Pop.stream().mapToDouble(Solution::getFitness).min().getAsDouble();
+
         double soma = 0;
         for (Solution s : Pop) {
-            double fitness = (maximo - s.getFitness()) / (maximo - minimo);
+            //double fitness = (maximo - s.getFitness()) / (maximo - minimo);
+            double fitness = (s.getFitness() - minimo) / (maximo - minimo);
             s.setFitness(fitness);
             soma += fitness;
         }
@@ -915,53 +970,53 @@ public class EvolutionaryAlgorithms {
         }
     }
 
-    public static void dominanceAlgorithm(List<Solution> Pop, List<Solution> naoDominados) {
+    public static void dominanceAlgorithm(List<Solution> population, List<Solution> nonDominated) {
         //--------------------------------------------------------------------------------------------------------------
         //List<Solucao> naoDominados = new ArrayList<>();
-        naoDominados.clear();
-        for (int i = 0; i < Pop.size(); i++) {
-            Pop.get(i).setNumberOfSolutionsWichDomineThisSolution(0);
-            Pop.get(i).setNumberOfDominatedSolutionsByThisSolution(0);
-            Pop.get(i).setListOfSolutionsDominatedByThisSolution(new ArrayList<>());
+        nonDominated.clear();
+        for (int i = 0; i < population.size(); i++) {
+            population.get(i).setNumberOfSolutionsWichDomineThisSolution(0);
+            population.get(i).setNumberOfDominatedSolutionsByThisSolution(0);
+            population.get(i).setListOfSolutionsDominatedByThisSolution(new ArrayList<>());
         }
         //Ficar atento nesse reset aqui em cima, pode ser que de problema depois
         //--------------------------------------------------------------------------------------------------------------
 
-        for (int i = 0; i < Pop.size(); i++) {
-            for (int j = 0; j < Pop.size(); j++) {
+        for (int i = 0; i < population.size(); i++) {
+            for (int j = 0; j < population.size(); j++) {
                 if (i != j) {
                     //if((Pop.get(i).getF1()<Pop.get(j).getF1())&&(Pop.get(i).getF2()<Pop.get(j).getF2())){
-                    if (((Pop.get(i).getAggregatedObjective1() < Pop.get(j).getAggregatedObjective1()) && (Pop.get(i).getAggregatedObjective2() < Pop.get(j).getAggregatedObjective2())
-                            || (Pop.get(i).getAggregatedObjective1() < Pop.get(j).getAggregatedObjective1()) && (Pop.get(i).getAggregatedObjective2() == Pop.get(j).getAggregatedObjective2())
-                            || (Pop.get(i).getAggregatedObjective1() == Pop.get(j).getAggregatedObjective1()) && (Pop.get(i).getAggregatedObjective2() < Pop.get(j).getAggregatedObjective2()))) {
-                        Pop.get(i).addnDom();
-                        Pop.get(j).addeDom();
-                        Pop.get(i).addL(j);//adiciona a posição da solucao que é dominada - usado no NSGA-II
+                    if (((population.get(i).getAggregatedObjective1() < population.get(j).getAggregatedObjective1()) && (population.get(i).getAggregatedObjective2() < population.get(j).getAggregatedObjective2())
+                            || (population.get(i).getAggregatedObjective1() < population.get(j).getAggregatedObjective1()) && (population.get(i).getAggregatedObjective2() == population.get(j).getAggregatedObjective2())
+                            || (population.get(i).getAggregatedObjective1() == population.get(j).getAggregatedObjective1()) && (population.get(i).getAggregatedObjective2() < population.get(j).getAggregatedObjective2()))) {
+                        population.get(i).addnDom();
+                        population.get(j).addeDom();
+                        population.get(i).addL(j);//adiciona a posição da solucao que é dominada - usado no NSGA-II
                     }
                 }
             }
         }
 
-        for (int i = 0; i < Pop.size(); i++) {//Determina S, número de soluções que são dominadas pela solução i
-            Pop.get(i).setS(Pop.get(i).getNumberOfDominatedSolutionsByThisSolution());
+        for (int i = 0; i < population.size(); i++) {//Determina S, número de soluções que são dominadas pela solução i
+            population.get(i).setS(population.get(i).getNumberOfDominatedSolutionsByThisSolution());
         }
 
-        for (int i = 0; i < Pop.size(); i++) {
-            for (int j = 0; j < Pop.size(); j++) {
-                if (((Pop.get(j).getAggregatedObjective1() < Pop.get(i).getAggregatedObjective1()) && (Pop.get(j).getAggregatedObjective2() < Pop.get(i).getAggregatedObjective2())
-                        || (Pop.get(j).getAggregatedObjective1() < Pop.get(i).getAggregatedObjective1()) && (Pop.get(j).getAggregatedObjective2() == Pop.get(i).getAggregatedObjective2())
-                        || (Pop.get(j).getAggregatedObjective1() == Pop.get(i).getAggregatedObjective1()) && (Pop.get(j).getAggregatedObjective2() < Pop.get(i).getAggregatedObjective2()))) {
-                    Pop.get(i).setR(Pop.get(i).getR() + Pop.get(j).getNumberOfDominatedSolutionsByThisSolution());
+        for (int i = 0; i < population.size(); i++) {
+            for (int j = 0; j < population.size(); j++) {
+                if (((population.get(j).getAggregatedObjective1() < population.get(i).getAggregatedObjective1()) && (population.get(j).getAggregatedObjective2() < population.get(i).getAggregatedObjective2())
+                        || (population.get(j).getAggregatedObjective1() < population.get(i).getAggregatedObjective1()) && (population.get(j).getAggregatedObjective2() == population.get(i).getAggregatedObjective2())
+                        || (population.get(j).getAggregatedObjective1() == population.get(i).getAggregatedObjective1()) && (population.get(j).getAggregatedObjective2() < population.get(i).getAggregatedObjective2()))) {
+                    population.get(i).setR(population.get(i).getR() + population.get(j).getNumberOfDominatedSolutionsByThisSolution());
                 }
             }
         }
 
-        for (int i = 0; i < Pop.size(); i++) {
-            if (Pop.get(i).getNumberOfSolutionsWichDomineThisSolution() == 0) {
-                naoDominados.add(Pop.get(i));
+        for (int i = 0; i < population.size(); i++) {
+            if (population.get(i).getNumberOfSolutionsWichDomineThisSolution() == 0) {
+                nonDominated.add(population.get(i));
             }
         }
-        removeEqualSolutions(naoDominados);
+        removeEqualSolutions(nonDominated);
     }
 
     public static void normalizeObjectiveFunctionsValues2(List<Solution> Pop) {

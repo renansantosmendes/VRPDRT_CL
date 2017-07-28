@@ -49,6 +49,7 @@ import static Algorithms.Algorithms.geraPesos;
 import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctions;
 import static Algorithms.Algorithms.FO3;
 import static Algorithms.Algorithms.FO9;
+import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctions;
 
 /**
  *
@@ -942,7 +943,8 @@ public class Methods {
         for (int i = 0; i < TamMax; i++) {
             soma = 0;
             pos = -1;
-            valor = rnd.nextFloat() / 10;
+            //valor = rnd.nextFloat() / 10;
+            valor = rnd.nextDouble()/10;
             //System.out.println(valor);
             //ImprimePopulacao(Pop);
             for (int j = 0; j < Pop.size(); j++) {
