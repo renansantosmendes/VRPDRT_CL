@@ -1,0 +1,47 @@
+
+Solution solution = new Solution(Algorithms.greedyConstructive(0.20, 0.15, 0.55, 0.10, requests.subList(0, 10),
+                requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+                timeWindows, currentTime, lastNode));
+
+ //System.out.println(solution);
+        //solution.getSetOfRoutes().forEach(route -> System.out.println(route.getRequestAttendanceList()));
+        //solution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+        //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
+        //solution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+        //Algorithms algorithms = new Algorithms(instanceName, nodesData, adjacenciesData);
+        //algorithms.getData().getListOfRequests().forEach(System.out::println);
+        //Solution individualSolution = new Solution(algorithms.individualConstructive());
+        //System.out.println(individualSolution);
+        //individualSolution.getSetOfRoutes().forEach(System.out::println);
+        //individualSolution.getStaticMapForEveryRoute(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+        //individualSolution.getStaticMapWithAllRoutes(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData);
+//        parameters.add(0.0273);
+//        parameters.add(0.5208);
+//        parameters.add(0.0161);
+//        parameters.add(0.3619);
+//        parameters.add(0.0739);
+
+
+
+Algorithms was over here in the source code
+
+//new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree();
+//        InstanceData data = new InstanceData(instanceName, nodesData, adjacenciesData);
+//        data.readProblemData();
+//        data.getListOfRequests().forEach(System.out::println);
+//        new Controller(args);
+//        MainScreen.main(args);
+//        MainScreen ms = new MainScreen();
+//        ms.setVisible(true);
+//        ms.setLocationRelativeTo(null);
+//        MainScreen mainScreen = new MainScreen();
+//        new Controller(mainScreen);
+//        mainScreen.setVisible(true);
+//        mainScreen.configureMainScreen();
+//        NSGAII_Calibration(populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+//                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+//                timeWindows, currentTime, lastNode);
+//        ils(requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, setOfVehicles, listOfNonAttendedRequests,
+//                requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
