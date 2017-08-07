@@ -586,9 +586,14 @@ public class Solution implements Comparable<Solution> {
     }
 
     public String getStringWithObjectives() {
-        String stringWithObjectives = totalDistance + "\t" + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance
-                + "\t" + numberOfNonAttendedRequests + "\t" + numberOfVehicles + "\t" + totalTravelTime + "\t"
-                + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
+//        String stringWithObjectives = totalDistance + "\t" + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance
+//                + "\t" + numberOfNonAttendedRequests + "\t" + numberOfVehicles + "\t" + totalTravelTime + "\t"
+//                + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
+        String stringWithObjectives = aggregatedObjective1 + "\t" + aggregatedObjective2 + "\t" + totalDistance + "\t" + 
+                totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance  + "\t" + numberOfNonAttendedRequests + "\t" +
+                numberOfVehicles;
+                // + "\t" + totalTravelTime + "\t"  + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
+
         return stringWithObjectives;
     }
 
@@ -601,8 +606,8 @@ public class Solution implements Comparable<Solution> {
 //                + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t" + numberOfVehicles
 //                + "\t" + totalTravelTime + "\t" + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t"
 //                + "\t" + df.format(totalOccupationRate) + "\t";
-        String s = df.format(aggregatedObjective1).replace(",", ".") + "\t" + df.format(aggregatedObjective2).replace(",", ".") + "\t" + totalDistance + "\t" 
-                + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t" 
+        String s = df.format(aggregatedObjective1).replace(",", ".") + "\t" + df.format(aggregatedObjective2).replace(",", ".") + "\t" + totalDistance + "\t"
+                + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t"
                 + numberOfVehicles + "\t";
 
 //        String s = aggregatedObjective1Normalized + "\t" + aggregatedObjective2Normalized + "\t" + crowdDistance + "\t" +/*aggregatedObjective1Normalized + "\t"+ 

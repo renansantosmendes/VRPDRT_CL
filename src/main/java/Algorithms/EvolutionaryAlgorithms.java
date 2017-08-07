@@ -135,6 +135,7 @@ public class EvolutionaryAlgorithms {
         try {
             List<Solution> combinedPareto = new ArrayList<>();
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
+            PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
                 List<Double> listOfHypervolumes = new ArrayList<>();
@@ -251,6 +252,7 @@ public class EvolutionaryAlgorithms {
             printPopulation(finalPareto);
             for (Solution individual : finalPareto) {
                 printStreamForCombinedPareto.print(individual + "\n");
+                printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
             }
 
             new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
@@ -258,12 +260,12 @@ public class EvolutionaryAlgorithms {
             hypervolume = smetric(finalPareto, nadirPoint);
             //hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
-            System.out.println("Final Pareto");
-            DecimalFormat formatator = new DecimalFormat("0.0000");
-            finalPareto.forEach(u -> System.out.println(
-                    formatator.format(u.getAggregatedObjective1()).replace(",", ".")
-                    + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
-            );
+//            System.out.println("Final Pareto");
+//            DecimalFormat formatator = new DecimalFormat("0.0000");
+//            finalPareto.forEach(u -> System.out.println(
+//                    formatator.format(u.getAggregatedObjective1()).replace(",", ".")
+//                    + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
+//            );
 
             //System.out.println("List of Lists = " + hypervolumes);
             saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
@@ -438,7 +440,6 @@ public class EvolutionaryAlgorithms {
                     dominanceAlgorithm(file, nonDominated);
                     actualGeneration++;
                     parentsAndOffspring.clear();
-//                    listOfHypervolumes.add(smetric(file, nadirPoint));
                     listOfHypervolumes.add(smetric(nonDominated, nadirPoint));
                     saveDataInTextFile(nonDominated, saida1, saida2, saida3);
                     System.out.println("Generation = " + actualGeneration + "\t" + nonDominated.size());
@@ -464,227 +465,6 @@ public class EvolutionaryAlgorithms {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void SPEA3(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize,
-            Integer fileSize, Integer maximumNumberOfGenerations,
-            Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
-            List<Request> requests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
-            Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
-            Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
-            List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
-            Long timeWindows, Long currentTime, Integer lastNode) throws IOException {
-
-        List<Solution> population = new ArrayList<>();
-        List<Solution> nonDominated = new ArrayList();
-        List<Solution> file = new ArrayList();
-        List<Integer> parents = new ArrayList<>();
-        List<Solution> parentsAndOffspring = new ArrayList();
-        String folderName, fileName;
-        List<List<Double>> hypervolumes = new ArrayList<>();
-        double hypervolume = 0;
-        LocalDateTime time = LocalDateTime.now();
-
-        folderName = "AlgorithmsResults//5FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
-        fileName = "SPEA2";
-
-        boolean success = (new File(folderName)).mkdirs();
-        if (!success) {
-            System.out.println("Folder already exists!");
-        }
-        try {
-            List<Solution> combinedPareto = new ArrayList<>();
-            for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
-                String number;
-                int tamMax;
-                double dist[][] = new double[populationSize][populationSize];
-                number = Integer.toString(executionCounter);
-                PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + number + ".txt");
-                inicializePopulation(population, populationSize, requests,
-                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
-                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-                
-                
-                
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-   
-    
-    public static double SPEA4(String instanceName, List<Double> parameters, List<Double> nadirPoint, Integer populationSize, Integer maximumNumberOfGenerations,
-            Integer maximumNumberOfExecutions, double probabilityOfMutation, double probabilityOfCrossover,
-            List<Request> requests, Map<Integer, List<Request>> requestsWhichBoardsInNode,
-            Map<Integer, List<Request>> requestsWhichLeavesInNode, Integer numberOfNodes, Integer vehicleCapacity,
-            Set<Integer> setOfVehicles, List<Request> listOfNonAttendedRequests, List<Request> requestList,
-            List<Integer> loadIndexList, List<List<Long>> timeBetweenNodes, List<List<Long>> distanceBetweenNodes,
-            Long timeWindows, Long currentTime, Integer lastNode) throws IOException {
-
-        List<Solution> offspring = new ArrayList<>();
-        List<Solution> population = new ArrayList<>();
-        List<Solution> finalPareto = new ArrayList<>();
-        List<Solution> nonDominatedSolutions = new ArrayList();
-        List<Solution> fileWithSolutions = new ArrayList();
-        List<Integer> parents = new ArrayList<>();
-        List<Solution> parentsAndOffspring = new ArrayList();
-        List<List<Solution>> nonDominatedFronts = new ArrayList<>();
-        List<List<Double>> hypervolumes = new ArrayList<>();
-        double hypervolume = 0;
-        String folderName, fileName;
-
-        LocalDateTime time = LocalDateTime.now();
-        folderName = "AlgorithmsResults//5FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
-        fileName = "NSGAII";
-
-        boolean success = (new File(folderName)).mkdirs();
-        if (!success) {
-            System.out.println("Folder already exists!");
-        }
-        try {
-            List<Solution> combinedPareto = new ArrayList<>();
-            PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
-            for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
-                String executionNumber;
-                List<Double> listOfHypervolumes = new ArrayList<>();
-                executionNumber = Integer.toString(executionCounter);
-                PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
-                PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
-                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + executionNumber + ".txt");
-
-                int maximumSize;
-
-                inicializePopulation(population, populationSize, requests,
-                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
-                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
-                //normalizeObjectiveFunctionsValues(population);
-                //normalizeObjectiveFunctions(population);
-                normalizeObjectiveFunctionsForSolutions(population);
-                evaluateAggregatedObjectiveFunctions(parameters, population);
-
-                //printPopulation(population);
-                dominanceAlgorithm(population, nonDominatedSolutions);
-                maximumSize = population.size();
-                offspring.addAll(population);
-                nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
-                fitnessEvaluationForMultiObjectiveOptimization(offspring);
-
-                rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
-
-                twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, requests,
-                        requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode,
-                        requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes,
-                        vehicleCapacity, timeWindows);
-
-                mutation2Shuffle(parameters, offspring, probabilityOfMutation, requests, requestsWhichBoardsInNode,
-                        requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
-                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
-                //normalizeObjectiveFunctionsValues(fileWithSolutions);
-                normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                evaluateAggregatedObjectiveFunctions(parameters, fileWithSolutions);
-
-                normalizeObjectiveFunctionsForSolutions(offspring);
-                evaluateAggregatedObjectiveFunctions(parameters, offspring);
-                //normalizeObjectiveFunctions(fileWithSolutions);
-                //normalizeObjectiveFunctions(fileWithSolutions);
-                for (Solution s : fileWithSolutions) {
-                    saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
-                    saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
-                }
-                saida1.print("\n\n");
-                saida2.print(fileWithSolutions.size() + "\n");
-                saida3.print("\n\n");
-
-                //dominanceAlgorithm(offspring, nonDominatedSolutions);
-                //fileWithSolutions.addAll(nonDominatedSolutions);
-                System.out.println("Execution = " + executionCounter);
-                int actualGeneration = 0;
-                while (actualGeneration < maximumNumberOfGenerations) {
-                    dominanceAlgorithm(offspring, nonDominatedSolutions);
-                    fileWithSolutions.addAll(nonDominatedSolutions);
-                    nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
-                    fitnessEvaluationForMultiObjectiveOptimization(offspring);
-                    parentsAndOffspring.clear();
-
-                    parentsAndOffspring.addAll(population);
-                    parentsAndOffspring.addAll(offspring);
-
-                    nonDominatedFrontiersSortingAlgorithm(parentsAndOffspring, nonDominatedFronts);
-                    fitnessEvaluationForMultiObjectiveOptimization(parentsAndOffspring);
-                    dominanceAlgorithm(parentsAndOffspring, nonDominatedSolutions);
-
-                    updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
-                    //normalizeObjectiveFunctionsValues(fileWithSolutions);
-                    normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
-                    evaluateAggregatedObjectiveFunctions(parameters, fileWithSolutions);
-                    //normalizeObjectiveFunctions(fileWithSolutions);
-                    reducePopulation(population, nonDominatedFronts, maximumSize);
-                    offspring.clear();
-
-                    offspring.addAll(population);
-                    rouletteWheelSelectionAlgorithm(parents, offspring, maximumSize);
-
-                    twoPointsCrossover(parameters, offspring, population, maximumSize, probabilityOfCrossover, parents, requests, requestList, setOfVehicles, listOfNonAttendedRequests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, timeBetweenNodes, distanceBetweenNodes, numberOfNodes, vehicleCapacity, timeWindows);
-                    mutation2Shuffle(parameters, offspring, probabilityOfMutation, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-                    //normalizeObjectiveFunctionsValues(offspring);
-                    normalizeAggregatedObjectiveFunctions(offspring);
-
-                    normalizeObjectiveFunctionsForSolutions(offspring);
-                    evaluateAggregatedObjectiveFunctions(parameters, offspring);
-
-                    System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
-
-                    listOfHypervolumes.add(smetric(fileWithSolutions, nadirPoint));
-
-                    for (Solution s : fileWithSolutions) {
-                        saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
-                        saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
-                    }
-                    saida1.print("\n\n");
-                    saida2.print(fileWithSolutions.size() + "\n");
-                    saida3.print("\n\n");
-                    actualGeneration++;
-                }
-                offspring.clear();
-                parentsAndOffspring.clear();
-                combinedPareto.addAll(fileWithSolutions);
-                fileWithSolutions.clear();
-                population.clear();
-                nonDominatedFronts.clear();
-                hypervolumes.add(listOfHypervolumes);
-            }
-
-            dominanceAlgorithm(combinedPareto, finalPareto);
-            printPopulation(finalPareto);
-            for (Solution individual : finalPareto) {
-                printStreamForCombinedPareto.print(individual + "\n");
-            }
-
-            new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
-
-            hypervolume = smetric(finalPareto, nadirPoint);
-            //hypervolume = smetric(finalPareto);
-            System.out.println("S-Metric = " + hypervolume);
-            System.out.println("Final Pareto");
-            DecimalFormat formatator = new DecimalFormat("0.0000");
-            finalPareto.forEach(u -> System.out.println(
-                    formatator.format(u.getAggregatedObjective1()).replace(",", ".")
-                    + "\t" + formatator.format(u.getAggregatedObjective2()).replace(",", "."))
-            );
-
-            //System.out.println("List of Lists = " + hypervolumes);
-            saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
-//            finalPareto.get(0).getStaticMapForEveryRoute(new NodeDAO("bh_nodes_little").getListOfNodes(),
-//                    "adjacencies_bh_nodes_little_test", "bh_nodes_little");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return hypervolume;
     }
 
     public static void saveDataInTextFile(List<Solution> arquivo, PrintStream saida1, PrintStream saida2, PrintStream saida3) {

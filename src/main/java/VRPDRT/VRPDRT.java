@@ -23,7 +23,6 @@ import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.NSGAII;
 import static Algorithms.EvolutionaryAlgorithms.SPEA2;
-import static Algorithms.EvolutionaryAlgorithms.SPEA3;
 
 /**
  *
@@ -53,10 +52,10 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        int numberOfRequests = 50;
+        int numberOfRequests = 150;
         int numberOfNodes = 12;
         int requestTimeWindows = 5;
-        String instanceSize = "s";
+        String instanceSize = "m";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
@@ -64,7 +63,7 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 30;
+        Integer maximumNumberOfGenerations = 20;
         Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
@@ -86,19 +85,20 @@ public class VRPDRT {
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
         parameters.add((double) numberOfRequests * numberOfNodes);//r n
 
-        nadirPoint.add(1000000.0);
-        nadirPoint.add(800000.0);
+//        nadirPoint.add(1000000.0);
+//        nadirPoint.add(800000.0);
+        nadirPoint.add((double) 25 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,25
+        nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20
+        System.out.println("Nadir Point = " + nadirPoint);
 
 //        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
 //                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
 //                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
 //                timeWindows, currentTime, lastNode);
-        
-        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
-                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
-                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
-                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
+//        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
+//                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
+//                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
+//                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
     }
 
 }
