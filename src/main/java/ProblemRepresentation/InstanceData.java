@@ -6,9 +6,9 @@
 package ProblemRepresentation;
 
 import Algorithms.Methods;
-import InstanceReaderWithMySQL.AdjacenciesDAO;
-import InstanceReaderWithMySQL.NodeDAO;
-import InstanceReaderWithMySQL.RequestDAO;
+import InstanceReader.AdjacenciesDAO;
+import InstanceReader.NodeDAO;
+import InstanceReader.RequestDAO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

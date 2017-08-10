@@ -5,7 +5,7 @@
  */
 package GoogleMapsApi;
 
-import InstanceReaderWithMySQL.ConnectionFactory;
+import InstanceReader.ConnectionFactory;
 import ProblemRepresentation.Node;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;

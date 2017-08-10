@@ -6,7 +6,7 @@
 package Controller;
 
 import GoogleMapsApi.GoogleStaticMap;
-import InstanceReaderWithMySQL.NodeDAO;
+import InstanceReader.NodeDAO;
 import ProblemRepresentation.InstanceData;
 import View.MainScreen;
 import View.WaitScreen;

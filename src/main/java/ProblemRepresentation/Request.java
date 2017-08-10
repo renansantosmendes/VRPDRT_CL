@@ -174,6 +174,12 @@ public class Request implements Comparable, Cloneable {
         }
     }
 
+    public String getStringToFile(){
+        String string = id + "\t" + origin + "\t" + destination + "\t" + pickupTimeWindowLower + "\t" +pickupTimeWindowUpper 
+                + "\t" + deliveryTimeWindowLower + "\t" + deliveryTimeWindowUpper;
+        return string;
+    }
+    
     @Override
     public String toString() {
 

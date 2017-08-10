@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package InstanceReaderWithMySQL;
+package InstanceReader;
 
 //import GoogleMapsApi.GoogleMapsRoute;
 //import static GoogleMapsApi.GoogleMapsRoute.FileExtension.json;

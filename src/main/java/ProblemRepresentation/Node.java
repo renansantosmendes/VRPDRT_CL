@@ -71,9 +71,9 @@ public class Node {
     public int getLoadIndex() {
         return loadIndex;
     }
-    
-    public String getGeocodedInformationForRoutes(){
-        return this.getLongitude() + "," +  this.getLatitude();
+
+    public String getGeocodedInformationForRoutes() {
+        return this.getLongitude() + "," + this.getLatitude();
     }
 
     public void setLoadIndex(Map<Node, List<Request>> requestsWichBoardsInNode, Map<Node, List<Request>> requestsWichLeavesInNode) {
@@ -82,14 +82,15 @@ public class Node {
         }
     }
 
-    public String getLatLng(){
+    public String getLatLng() {
         return this.longitude + "," + this.latitude;
     }
-    
+
     @Override
     public String toString() {
-        return "Node(" + this.nodeId + ") " + "Lat = " + this.latitude + " Long = "
-                + this.longitude + " LoadIndex = " + this.loadIndex + " Adress = " + this.adress;
+//        return "Node(" + this.nodeId + ") " + "Lat = " + this.latitude + " Long = "
+//                + this.longitude + " LoadIndex = " + this.loadIndex + " Adress = " + this.adress;
+        return nodeId + "\t" + latitude + "\t" + longitude + "\t" + adress;
     }
 
     public String toStringForMapQuery() {
@@ -105,24 +106,24 @@ public class Node {
 //        return "&markers=color:" + color + "|label:" + label + "|" + this.longitude + "," + this.latitude;
         String color;
         String label = null;
-        if(this.nodeId > 9){
-            if(this.nodeId == 10){
+        if (this.nodeId > 9) {
+            if (this.nodeId == 10) {
                 label = "A";
-            }else if(this.nodeId == 11){
+            } else if (this.nodeId == 11) {
                 label = "B";
-            }else if(this.nodeId == 12){
+            } else if (this.nodeId == 12) {
                 label = "C";
-            }else if(this.nodeId == 13){
+            } else if (this.nodeId == 13) {
                 label = "D";
-            }else if(this.nodeId == 14){
+            } else if (this.nodeId == 14) {
                 label = "E";
-            }else if(this.nodeId == 15){
+            } else if (this.nodeId == 15) {
                 label = "F";
             }
-        }else{
+        } else {
             label = this.nodeId.toString();
         }
-        
+
         if (this.nodeId == 0) {
             color = "red";
             //label = "O";

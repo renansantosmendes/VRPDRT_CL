@@ -5,7 +5,7 @@
  */
 package AlgorithmsResults;
 
-import InstanceReaderWithMySQL.NodeDAO;
+import InstanceReader.NodeDAO;
 import ProblemRepresentation.Solution;
 import java.awt.Color;
 import java.awt.Shape;

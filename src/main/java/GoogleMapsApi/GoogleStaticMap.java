@@ -5,7 +5,7 @@
  */
 package GoogleMapsApi;
 
-import InstanceReaderWithMySQL.AdjacenciesDAO;
+import InstanceReader.AdjacenciesDAO;
 import ProblemRepresentation.Node;
 import ProblemRepresentation.Request;
 import java.io.File;

@@ -11,7 +11,6 @@ import java.util.*;
 import ProblemRepresentation.*;
 import static Algorithms.Methods.readProblemData;
 import GoogleMapsApi.*;
-import InstanceReaderWithMySQL.*;
 import com.google.maps.errors.ApiException;
 import java.io.IOException;
 import Algorithms.*;
@@ -23,6 +22,9 @@ import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.NSGAII;
 import static Algorithms.EvolutionaryAlgorithms.SPEA2;
+import InstanceReader.NodeDAO;
+import InstanceReader.ReadDataInExcelFile;
+import jxl.read.biff.BiffException;
 
 /**
  *
@@ -50,12 +52,12 @@ public class VRPDRT {
     static Long currentTime;
     static Integer lastNode;
 
-    public static void main(String[] args) throws ApiException, InterruptedException, IOException {
+    public static void main(String[] args) throws ApiException, InterruptedException, IOException, BiffException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        int numberOfRequests = 150;
+        int numberOfRequests = 250;
         int numberOfNodes = 12;
-        int requestTimeWindows = 5;
-        String instanceSize = "m";
+        int requestTimeWindows = 10;
+        String instanceSize = "l";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
@@ -99,6 +101,12 @@ public class VRPDRT {
 //                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+
+        //new NodeDAO(nodesData).getListOfNodes().forEach(System.out::println);
+        //new ReadDataInExcelFile().saveData(requests);
+        
+        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/instances.xls";
+        new ReadDataInExcelFile(filePath).getRequests(instanceName);
     }
 
 }

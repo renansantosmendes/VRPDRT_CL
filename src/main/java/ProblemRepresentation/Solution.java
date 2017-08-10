@@ -2,7 +2,7 @@ package ProblemRepresentation;
 
 //import GoogleMapsApi.StaticGoogleMap;
 import GoogleMapsApi.GoogleStaticMap;
-import InstanceReaderWithMySQL.NodeDAO;
+import InstanceReader.NodeDAO;
 import java.io.*;
 import java.text.*;
 import java.util.*;
