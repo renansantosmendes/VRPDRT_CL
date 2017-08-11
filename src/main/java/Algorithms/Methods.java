@@ -5,51 +5,18 @@
  */
 package Algorithms;
 
-import static Algorithms.Algorithms.FO;
-import static Algorithms.Algorithms.FO1;
-import static Algorithms.Algorithms.FO2;
-import static Algorithms.Algorithms.FO3;
-import static Algorithms.Algorithms.FO4;
-import static Algorithms.Algorithms.FO5;
-import static Algorithms.Algorithms.FO6;
-import static Algorithms.Algorithms.FO7;
-import static Algorithms.Algorithms.FO8;
-import static Algorithms.Algorithms.FOp;
-import static Algorithms.Algorithms.FuncaoDeAvaliacao;
-import static Algorithms.Algorithms.PerturbacaoSemente;
-import static Algorithms.Algorithms.greedyConstructive;
-import InstanceReader.AdjacenciesDAO;
-import InstanceReader.NodeDAO;
-import InstanceReader.RequestDAO;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import static Algorithms.Algorithms.*;
+import InstanceReader.*;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
-import ProblemRepresentation.Request;
-import ProblemRepresentation.Route;
-import ProblemRepresentation.Solution;
+import ProblemRepresentation.*;
 import static java.util.stream.Collectors.toSet;
-import static Algorithms.Algorithms.IteratedLocalSearch;
-import static Algorithms.Algorithms.rebuildSolution;
-import static Algorithms.Algorithms.perturbation;
 import static Algorithms.EvolutionaryAlgorithms.initializePopulation;
-import static Algorithms.Algorithms.VariableNeighborhoodDescend;
-import static Algorithms.Algorithms.geraPesos;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctions;
-import static Algorithms.Algorithms.FO3;
-import static Algorithms.Algorithms.FO9;
-import static Algorithms.Algorithms.evaluateAggregatedObjectiveFunctions;
+import static Algorithms.Algorithms.*;
+import InstanceReader.ReadDataInExcelFile;
+import java.io.IOException;
+import jxl.read.biff.BiffException;
 
 /**
  *
@@ -67,6 +34,43 @@ public class Methods {
         distanceBetweenNodes.addAll(new AdjacenciesDAO(adjacenciesTable, nodesTable).getAdjacenciesListOfDistances());
         timeBetweenNodes.addAll(new AdjacenciesDAO(adjacenciesTable, nodesTable).getAdjacenciesListOfTimes());
         numberOfNodes = new AdjacenciesDAO(adjacenciesTable, nodesTable).getNumberOfNodes();
+
+        setOfOrigins.addAll(listOfRequests.stream()
+                .map(Request::getOrigin)
+                .collect(Collectors.toCollection(HashSet::new)));
+        setOfDestinations.addAll(listOfRequests.stream()
+                .map(Request::getDestination)
+                .collect(Collectors.toCollection(HashSet::new)));
+
+        requestsWichBoardsInNode.putAll(listOfRequests.stream()
+                .collect(Collectors.groupingBy(Request::getOrigin)));
+        requestsWichLeavesInNode.putAll(listOfRequests.stream()
+                .collect(Collectors.groupingBy(Request::getDestination)));
+
+        for (int i = 0; i < numberOfNodes; i++) {
+            if (requestsWichBoardsInNode.get(i) != null && requestsWichLeavesInNode.get(i) != null) {
+                loadIndex.add(requestsWichBoardsInNode.get(i).size() - requestsWichLeavesInNode.get(i).size());
+            } else {
+                loadIndex.add(0);
+            }
+        }
+        return numberOfNodes;
+    }
+
+    public static Integer readProblemUsingExcelData(String filePath, String instanceName, String nodesTable, String adjacenciesTable, List<Request> listOfRequests,
+            List<List<Long>> distanceBetweenNodes, List<List<Long>> timeBetweenNodes, Set<Integer> setOfOrigins,
+            Set<Integer> setOfDestinations, Map<Integer, List<Request>> requestsWichBoardsInNode, Map<Integer, List<Request>> requestsWichLeavesInNode,
+            Set<Integer> setOfNodes, Integer numberOfNodes, List<Integer> loadIndex) throws IOException, BiffException {
+
+        listOfRequests.addAll(new ReadDataInExcelFile(filePath, instanceName, nodesTable, adjacenciesTable)
+                .getRequests());
+        setOfNodes.addAll(new ReadDataInExcelFile(filePath, instanceName, nodesTable, adjacenciesTable)
+                .getSetOfNodes());
+        distanceBetweenNodes.addAll(new ReadDataInExcelFile(filePath, instanceName, nodesTable, adjacenciesTable)
+                .getAdjacenciesListOfDistances());
+        timeBetweenNodes.addAll(new ReadDataInExcelFile(filePath, instanceName, nodesTable, adjacenciesTable)
+                .getAdjacenciesListOfTimes());
+        numberOfNodes = new ReadDataInExcelFile(filePath, instanceName, nodesTable, adjacenciesTable).getNumberOfNodes();
 
         setOfOrigins.addAll(listOfRequests.stream()
                 .map(Request::getOrigin)
@@ -569,7 +573,7 @@ public class Methods {
             Solution S_linha = new Solution();
             S.setSolution(GeraSolucaoAleatoria(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode));
             //S_linha.setSolution(perturbation(S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
-            S_linha.setSolution(PerturbacaoSemente(parameters,S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
+            S_linha.setSolution(PerturbacaoSemente(parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
             Pop.add(S_linha);
         }
     }
@@ -889,7 +893,7 @@ public class Methods {
                 Solution S = new Solution();
                 //S.setSolution(IteratedLocalSearch(Pop.get(i), listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
                 //S.setSolution(VariableNeighborhoodDescend(Pop.get(i), listRequests,  P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
-                S.setSolution(firstImprovementAlgorithm(parameters,Pop.get(i), 2, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                S.setSolution(firstImprovementAlgorithm(parameters, Pop.get(i), 2, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
                 Pop.get(i).setSolution(S);
             }
         }
@@ -944,7 +948,7 @@ public class Methods {
             soma = 0;
             pos = -1;
             //valor = rnd.nextFloat() / 10;
-            valor = rnd.nextDouble()/10;
+            valor = rnd.nextDouble() / 10;
             //System.out.println(valor);
             //ImprimePopulacao(Pop);
             for (int j = 0; j < Pop.size(); j++) {
@@ -1774,7 +1778,7 @@ public class Methods {
         return melhor;
     }
 
-    public static Solution buscaTabu(List<Double>parameters, Solution inicial, int tipoEstrategia, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
+    public static Solution buscaTabu(List<Double> parameters, Solution inicial, int tipoEstrategia, int tipoMovimento, List<Request> listRequests, List<Request> P, Set<Integer> K,
             List<Request> U, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout, List<List<Long>> d,
             List<List<Long>> c, Integer n, Integer Qmax, Long TimeWindows) {
         Solution estrela = new Solution();
@@ -1830,7 +1834,7 @@ public class Methods {
         return estrela;
     }
 
-    public static Solution melhorVizinhoBT(List<Double>parameters, Solution s, Solution estrela, int tipoMovimento, int[][] listaTabuTroca, int[][] listaTabuSubstituicao,
+    public static Solution melhorVizinhoBT(List<Double> parameters, Solution s, Solution estrela, int tipoMovimento, int[][] listaTabuTroca, int[][] listaTabuSubstituicao,
             int[][] listaTabuMovimento, int iteracao, List<Request> listRequests, List<Request> P, Set<Integer> K,
             List<Request> U, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout, List<List<Long>> d,
             List<List<Long>> c, Integer n, Integer Qmax, Long TimeWindows) {
@@ -1984,7 +1988,7 @@ public class Methods {
 
                         Collections.swap(vizinho, posicao1, posicao2);
 
-                        aux.setSolution(rebuildSolution(parameters,new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+                        aux.setSolution(rebuildSolution(parameters, new ArrayList<Integer>(vizinho), listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
 
                         if (aux.getTotalDistance() < melhor.getTotalDistance()
                                 && ((listaTabuTroca[posicao2][posicao1] <= iteracao && listaTabuTroca[posicao1][posicao2] <= iteracao)

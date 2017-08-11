@@ -22,6 +22,7 @@ import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.NSGAII;
 import static Algorithms.EvolutionaryAlgorithms.SPEA2;
+import static Algorithms.Methods.readProblemUsingExcelData;
 import InstanceReader.NodeDAO;
 import InstanceReader.ReadDataInExcelFile;
 import jxl.read.biff.BiffException;
@@ -54,7 +55,8 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException, BiffException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        int numberOfRequests = 250;
+        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
+        int numberOfRequests = 50;
         int numberOfNodes = 12;
         int requestTimeWindows = 10;
         String instanceSize = "s";
@@ -75,9 +77,14 @@ public class VRPDRT {
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
-        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+//        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+//                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
+//                numberOfNodes, loadIndexList);
+
+        numberOfNodes = readProblemUsingExcelData(filePath,instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
                 timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
                 numberOfNodes, loadIndexList);
+
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
@@ -101,15 +108,7 @@ public class VRPDRT {
 //                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-        //new NodeDAO(nodesData).getListOfNodes().forEach(System.out::println);
-        //new ReadDataInExcelFile().saveData(requests);
-        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
-        String instanceFile = "instances2.xls";
-        String nodesFile = "nodes.xls";
-        String adjacenciesFile = "adjacencies.xls";
-
-        //new ReadDataInExcelFile(filePath + instanceFile).getRequests(instanceName).forEach(System.out::println);
-        new ReadDataInExcelFile(filePath + nodesFile).getSetOfNodes("s").forEach(System.out::println);
+       
     }
 
 }
