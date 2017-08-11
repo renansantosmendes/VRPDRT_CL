@@ -54,6 +54,8 @@ public class Methods {
                 loadIndex.add(0);
             }
         }
+        
+       // timeBetweenNodes.forEach(System.out::println);
         return numberOfNodes;
     }
 
@@ -91,6 +93,9 @@ public class Methods {
                 loadIndex.add(0);
             }
         }
+        
+        
+        
         return numberOfNodes;
     }
 
