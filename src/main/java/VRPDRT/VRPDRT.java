@@ -57,7 +57,7 @@ public class VRPDRT {
         int numberOfRequests = 250;
         int numberOfNodes = 12;
         int requestTimeWindows = 10;
-        String instanceSize = "l";
+        String instanceSize = "s";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
@@ -91,7 +91,7 @@ public class VRPDRT {
 //        nadirPoint.add(800000.0);
         nadirPoint.add((double) 25 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,25
         nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20
-        System.out.println("Nadir Point = " + nadirPoint);
+        //System.out.println("Nadir Point = " + nadirPoint);
 
 //        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
 //                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
@@ -101,12 +101,15 @@ public class VRPDRT {
 //                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
         //new NodeDAO(nodesData).getListOfNodes().forEach(System.out::println);
         //new ReadDataInExcelFile().saveData(requests);
-        
-        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/instances.xls";
-        new ReadDataInExcelFile(filePath).getRequests(instanceName);
+        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
+        String instanceFile = "instances2.xls";
+        String nodesFile = "nodes.xls";
+        String adjacenciesFile = "adjacencies.xls";
+
+        //new ReadDataInExcelFile(filePath + instanceFile).getRequests(instanceName).forEach(System.out::println);
+        new ReadDataInExcelFile(filePath + nodesFile).getSetOfNodes("s").forEach(System.out::println);
     }
 
 }
