@@ -114,8 +114,8 @@ public class AdjacenciesDAO {
                 Integer destinationNode = resultSet.getInt("destinationNode");
 //                System.out.println(resultSet.getLong("timeTo"));
 //                System.out.println(Math.round((resultSet.getLong("timeTo")) / 60));
-//                long timeTo = Math.round((resultSet.getLong("timeTo")) / 60);
-                long timeTo = resultSet.getLong("timeTo");
+                long timeTo = Math.round((resultSet.getLong("timeTo")) / 60);
+                //long timeTo = resultSet.getLong("timeTo");
                 timeBetweenNodes.get(originNode).set(destinationNode, timeTo);
             }
             resultSet.close();

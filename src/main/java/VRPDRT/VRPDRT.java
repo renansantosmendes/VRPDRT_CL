@@ -112,9 +112,9 @@ public class VRPDRT {
                 requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode));
-
+        evaluateAggregatedObjectiveFunctions(parameters, solution);
         solution.getNonAttendedRequestsList().forEach(System.out::println);
-//        System.out.println(solution);
+        System.out.println(solution);
     }
 
 }

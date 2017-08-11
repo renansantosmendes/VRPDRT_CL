@@ -183,7 +183,7 @@ public class ReadDataInExcelFile {
         for (int i = 1; i < rows; i++) {
             Integer originNode = Integer.parseInt(sheet.getCell(0, i).getContents());//)resultSet.getInt("originNode");
             Integer destinationNode = Integer.parseInt(sheet.getCell(1, i).getContents());
-            Long timeTo = (long) Double.parseDouble(sheet.getCell(2, i).getContents());
+            Long timeTo = (long) Double.parseDouble(sheet.getCell(2, i).getContents())/60;
             timeBetweenNodes.get(originNode).set(destinationNode, timeTo);
         }
 
