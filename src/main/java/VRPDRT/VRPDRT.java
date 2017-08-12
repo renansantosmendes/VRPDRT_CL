@@ -9,22 +9,15 @@ import Algorithms.*;
 import static Algorithms.Algorithms.*;
 import java.util.*;
 import ProblemRepresentation.*;
-import static Algorithms.Methods.readProblemData;
 import GoogleMapsApi.*;
 import com.google.maps.errors.ApiException;
 import java.io.IOException;
 import Algorithms.*;
-import static Algorithms.AlgorithmsCalibration.NSGAII_Calibration;
-import static Algorithms.AlgorithmsCalibration.generateLambdas;
-import static Algorithms.AlgorithmsCalibration.ils;
-import static Algorithms.AlgorithmsCalibration.vnd;
 import Controller.Controller;
 import View.MainScreen;
-import static Algorithms.EvolutionaryAlgorithms.NSGAII;
-import static Algorithms.EvolutionaryAlgorithms.SPEA2;
+import static Algorithms.EvolutionaryAlgorithms.*;
 import static Algorithms.Methods.readProblemUsingExcelData;
-import InstanceReader.NodeDAO;
-import InstanceReader.ReadDataInExcelFile;
+import InstanceReader.*;
 import jxl.read.biff.BiffException;
 
 /**
@@ -55,7 +48,8 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException, BiffException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
+        //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
+        String filePath = "/home/rmendes/VRPDRT/";
         int numberOfRequests = 50;
         int numberOfNodes = 12;
         int requestTimeWindows = 10;
@@ -67,7 +61,7 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
         final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfGenerations = 30;
         Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
@@ -77,13 +71,14 @@ public class VRPDRT {
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
-        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
-                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
-                numberOfNodes, loadIndexList);
-
-//        numberOfNodes = readProblemUsingExcelData(filePath,instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+//        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
 //                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
 //                numberOfNodes, loadIndexList);
+
+        numberOfNodes = readProblemUsingExcelData(filePath,instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
+                numberOfNodes, loadIndexList);
+        
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
@@ -99,22 +94,15 @@ public class VRPDRT {
         nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20
         //System.out.println("Nadir Point = " + nadirPoint);
 
-//        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-//                timeWindows, currentTime, lastNode);
+        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+                timeWindows, currentTime, lastNode);
 //        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
 //                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-       
-        Solution solution = new Solution(Algorithms.greedyConstructive(0.20, 0.15, 0.55, 0.10, requests,
-                requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-                timeWindows, currentTime, lastNode));
-        evaluateAggregatedObjectiveFunctions(parameters, solution);
-        solution.getNonAttendedRequestsList().forEach(System.out::println);
-        System.out.println(solution);
+
     }
 
 }

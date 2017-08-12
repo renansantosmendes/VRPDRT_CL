@@ -255,7 +255,7 @@ public class EvolutionaryAlgorithms {
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
             }
 
-            new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
+            //new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
 
             hypervolume = smetric(finalPareto, nadirPoint);
             //hypervolume = smetric(finalPareto);
@@ -298,7 +298,7 @@ public class EvolutionaryAlgorithms {
             hypervolumeConvergence.add(average);
         }
 
-        showHypervolumeConvergence(hypervolumeConvergence);
+       // showHypervolumeConvergence(hypervolumeConvergence);
     }
 
     private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) throws IOException {
