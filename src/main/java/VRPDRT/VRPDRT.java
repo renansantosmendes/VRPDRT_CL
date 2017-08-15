@@ -16,6 +16,7 @@ import Algorithms.*;
 import Controller.Controller;
 import View.MainScreen;
 import static Algorithms.EvolutionaryAlgorithms.*;
+import static Algorithms.Methods.readProblemData;
 import static Algorithms.Methods.readProblemUsingExcelData;
 import InstanceReader.*;
 import jxl.read.biff.BiffException;
@@ -50,19 +51,19 @@ public class VRPDRT {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
         //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
         String filePath = "/home/rmendes/VRPDRT/";
-        int numberOfRequests = 50;
+        int numberOfRequests = 200;
         int numberOfNodes = 12;
         int requestTimeWindows = 10;
-        String instanceSize = "s";
+        String instanceSize = "l";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
                 requestTimeWindows, instanceSize);
         final Integer numberOfVehicles = 50;
-        final Integer vehicleCapacity = 4;
+        final Integer vehicleCapacity = 11;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 30;
-        Integer maximumNumberOfExecutions = 3;
+        Integer maximumNumberOfGenerations = 1000;
+        Integer maximumNumberOfExecutions = 30;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -88,11 +89,11 @@ public class VRPDRT {
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
         parameters.add((double) numberOfRequests * numberOfNodes);//r n
 
-//        nadirPoint.add(1000000.0);
-//        nadirPoint.add(800000.0);
-        nadirPoint.add((double) 25 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,25
-        nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20
-        //System.out.println("Nadir Point = " + nadirPoint);
+        nadirPoint.add(10000000.0);
+        nadirPoint.add(1000000.0);
+//        nadirPoint.add((double) 25 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,25,25
+//        nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20,20
+        System.out.println("Nadir Point = " + nadirPoint);
 
         NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
@@ -102,7 +103,7 @@ public class VRPDRT {
 //                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
+        
     }
 
 }

@@ -54,8 +54,8 @@ public class Methods {
                 loadIndex.add(0);
             }
         }
-        
-       // timeBetweenNodes.forEach(System.out::println);
+
+        // timeBetweenNodes.forEach(System.out::println);
         return numberOfNodes;
     }
 
@@ -93,9 +93,7 @@ public class Methods {
                 loadIndex.add(0);
             }
         }
-        
-        
-        
+
         return numberOfNodes;
     }
 
@@ -526,6 +524,7 @@ public class Methods {
         for (int i = 0; i < TamPop; i++) {
             Solution S = new Solution();
             S.setSolution(GeraSolucaoAleatoria(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode));
+            //S.setSolution(PerturbacaoSemente(parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
             Pop.add(S);
         }
 
@@ -534,6 +533,32 @@ public class Methods {
         }
         //Coloquei a linha de baixo, que estava no codigo principal dos algoritmos multi
         Inicializa(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
+    }
+
+    public static void inicializeRandomPopulation(List<Double> parameters, List<Solution> Pop, Integer TamPop, List<Request> listRequests,
+            Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K,
+            List<Request> U, List<Request> P, List<Integer> m, List<List<Long>> d, List<List<Long>> c,
+            Long TimeWindows, Long currentTime, Integer lastNode) {
+
+        Solution S = new Solution();
+        S.setSolution(GeraSolucaoAleatoria(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode));
+        for (int i = 0; i < TamPop; i++) {
+            Solution S2 = new Solution();
+            S2.setSolution(PerturbacaoSemente(i, parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
+            Pop.add(S2);
+        }
+//        for (int i = 0; i < TamPop; i++) {
+//            Solution S = new Solution();
+//            S.setSolution(GeraSolucaoAleatoria(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode));
+//            Solution S2 = new Solution();
+//            S2.setSolution(PerturbacaoSemente(i, parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
+//            Pop.add(S2);
+//        }
+//        for (int i = 0; i < TamPop; i++) {
+//            Solution solucao = new Solution(Pop.get(i));
+//        }
+//        //Coloquei a linha de baixo, que estava no codigo principal dos algoritmos multi
+//        Inicializa(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode);
     }
 
     public static void Inicializa(List<Solution> Pop, int TamPop, List<Request> listRequests, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
@@ -578,7 +603,7 @@ public class Methods {
             Solution S_linha = new Solution();
             S.setSolution(GeraSolucaoAleatoria(Pop, TamPop, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows, currentTime, lastNode));
             //S_linha.setSolution(perturbation(S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
-            S_linha.setSolution(PerturbacaoSemente(parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
+            S_linha.setSolution(PerturbacaoSemente(i, parameters, S, listRequests, Pin, Pout, n, Qmax, K, U, P, m, d, c, TimeWindows));
             Pop.add(S_linha);
         }
     }

@@ -1233,6 +1233,35 @@ public class Algorithms {
 
         return s;
     }
+    
+    
+    public static Solution perturbationWithSeed(List<Double> parameters, Solution s, List<Request> listRequests, Map<Integer, List<Request>> Pin,
+            Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P,
+            List<Integer> m, List<List<Long>> d, List<List<Long>> c, Long TimeWindows) {
+        Random rnd = new Random();
+        Random p1 = new Random();
+        Random p2 = new Random();
+        int posicao1, posicao2;
+        int NUMPERT = 4;//número de perturções
+
+        List<Integer> original = new ArrayList<>(s.getLinkedRouteList());
+        //for (int i = 0; i < NUMPERT; i++) {
+        posicao1 = p1.nextInt(original.size());
+
+        do {
+            posicao2 = p2.nextInt(original.size());
+        } while (Objects.equals(original.get(posicao1), original.get(posicao2)));
+
+        //Collections.swap(original, posicao1, posicao2);
+        //Collections.shuffle(original);
+        original.add(posicao1, original.remove(posicao2));
+        //}
+        Solution S = new Solution();
+        S.setSolution(rebuildSolution(parameters, original, listRequests, P, K, U, Pin, Pout, d, c, n, Qmax, TimeWindows));
+        s.setSolution(S);
+
+        return s;
+    }
 
     public static Solution geraPesos(Integer semente, List<Request> listRequests, Map<Integer, List<Request>> Pin, Map<Integer, List<Request>> Pout,
             Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P, List<Integer> m, List<List<Long>> d,
@@ -1258,14 +1287,14 @@ public class Algorithms {
         //}
     }
 
-    public static Solution PerturbacaoSemente(List<Double> parameters, Solution s, List<Request> listRequests, Map<Integer, List<Request>> Pin,
+    public static Solution PerturbacaoSemente(int i, List<Double> parameters, Solution s, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P,
             List<Integer> m, List<List<Long>> d, List<List<Long>> c, Long TimeWindows) {
-        Random rnd = new Random(19700621);
-        Random p1 = new Random(19622);
-        Random p2 = new Random(19700623);
+        Random rnd = new Random(i+1);
+        Random p1 = new Random(i+2234234);
+        Random p2 = new Random(86554*i);
         int posicao1, posicao2;
-        int NUMPERT = 2;//número de perturções
+        int NUMPERT = rnd.nextInt();//número de perturções
 
         List<Integer> original = new ArrayList<>(s.getLinkedRouteList());
         //for (int i = 0; i < NUMPERT; i++) {

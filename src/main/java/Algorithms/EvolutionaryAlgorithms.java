@@ -146,7 +146,11 @@ public class EvolutionaryAlgorithms {
 
                 int maximumSize;
 
-                inicializePopulation(population, populationSize, requests,
+//                inicializePopulation(population, populationSize, requests,
+//                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
+//                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+
+                inicializeRandomPopulation(parameters,population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
@@ -298,7 +302,7 @@ public class EvolutionaryAlgorithms {
             hypervolumeConvergence.add(average);
         }
 
-       // showHypervolumeConvergence(hypervolumeConvergence);
+        //showHypervolumeConvergence(hypervolumeConvergence);
     }
 
     private static void showHypervolumeConvergence(List<Double> hypervolumeConvergence) throws IOException {
@@ -405,8 +409,7 @@ public class EvolutionaryAlgorithms {
                 tamMax = population.size();
                 dominanceAlgorithm(population, file);
                 evaluateDistanceBetweenSolutions(population, dist);
-                
-                
+
                 int actualGeneration = 0;
                 fitnessEvaluationForSPEA2(population, dist, populationSize, fileSize);
                 System.out.println("Execution = " + executionCounter);
