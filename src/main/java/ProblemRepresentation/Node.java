@@ -128,7 +128,8 @@ public class Node {
             color = "red";
             //label = "O";
         } else {
-            color = "blue";
+            //color = "blue";
+            color = "red";
             //label = "S";
         }
         return "&markers=color:" + color + "|label:" + label + "|" + this.longitude + "," + this.latitude;

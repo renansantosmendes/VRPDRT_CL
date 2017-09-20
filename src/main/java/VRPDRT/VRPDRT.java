@@ -51,19 +51,19 @@ public class VRPDRT {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
         //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
         String filePath = "/home/rmendes/VRPDRT/";
-        int numberOfRequests = 200;
+        int numberOfRequests = 50;
         int numberOfNodes = 12;
-        int requestTimeWindows = 10;
-        String instanceSize = "l";
+        int requestTimeWindows = 5;
+        String instanceSize = "s";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
                 requestTimeWindows, instanceSize);
         final Integer numberOfVehicles = 50;
-        final Integer vehicleCapacity = 11;
+        final Integer vehicleCapacity = 4;
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 1000;
-        Integer maximumNumberOfExecutions = 30;
+        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -79,7 +79,6 @@ public class VRPDRT {
 //        numberOfNodes = readProblemUsingExcelData(filePath,instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
 //                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
 //                numberOfNodes, loadIndexList);
-        
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
@@ -95,15 +94,16 @@ public class VRPDRT {
 //        nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20,20
         System.out.println("Nadir Point = " + nadirPoint);
 
-        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-                timeWindows, currentTime, lastNode);
-//        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
-//                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
-//                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
-//                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-        
+//        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+//                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+//                timeWindows, currentTime, lastNode);
+        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
+                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
+                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
+                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+
+        //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
     }
 
 }

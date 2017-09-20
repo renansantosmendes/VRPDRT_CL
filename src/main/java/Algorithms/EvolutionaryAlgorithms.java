@@ -136,6 +136,7 @@ public class EvolutionaryAlgorithms {
             List<Solution> combinedPareto = new ArrayList<>();
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
+            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/ParetoCombinado_Todas_FOs.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
                 List<Double> listOfHypervolumes = new ArrayList<>();
@@ -149,8 +150,7 @@ public class EvolutionaryAlgorithms {
 //                inicializePopulation(population, populationSize, requests,
 //                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
 //                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
-
-                inicializeRandomPopulation(parameters,population, populationSize, requests,
+                inicializeRandomPopulation(parameters, population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
@@ -257,10 +257,10 @@ public class EvolutionaryAlgorithms {
             for (Solution individual : finalPareto) {
                 printStreamForCombinedPareto.print(individual + "\n");
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
+                printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectives() + "\n");
             }
 
-            new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
-
+            //new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
             hypervolume = smetric(finalPareto, nadirPoint);
             //hypervolume = smetric(finalPareto);
             System.out.println("S-Metric = " + hypervolume);
@@ -398,13 +398,18 @@ public class EvolutionaryAlgorithms {
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + number + ".txt");
                 PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + number + ".txt");
 
-                inicializePopulation(population, populationSize, requests,
+//                inicializePopulation(population, populationSize, requests,
+//                        requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
+//                        requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+                inicializeRandomPopulation(parameters, population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
+                //printPopulation(population);
                 normalizeObjectiveFunctionsValues(population);
                 normalizeObjectiveFunctionsForSolutions(population);
                 normalizeAggregatedObjectiveFunctions(population, nadirPoint);
+                evaluateAggregatedObjectiveFunctions(parameters, population);
 
                 tamMax = population.size();
                 dominanceAlgorithm(population, file);
@@ -435,6 +440,7 @@ public class EvolutionaryAlgorithms {
 
                     evaluateAggregatedObjectiveFunctions(parameters, file);
                     evaluateAggregatedObjectiveFunctions(parameters, population);
+
                     fitnessEvaluationForSPEA2(file, dist, populationSize, fileSize);
 
                     normalizeObjectiveFunctionsValues(file);
@@ -456,10 +462,12 @@ public class EvolutionaryAlgorithms {
             List<Solution> finalPareto = new ArrayList<>();
             dominanceAlgorithm(combinedPareto, finalPareto);
             PrintStream saida4 = new PrintStream(folderName + "/ParetoCombinado.txt");
-            PrintStream saida5 = new PrintStream(folderName + "/ParetoCombinadoFOs.txt");
+            PrintStream saida5 = new PrintStream(folderName + "/ParetoCombinadoFOs_Reduzida.txt");
+            PrintStream saida6 = new PrintStream(folderName + "/ParetoCombinado_Todas_FOs.txt");
             for (Solution solution : finalPareto) {
                 saida4.print(solution + "\n");
                 saida5.print(solution.getAggregatedObjective1() + "\t" + solution.getAggregatedObjective2() + "\n");
+                saida6.print(solution.getStringWithAllNonReducedObjectives() + "\n");
             }
             printPopulation(finalPareto);
             new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
