@@ -53,7 +53,7 @@ public class VRPDRT {
         String filePath = "/home/rmendes/VRPDRT/";
         int numberOfRequests = 50;
         int numberOfNodes = 12;
-        int requestTimeWindows = 5;
+        int requestTimeWindows = 10;
         String instanceSize = "s";
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
@@ -72,37 +72,53 @@ public class VRPDRT {
 
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
+//        
+        new ScriptGenerator(instanceName, instanceSize, vehicleCapacity).generate("3d", "small");
+
         numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
                 timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
                 numberOfNodes, loadIndexList);
 
-//        numberOfNodes = readProblemUsingExcelData(filePath,instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+//        numberOfNodes = readProblemUsingExcelData(filePath, instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
 //                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
 //                numberOfNodes, loadIndexList);
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
-        parameters.add(1.0);//1
-        parameters.add((double) requestTimeWindows);//delta_t
-        parameters.add((double) numberOfNodes);//n
-        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
-        parameters.add((double) numberOfRequests * numberOfNodes);//r n
+//        parameters.add(1.0);//1
+//        parameters.add((double) requestTimeWindows);//delta_t
+//        parameters.add((double) numberOfNodes);//n
+//        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
+//        parameters.add((double) numberOfRequests * numberOfNodes);//r n
+        //Random Projection matrix transposed 
+        //0.1785052  0.4923117 -0.713838270  1.0102024  0.7336253
+        //2.0895402 -1.0053156 -0.007114346 -0.4405137 -0.2805828
+        parameters.add(0.1785052);
+        parameters.add(0.4923117);
+        parameters.add(-0.713838270);
+        parameters.add(1.0102024);
+        parameters.add(0.7336253);
+
+        parameters.add(2.0895402);
+        parameters.add(-1.0053156);
+        parameters.add(-0.007114346);
+        parameters.add(-0.4405137);
+        parameters.add(-0.2805828);
 
         nadirPoint.add(10000000.0);
         nadirPoint.add(1000000.0);
-//        nadirPoint.add((double) 25 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,25,25
-//        nadirPoint.add((double) 20 * numberOfRequests * numberOfVehicles * numberOfNodes);//10,20,20
         System.out.println("Nadir Point = " + nadirPoint);
+        System.out.println("Instance Name = " + instanceName);
 
-//        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
-//                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
-//                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
-//                timeWindows, currentTime, lastNode);
-        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
-                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
-                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
-                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+                requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
+                listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
+                timeWindows, currentTime, lastNode);
 
+//        SPEA2(instanceName, parameters, nadirPoint, populationSize, fileSize, maximumNumberOfGenerations, maximumNumberOfExecutions,
+//                probabilityOfMutation, probabilityOfCrossover, requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode,
+//                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
+//                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
     }
 

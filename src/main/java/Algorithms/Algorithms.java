@@ -30,7 +30,7 @@ public class Algorithms {
         return data;
     }
 
-    public static String buildInstaceName(String nodesData, String adjacenciesData, int numberOfRequests, 
+    public static String buildInstaceName(String nodesData, String adjacenciesData, int numberOfRequests,
             int numberOfNodes, int requestTimeWindows, String instanceSize) {
         String instanceName;
         if (numberOfRequests < 100) {
@@ -313,10 +313,26 @@ public class Algorithms {
 //                + 50 * S.getTotalRouteTimeChargeBanlance()
 //                + 3000 * S.getNumberOfVehicles());
 //        S.setAggregatedObjective2(8000 * S.getNumberOfNonAttendedRequests());
+        
+        //---------------------------------------------------------------------------------------------------------------
+        // Aggregation using AT with 5 objective functions
+        //---------------------------------------------------------------------------------------------------------------
+//        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
+//                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
+//                + parameters.get(4) * S.getNumberOfVehicles());
+//        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequests());
+        
+        
+        //---------------------------------------------------------------------------------------------------------------
+        // Aggregation using RP
+        //---------------------------------------------------------------------------------------------------------------
         S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
-                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
+                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance() + parameters.get(3) * S.getNumberOfNonAttendedRequests()
                 + parameters.get(4) * S.getNumberOfVehicles());
-        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequests());
+        
+        S.setAggregatedObjective2(parameters.get(5) * S.getTotalDistance() + parameters.get(6) * S.getTotalDeliveryDelay()
+                + parameters.get(7) * S.getTotalRouteTimeChargeBanlance() + parameters.get(8) * S.getNumberOfNonAttendedRequests()
+                + parameters.get(9) * S.getNumberOfVehicles());
     }
 
     public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Solution> solutions) {
@@ -1233,8 +1249,7 @@ public class Algorithms {
 
         return s;
     }
-    
-    
+
     public static Solution perturbationWithSeed(List<Double> parameters, Solution s, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P,
             List<Integer> m, List<List<Long>> d, List<List<Long>> c, Long TimeWindows) {
@@ -1290,9 +1305,9 @@ public class Algorithms {
     public static Solution PerturbacaoSemente(int i, List<Double> parameters, Solution s, List<Request> listRequests, Map<Integer, List<Request>> Pin,
             Map<Integer, List<Request>> Pout, Integer n, Integer Qmax, Set<Integer> K, List<Request> U, List<Request> P,
             List<Integer> m, List<List<Long>> d, List<List<Long>> c, Long TimeWindows) {
-        Random rnd = new Random(i+1);
-        Random p1 = new Random(i+2234234);
-        Random p2 = new Random(86554*i);
+        Random rnd = new Random(i + 1);
+        Random p1 = new Random(i + 2234234);
+        Random p2 = new Random(86554 * i);
         int posicao1, posicao2;
         int NUMPERT = rnd.nextInt();//número de perturções
 
