@@ -51,7 +51,7 @@ public class VRPDRT {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
         //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
         String filePath = "/home/rmendes/VRPDRT/";
-        int numberOfRequests = 50;
+        int numberOfRequests = 150;
         int numberOfNodes = 12;
         int requestTimeWindows = 10;
         String instanceSize = "s";
@@ -85,25 +85,14 @@ public class VRPDRT {
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
-//        parameters.add(1.0);//1
-//        parameters.add((double) requestTimeWindows);//delta_t
-//        parameters.add((double) numberOfNodes);//n
-//        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
-//        parameters.add((double) numberOfRequests * numberOfNodes);//r n
-        //Random Projection matrix transposed 
-        //0.1785052  0.4923117 -0.713838270  1.0102024  0.7336253
-        //2.0895402 -1.0053156 -0.007114346 -0.4405137 -0.2805828
-        parameters.add(0.1785052);
-        parameters.add(0.4923117);
-        parameters.add(-0.713838270);
-        parameters.add(1.0102024);
-        parameters.add(0.7336253);
-
-        parameters.add(2.0895402);
-        parameters.add(-1.0053156);
-        parameters.add(-0.007114346);
-        parameters.add(-0.4405137);
-        parameters.add(-0.2805828);
+        parameters.add(1.0);//1
+        parameters.add((double) requestTimeWindows);//delta_t
+        parameters.add((double) numberOfNodes);//n
+        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
+        parameters.add((double) numberOfRequests * numberOfNodes);//r n
+        parameters.add((double) numberOfRequests);//
+        parameters.add((double) numberOfNodes);//
+        
 
         nadirPoint.add(10000000.0);
         nadirPoint.add(1000000.0);

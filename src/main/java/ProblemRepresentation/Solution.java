@@ -618,7 +618,7 @@ public class Solution implements Comparable<Solution> {
 //                + "\t" + df.format(totalOccupationRate) + "\t";
         String s = df.format(aggregatedObjective1).replace(",", ".") + "\t" + df.format(aggregatedObjective2).replace(",", ".") + "\t" + totalDistance + "\t"
                 + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t"
-                + numberOfVehicles + "\t";
+                + numberOfVehicles + "\t" + totalWaintingTime + "\t" + totalTravelTime + "\t";
 
 //        String s = aggregatedObjective1Normalized + "\t" + aggregatedObjective2Normalized + "\t" + crowdDistance + "\t" +/*aggregatedObjective1Normalized + "\t"+ 
 //                aggregatedObjective2Normalized + "\t"+*/ totalDistanceNormalized + "\t" + totalDeliveryDelayNormalized
