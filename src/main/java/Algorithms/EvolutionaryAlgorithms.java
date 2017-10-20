@@ -125,7 +125,7 @@ public class EvolutionaryAlgorithms {
         String folderName, fileName;
 
         LocalDateTime time = LocalDateTime.now();
-        folderName = "AlgorithmsResults//5FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//7FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -379,7 +379,7 @@ public class EvolutionaryAlgorithms {
         double hypervolume = 0;
         LocalDateTime time = LocalDateTime.now();
 
-        folderName = "AlgorithmsResults//5FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//7FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "SPEA2";
 
         boolean success = (new File(folderName)).mkdirs();

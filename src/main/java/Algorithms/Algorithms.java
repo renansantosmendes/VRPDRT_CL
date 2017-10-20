@@ -313,7 +313,6 @@ public class Algorithms {
 //                + 50 * S.getTotalRouteTimeChargeBanlance()
 //                + 3000 * S.getNumberOfVehicles());
 //        S.setAggregatedObjective2(8000 * S.getNumberOfNonAttendedRequests());
-        
         //---------------------------------------------------------------------------------------------------------------
         // Aggregation using AT with 5 objective functions
         //---------------------------------------------------------------------------------------------------------------
@@ -321,19 +320,29 @@ public class Algorithms {
 //                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
 //                + parameters.get(4) * S.getNumberOfVehicles());
 //        S.setAggregatedObjective2(parameters.get(3) * S.getNumberOfNonAttendedRequests());
-        
-
         //---------------------------------------------------------------------------------------------------------------
         // Aggregation using AT with 7 objective functions
         //---------------------------------------------------------------------------------------------------------------
         //
-        S.setAggregatedObjective1(parameters.get(3) * S.getNumberOfNonAttendedRequests() 
-                + parameters.get(6)*S.getTotalWaintingTime());
+//        S.setAggregatedObjective1(parameters.get(3) * S.getNumberOfNonAttendedRequests() 
+//                + parameters.get(6)*S.getTotalWaintingTime());
+//        
+//        S.setAggregatedObjective2(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
+//                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
+//                + parameters.get(4) * S.getNumberOfVehicles() + parameters.get(5)*S.getTotalTravelTime());
+
+        //---------------------------------------------------------------------------------------------------------------
+        // Aggregation using AT with 9 objective functions
+        //---------------------------------------------------------------------------------------------------------------
+        //
         
-        S.setAggregatedObjective2(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
-                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
-                + parameters.get(4) * S.getNumberOfVehicles() + parameters.get(5)*S.getTotalTravelTime());
+        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
+                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance() + parameters.get(3) * S.getNumberOfNonAttendedRequests()
+                + parameters.get(4) * S.getNumberOfVehicles() + parameters.get(5) * S.getTotalTravelTime() 
+                + parameters.get(6) * S.getTotalWaintingTime() + parameters.get(7)*S.getDeliveryTimeWindowAntecipation());
         
+        S.setAggregatedObjective2(parameters.get(8)*S.getTotalOccupationRate());
+
         //---------------------------------------------------------------------------------------------------------------
         // Aggregation using RP
         //---------------------------------------------------------------------------------------------------------------

@@ -51,16 +51,19 @@ public class VRPDRT {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
         //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
         String filePath = "/home/rmendes/VRPDRT/";
-        int numberOfRequests = 150;
-        int numberOfNodes = 12;
+
+        int numberOfRequests = 50;
         int requestTimeWindows = 10;
+        final Integer vehicleCapacity = 11;
         String instanceSize = "s";
+        
+        int numberOfNodes = 12;
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
         String instanceName = buildInstaceName(nodesData, adjacenciesData, numberOfRequests, numberOfNodes,
                 requestTimeWindows, instanceSize);
         final Integer numberOfVehicles = 50;
-        final Integer vehicleCapacity = 4;
+
         Integer populationSize = 100;
         Integer maximumNumberOfGenerations = 10;
         Integer maximumNumberOfExecutions = 3;
@@ -78,10 +81,10 @@ public class VRPDRT {
         numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
                 timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
                 numberOfNodes, loadIndexList);
-
 //        numberOfNodes = readProblemUsingExcelData(filePath, instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
 //                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
 //                numberOfNodes, loadIndexList);
+
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
@@ -90,12 +93,13 @@ public class VRPDRT {
         parameters.add((double) numberOfNodes);//n
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
         parameters.add((double) numberOfRequests * numberOfNodes);//r n
-        parameters.add((double) numberOfRequests);//
-        parameters.add((double) numberOfNodes);//
-        
+        parameters.add((double) numberOfRequests);//r
+        parameters.add((double) numberOfNodes);//n
+        parameters.add(1.0);//1
+        parameters.add((double) -numberOfRequests * numberOfNodes * requestTimeWindows);//1
 
-        nadirPoint.add(10000000.0);
         nadirPoint.add(1000000.0);
+        nadirPoint.add(10000000.0);
         System.out.println("Nadir Point = " + nadirPoint);
         System.out.println("Instance Name = " + instanceName);
 
@@ -109,6 +113,7 @@ public class VRPDRT {
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
+//        new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
     }
 
 }
