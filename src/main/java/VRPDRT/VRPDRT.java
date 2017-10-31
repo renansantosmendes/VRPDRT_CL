@@ -52,7 +52,7 @@ public class VRPDRT {
         //String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
         String filePath = "/home/rmendes/VRPDRT/";
 
-        int numberOfRequests = 50;
+        int numberOfRequests = 200;
         int requestTimeWindows = 10;
         final Integer vehicleCapacity = 11;
         String instanceSize = "s";
@@ -65,8 +65,8 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
 
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 10;
-        Integer maximumNumberOfExecutions = 3;
+        Integer maximumNumberOfGenerations = 1000;
+        Integer maximumNumberOfExecutions = 30;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -78,12 +78,12 @@ public class VRPDRT {
 //        
         new ScriptGenerator(instanceName, instanceSize, vehicleCapacity).generate("3d", "small");
 
-        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
-                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
-                numberOfNodes, loadIndexList);
-//        numberOfNodes = readProblemUsingExcelData(filePath, instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+//        numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
 //                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
 //                numberOfNodes, loadIndexList);
+        numberOfNodes = readProblemUsingExcelData(filePath, instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
+                timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
+                numberOfNodes, loadIndexList);
 
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
