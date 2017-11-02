@@ -137,6 +137,7 @@ public class EvolutionaryAlgorithms {
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
             PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/ParetoCombinado_Todas_FOs.txt");
+            PrintStream printStreamForAllObjectives2 = new PrintStream(folderName + "/NSGAII - Objetivos.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
                 List<Double> listOfHypervolumes = new ArrayList<>();
@@ -258,6 +259,9 @@ public class EvolutionaryAlgorithms {
                 printStreamForCombinedPareto.print(individual + "\n");
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
                 printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectives() + "\n");
+                printStreamForAllObjectives2.print(individual.getAggregatedObjective1() + "\t"+
+                        individual.getAggregatedObjective2() + "\t"
+                        +individual.getStringWithAllNonReducedObjectives() + "\n");
             }
 
             //new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
