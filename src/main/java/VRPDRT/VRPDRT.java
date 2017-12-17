@@ -54,7 +54,7 @@ public class VRPDRT {
 
         int numberOfRequests = 50;
         int requestTimeWindows = 10;
-        final Integer vehicleCapacity = 11;
+        final Integer vehicleCapacity = 4;
         String instanceSize = "s";
         
         int numberOfNodes = 12;
@@ -65,8 +65,8 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
 
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 5;
-        Integer maximumNumberOfExecutions = 1;
+        Integer maximumNumberOfGenerations = 10;
+        Integer maximumNumberOfExecutions = 3;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -76,7 +76,7 @@ public class VRPDRT {
 //        new DataUpdaterUsingGoogleMapsApi(directionsApiKey, new NodeDAO(nodesData).getListOfNodes(),
 //                adjacenciesData).updateAdjacenciesData();
 //        
-        new ScriptGenerator(instanceName, instanceSize, vehicleCapacity).generate("3d", "large");
+        new ScriptGenerator(instanceName, instanceSize, vehicleCapacity).generate("3d", "small");
 
         numberOfNodes = readProblemData(instanceName, nodesData, adjacenciesData, requests, distanceBetweenNodes,
                 timeBetweenNodes, Pmais, Pmenos, requestsWhichBoardsInNode, requestsWhichLeavesInNode, setOfNodes,
@@ -88,31 +88,44 @@ public class VRPDRT {
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
-//        parameters.add(1.0);//1
-//        parameters.add((double) requestTimeWindows);//delta_t
-//        parameters.add((double) numberOfNodes);//n
-//        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
-//        parameters.add((double) numberOfRequests * numberOfNodes);//r n
-//        parameters.add((double) numberOfRequests);//r
-//        parameters.add((double) numberOfNodes);//n
-//        parameters.add(1.0);//1
-//        parameters.add((double) -numberOfRequests * numberOfNodes * requestTimeWindows);//1
+        parameters.add(1.0);//1
+        parameters.add((double) requestTimeWindows);//delta_t
+        parameters.add((double) numberOfNodes);//n
+        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
+        parameters.add((double) numberOfRequests * numberOfNodes);//r n
+        parameters.add((double) numberOfRequests);//r
+        parameters.add((double) numberOfNodes);//n
+        parameters.add(1.0);//1
+        parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);//
 
-        //PCA 1
-        parameters.add(0.4856772);
-        parameters.add(0.4871690);
-        parameters.add(0.4256377);
-        parameters.add(0.3744812);
-        parameters.add(0.4531891);
-        //PCA 2
-        parameters.add(-0.2753961);
-        parameters.add(0.1072986);
-        parameters.add(-0.1810329);
-        parameters.add(0.3744812);
-        parameters.add(-0.3644025);
+//        //PCA 1
+//        parameters.add(0.4856772);
+//        parameters.add(0.4871690);
+//        parameters.add(0.4256377);
+//        parameters.add(0.3744812);
+//        parameters.add(0.4531891);
+//        //PCA 2
+//        parameters.add(-0.2753961);
+//        parameters.add(0.1072986);
+//        parameters.add(-0.1810329);
+//        parameters.add(0.3744812);
+//        parameters.add(-0.3644025);
 
+//        
+//        //PCA 1 - test
+//        parameters.add(0.0025);
+//        parameters.add(0.0);
+//        parameters.add(0.25);
+//        parameters.add(0.0);
+//        parameters.add(0.25);
+//        //PCA 2 - test
+//        parameters.add(0.0);
+//        parameters.add(0.35);
+//        parameters.add(0.05);
+//        parameters.add(0.80);
+//        parameters.add(0.0);
 
-        nadirPoint.add(1000000.0);
+        nadirPoint.add(10000000.0);
         nadirPoint.add(10000000.0);
         System.out.println("Nadir Point = " + nadirPoint);
         System.out.println("Instance Name = " + instanceName);

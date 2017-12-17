@@ -240,7 +240,7 @@ public class Algorithms {
 
         double totalOccupationRate = routesOccupationRate.stream().mapToDouble(Double::valueOf).average().getAsDouble();
 
-        return totalOccupationRate;
+        return 1- totalOccupationRate;
     }
 
     public static void normalizeObjectiveFunctionsForSolutions(List<Solution> solutions) {
@@ -341,6 +341,14 @@ public class Algorithms {
 //
 //        S.setAggregatedObjective2(parameters.get(8) * S.getTotalOccupationRate());
 
+        S.setAggregatedObjective1( parameters.get(1) * S.getTotalDeliveryDelay()+ parameters.get(5) * S.getTotalTravelTime() 
+                 + parameters.get(3) * S.getNumberOfNonAttendedRequests()
+                + parameters.get(6) * S.getTotalWaintingTime());
+        
+        S.setAggregatedObjective2(parameters.get(0) * S.getTotalDistance() + parameters.get(8)*S.getTotalOccupationRate() 
+                + parameters.get(7)*S.getDeliveryTimeWindowAntecipation() + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
+        + parameters.get(4) * S.getNumberOfVehicles());
+
         //---------------------------------------------------------------------------------------------------------------
         // Aggregation using RP
         //---------------------------------------------------------------------------------------------------------------
@@ -354,13 +362,13 @@ public class Algorithms {
 //---------------------------------------------------------------------------------------------------------------
         // Aggregation using PCA
         //---------------------------------------------------------------------------------------------------------------
-        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
-                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance() + parameters.get(3) * S.getNumberOfNonAttendedRequests()
-                + parameters.get(4) * S.getNumberOfVehicles());
-        
-        S.setAggregatedObjective2(parameters.get(5) * S.getTotalDistance() + parameters.get(6) * S.getTotalDeliveryDelay()
-                + parameters.get(7) * S.getTotalRouteTimeChargeBanlance() + parameters.get(8) * S.getNumberOfNonAttendedRequests()
-                + parameters.get(9) * S.getNumberOfVehicles());
+//        S.setAggregatedObjective1(parameters.get(0) * S.getTotalDistance() + parameters.get(1) * S.getTotalDeliveryDelay()
+//                + parameters.get(2) * S.getTotalRouteTimeChargeBanlance() + parameters.get(3) * S.getNumberOfNonAttendedRequests()
+//                + parameters.get(4) * S.getNumberOfVehicles());
+//        
+//        S.setAggregatedObjective2(parameters.get(5) * S.getTotalDistance() + parameters.get(6) * S.getTotalDeliveryDelay()
+//                + parameters.get(7) * S.getTotalRouteTimeChargeBanlance() + parameters.get(8) * S.getNumberOfNonAttendedRequests()
+//                + parameters.get(9) * S.getNumberOfVehicles());
     }
 
     public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Solution> solutions) {

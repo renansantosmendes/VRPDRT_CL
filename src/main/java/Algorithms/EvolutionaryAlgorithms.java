@@ -125,7 +125,7 @@ public class EvolutionaryAlgorithms {
         String folderName, fileName;
 
         LocalDateTime time = LocalDateTime.now();
-        folderName = "AlgorithmsResults//7FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//9FO//NSGA-II//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "NSGAII";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -136,8 +136,8 @@ public class EvolutionaryAlgorithms {
             List<Solution> combinedPareto = new ArrayList<>();
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
-            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/ParetoCombinado_Todas_FOs.txt");
-            PrintStream printStreamForAllObjectives2 = new PrintStream(folderName + "/NSGAII - Objetivos.txt");
+            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/nsga_pareto_9fo.txt");
+            PrintStream printStreamForAllObjectives2 = new PrintStream(folderName + "/nsga_pareto_reduced.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
                 List<Double> listOfHypervolumes = new ArrayList<>();
@@ -199,6 +199,7 @@ public class EvolutionaryAlgorithms {
                 System.out.println("Execution = " + executionCounter);
                 int actualGeneration = 0;
                 while (actualGeneration < maximumNumberOfGenerations) {
+                    saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
                     fileWithSolutions.addAll(nonDominatedSolutions);
                     nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
@@ -259,9 +260,7 @@ public class EvolutionaryAlgorithms {
                 printStreamForCombinedPareto.print(individual + "\n");
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
                 printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectives() + "\n");
-                printStreamForAllObjectives2.print(individual.getAggregatedObjective1() + "\t"+
-                        individual.getAggregatedObjective2() + "\t"
-                        +individual.getStringWithAllNonReducedObjectives() + "\n");
+                printStreamForAllObjectives2.print(individual.getAggregatedObjective1() + "\t" + individual.getAggregatedObjective2() + "\n");
             }
 
             new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
@@ -283,6 +282,17 @@ public class EvolutionaryAlgorithms {
             e.printStackTrace();
         }
         return hypervolume;
+    }
+
+    private static void saveCurrentPopulation(List<Solution> population, int actualGeneration, String folderName,
+            String fileName) throws FileNotFoundException {
+        PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName
+                + "-Population_" + actualGeneration + ".csv");
+
+        for (Solution individual : population) {
+            printStreamForCombinedPareto.print(individual.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
+        }
+
     }
 
     public static void saveHypervolumesDatas(List<List<Double>> hypervolumes, int maximumNumberOfGenerations,
@@ -383,7 +393,7 @@ public class EvolutionaryAlgorithms {
         double hypervolume = 0;
         LocalDateTime time = LocalDateTime.now();
 
-        folderName = "AlgorithmsResults//7FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
+        folderName = "AlgorithmsResults//9FO//SPEA2//" + instanceName + "k" + vehicleCapacity + "_" + time.getYear() + "_" + time.getMonthValue() + "_" + time.getDayOfMonth();
         fileName = "SPEA2";
 
         boolean success = (new File(folderName)).mkdirs();
@@ -456,6 +466,7 @@ public class EvolutionaryAlgorithms {
                     listOfHypervolumes.add(smetric(nonDominated, nadirPoint));
                     saveDataInTextFile(nonDominated, saida1, saida2, saida3);
                     System.out.println("Generation = " + actualGeneration + "\t" + nonDominated.size());
+                    //actualGeneration
                 }
                 combinedPareto.addAll(file);
                 file.clear();
@@ -465,16 +476,17 @@ public class EvolutionaryAlgorithms {
             }
             List<Solution> finalPareto = new ArrayList<>();
             dominanceAlgorithm(combinedPareto, finalPareto);
-            PrintStream saida4 = new PrintStream(folderName + "/ParetoCombinado.txt");
-            PrintStream saida5 = new PrintStream(folderName + "/ParetoCombinadoFOs_Reduzida.txt");
-            PrintStream saida6 = new PrintStream(folderName + "/ParetoCombinado_Todas_FOs.txt");
+            PrintStream saida4 = new PrintStream(folderName + "/spea_pareto.txt");
+            PrintStream saida5 = new PrintStream(folderName + "/spea_pareto_reduced.txt");
+            PrintStream saida6 = new PrintStream(folderName + "/spea_pareto_9fo.txt");
+
             for (Solution solution : finalPareto) {
                 saida4.print(solution + "\n");
                 saida5.print(solution.getAggregatedObjective1() + "\t" + solution.getAggregatedObjective2() + "\n");
                 saida6.print(solution.getStringWithAllNonReducedObjectives() + "\n");
             }
             printPopulation(finalPareto);
-            
+
             //new ResultsGraphicsForParetoCombinedSet(finalPareto, "ResultGraphics", "CombinedParetoSet");
             hypervolume = smetric(finalPareto, nadirPoint);
             saveHypervolumesDatas(hypervolumes, maximumNumberOfGenerations, maximumNumberOfExecutions, folderName, fileName);
