@@ -19,6 +19,7 @@ import static Algorithms.EvolutionaryAlgorithms.*;
 import static Algorithms.Methods.readProblemData;
 import static Algorithms.Methods.readProblemUsingExcelData;
 import InstanceReader.*;
+import ReductionTechniques.HierarchicalCluster;
 import jxl.read.biff.BiffException;
 
 /**
@@ -56,7 +57,7 @@ public class VRPDRT {
         int requestTimeWindows = 10;
         final Integer vehicleCapacity = 4;
         String instanceSize = "s";
-        
+
         int numberOfNodes = 12;
         String nodesData = "bh_n" + numberOfNodes + instanceSize;
         String adjacenciesData = "bh_adj_n" + numberOfNodes + instanceSize;
@@ -110,7 +111,6 @@ public class VRPDRT {
 //        parameters.add(-0.1810329);
 //        parameters.add(0.3744812);
 //        parameters.add(-0.3644025);
-
 //        
 //        //PCA 1 - test
 //        parameters.add(0.0025);
@@ -124,7 +124,6 @@ public class VRPDRT {
 //        parameters.add(0.05);
 //        parameters.add(0.80);
 //        parameters.add(0.0);
-
         nadirPoint.add(10000000.0);
         nadirPoint.add(10000000.0);
         System.out.println("Nadir Point = " + nadirPoint);

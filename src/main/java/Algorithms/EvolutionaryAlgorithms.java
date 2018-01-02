@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import static Algorithms.Algorithms.*;
 import AlgorithmsResults.ResultsGraphicsForConvergence;
+import ReductionTechniques.HierarchicalCluster;
 import java.text.DecimalFormat;
 import org.jfree.chart.JFreeChart;
 
@@ -154,6 +155,11 @@ public class EvolutionaryAlgorithms {
                 inicializeRandomPopulation(parameters, population, populationSize, requests,
                         requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests,
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
+
+                int numberOfClusters = 2;
+//                HierarchicalCluster inicialHC = new HierarchicalCluster(, numberOfClusters);
+//                inicialHC.reduce();
+//                System.out.println(inicialHC.getTransfomationList());
 
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
