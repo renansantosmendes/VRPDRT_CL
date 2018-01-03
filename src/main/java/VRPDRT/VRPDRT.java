@@ -67,7 +67,7 @@ public class VRPDRT {
 
         Integer populationSize = 100;
         Integer maximumNumberOfGenerations = 100;
-        Integer maximumNumberOfExecutions =1 ;
+        Integer maximumNumberOfExecutions = 1 ;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;
@@ -129,7 +129,7 @@ public class VRPDRT {
         System.out.println("Nadir Point = " + nadirPoint);
         System.out.println("Instance Name = " + instanceName);
 
-        NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
+        CL_NSGAII(instanceName, parameters, nadirPoint, populationSize, maximumNumberOfGenerations, maximumNumberOfExecutions, probabilityOfMutation, probabilityOfCrossover,
                 requests, requestsWhichBoardsInNode, requestsWhichLeavesInNode, numberOfNodes, vehicleCapacity, setOfVehicles,
                 listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes,
                 timeWindows, currentTime, lastNode);

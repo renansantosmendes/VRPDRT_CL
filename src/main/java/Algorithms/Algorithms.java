@@ -370,9 +370,33 @@ public class Algorithms {
 //                + parameters.get(9) * S.getNumberOfVehicles());
     }
 
-    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Integer> matrix, Solution S) {
+    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<List<Integer>> matrix, Solution S) {
+
+        S.setAggregatedObjective1(
+                parameters.get(0) * matrix.get(0).get(0) * S.getTotalDistance()
+                + parameters.get(1) * matrix.get(0).get(1) * S.getTotalDeliveryDelay()
+                + parameters.get(2) * matrix.get(0).get(2) * S.getTotalRouteTimeChargeBanlance()
+                + parameters.get(3) * matrix.get(0).get(3) * S.getNumberOfNonAttendedRequests()
+                + parameters.get(4) * matrix.get(0).get(4) * S.getNumberOfVehicles()
+                + parameters.get(5) * matrix.get(0).get(5) * S.getTotalTravelTime()
+                + parameters.get(6) * matrix.get(0).get(6) * S.getTotalWaintingTime()
+                + parameters.get(7) * matrix.get(0).get(7) * S.getDeliveryTimeWindowAntecipation()
+                + parameters.get(8) * matrix.get(0).get(8) * S.getTotalOccupationRate()
+        );
+
         
-        
+         S.setAggregatedObjective2(
+                parameters.get(0) * matrix.get(1).get(0) * S.getTotalDistance()
+                + parameters.get(1) * matrix.get(1).get(1) * S.getTotalDeliveryDelay()
+                + parameters.get(2) * matrix.get(1).get(2) * S.getTotalRouteTimeChargeBanlance()
+                + parameters.get(3) * matrix.get(1).get(3) * S.getNumberOfNonAttendedRequests()
+                + parameters.get(4) * matrix.get(1).get(4) * S.getNumberOfVehicles()
+                + parameters.get(5) * matrix.get(1).get(5) * S.getTotalTravelTime()
+                + parameters.get(6) * matrix.get(1).get(6) * S.getTotalWaintingTime()
+                + parameters.get(7) * matrix.get(1).get(7) * S.getDeliveryTimeWindowAntecipation()
+                + parameters.get(8) * matrix.get(1).get(8) * S.getTotalOccupationRate()
+        );
+        //S.setAggregatedObjective2();
     }
 
     public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Solution> solutions) {
@@ -382,9 +406,10 @@ public class Algorithms {
         }
     }
 
-    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<Integer> matrix, List<Solution> solutions) {
+    public static void evaluateAggregatedObjectiveFunctions(List<Double> parameters, List<List<Integer>> matrix,
+            List<Solution> solutions) {
         for (Solution solution : solutions) {
-            evaluateAggregatedObjectiveFunctions(parameters, solution);
+            evaluateAggregatedObjectiveFunctions(parameters, matrix, solution);
         }
     }
 
