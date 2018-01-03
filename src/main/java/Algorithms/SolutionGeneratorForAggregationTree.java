@@ -28,10 +28,10 @@ import java.util.Set;
  */
 public class SolutionGeneratorForAggregationTree {
 
-    private String vehicleCapacities[] = {"4", "11", "16"};//"13" -> removed
-    private String nodesDistance[] = {"s", "m", "l"};
-    private String numberOfRequests[] = {"050", "100", "150", "200", "250"};
-    private String timeWindows[] = {"05", "10"};// "03"-> removed
+    private String vehicleCapacities[] = {"4"};//"11""16""13" -> removed
+    private String nodesDistance[] = {"s"};//m l
+    private String numberOfRequests[] = {"050"};//100,150,200,250
+    private String timeWindows[] = {"10"};//05 "03"-> removed
     private String numberOfNodes = "12";
     private int numberOfInstances;
     private int numberOfSolutionsPerInstance;

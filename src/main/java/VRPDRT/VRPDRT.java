@@ -89,7 +89,7 @@ public class VRPDRT {
         Algorithms.printProblemInformations(requests, numberOfVehicles, vehicleCapacity, instanceName, adjacenciesData, nodesData);
         Methods.initializeFleetOfVehicles(setOfVehicles, numberOfVehicles);
 
-        parameters.add(1.0);//1
+        parameters.add(0.10);//1
         parameters.add((double) requestTimeWindows);//delta_t
         parameters.add((double) numberOfNodes);//n
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);// r n delta_t
@@ -139,7 +139,7 @@ public class VRPDRT {
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
-//        new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
+        //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
     }
 
 }

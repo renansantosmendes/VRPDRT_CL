@@ -338,7 +338,7 @@ public class EvolutionaryAlgorithms {
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 int numberOfClusters = 2;
-                HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population), numberOfClusters);
+                HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
                 inicialHC.reduce();
                 inicialHC.getTransfomationList().forEach(System.out::println);
 
@@ -389,10 +389,11 @@ public class EvolutionaryAlgorithms {
                     //saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
                     fileWithSolutions.addAll(nonDominatedSolutions);
-                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(fileWithSolutions), numberOfClusters);
+                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(fileWithSolutions, parameters), 
+                            numberOfClusters);
                     hc.reduce();
                     hc.getTransfomationList().forEach(System.out::println);
-
+//                    hc.printMatrixData();
                     nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
                     fitnessEvaluationForMultiObjectiveOptimization(offspring);
                     parentsAndOffspring.clear();
@@ -483,6 +484,19 @@ public class EvolutionaryAlgorithms {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 matrix[i][j] = population.get(i).getObjectives().get(j);
+            }
+        }
+        return matrix;
+    }
+    
+    public static double[][] getMatrixOfObjetives(List<Solution> population, List<Double> parameters) {
+        int rows = population.size();
+        int columns = population.get(0).getObjectives().size();
+        double[][] matrix = new double[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = population.get(i).getObjectives().get(j)*parameters.get(j);
             }
         }
         return matrix;
