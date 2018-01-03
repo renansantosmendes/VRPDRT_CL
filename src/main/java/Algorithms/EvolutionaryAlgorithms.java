@@ -207,12 +207,12 @@ public class EvolutionaryAlgorithms {
                 while (actualGeneration < maximumNumberOfGenerations) {
                     saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
-
-                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(population), numberOfClusters);
+                    fileWithSolutions.addAll(nonDominatedSolutions);
+                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(fileWithSolutions), numberOfClusters);
                     hc.reduce();
                     hc.getTransfomationList().forEach(System.out::println);
 
-                    fileWithSolutions.addAll(nonDominatedSolutions);
+                    //fileWithSolutions.addAll(nonDominatedSolutions);
                     nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
                     fitnessEvaluationForMultiObjectiveOptimization(offspring);
                     parentsAndOffspring.clear();
@@ -297,24 +297,14 @@ public class EvolutionaryAlgorithms {
 
     public static double[][] getMatrixOfObjetives(List<Solution> population) {
         int rows = population.size();
-        int columns = 9;
+        int columns = population.get(0).getObjectives().size();
         double[][] matrix = new double[rows][columns];
 
         for (int i = 0; i < rows; i++) {
-            //for (int j = 0; j < columns; j++) {
-
-            //}
-            matrix[i][0] = population.get(i).getTotalDistance();
-            matrix[i][1] = population.get(i).getTotalDeliveryDelay();
-            matrix[i][2] = population.get(i).getTotalRouteTimeChargeBanlance();
-            matrix[i][3] = population.get(i).getNumberOfNonAttendedRequests();
-            matrix[i][4] = population.get(i).getNumberOfVehicles();
-            matrix[i][5] = population.get(i).getTotalTravelTime();
-            matrix[i][6] = population.get(i).getTotalWaintingTime();
-            matrix[i][7] = population.get(i).getDeliveryTimeWindowAntecipation();
-            matrix[i][8] = population.get(i).getTotalOccupationRate();
+            for (int j = 0; j < columns; j++) {
+                matrix[i][j] = population.get(i).getObjectives().get(j);
+            }
         }
-
         return matrix;
     }
 

@@ -758,6 +758,7 @@ public class Methods {
         solution.setTotalWaintingTime(FO7(solution));
         solution.setDeliveryTimeWindowAntecipation(FO8(solution));
         solution.setTotalOccupationRate(FO9(solution, Qmax));
+        solution.setObjectivesList();
         //evaluateAggregatedObjectiveFunctions(solution, 1, 1, 1, 1, 1);
 
         solution.setObjectiveFunction(FuncaoDeAvaliacao(solution, listRequests, c));

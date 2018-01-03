@@ -144,7 +144,7 @@ public class Solution implements Comparable<Solution> {
         setDeliveryTimeWindowAntecipation(solution.getDeliveryTimeWindowAntecipation());
         setTotalOccupationRate(solution.getTotalOccupationRate());
         setObjectives(solution.getObjectives());
-        
+
         setTotalDistanceNormalized(solution.getTotalDistanceNormalized());
         setTotalDeliveryDelayNormalized(solution.getTotalDeliveryDelayNormalized());
         setTotalRouteTimeChargeBanlanceNormalized(solution.getTotalRouteTimeChargeBanlanceNormalized());
@@ -192,6 +192,18 @@ public class Solution implements Comparable<Solution> {
         nonAttendedRequestsList.clear();
         linkedRouteList.clear();
         logger = "";
+    }
+
+    public void setObjectivesList() {
+        this.objectives.add((double) this.totalDistance);
+        this.objectives.add((double) this.totalDeliveryDelay);
+        this.objectives.add((double) this.totalRouteTimeChargeBanlance);
+        this.objectives.add((double) this.numberOfNonAttendedRequests);
+        this.objectives.add((double) this.numberOfVehicles);
+        this.objectives.add((double) this.totalTravelTime);
+        this.objectives.add((double) this.totalWaintingTime);
+        this.objectives.add((double) this.deliveryTimeWindowAntecipation);
+        this.objectives.add((double) this.totalOccupationRate);
     }
 
     public Set<Route> getSetOfRoutes() {
