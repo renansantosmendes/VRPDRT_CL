@@ -348,7 +348,7 @@ public class Algorithms {
         S.setAggregatedObjective2(parameters.get(0) * S.getTotalDistance() + parameters.get(8)*S.getTotalOccupationRate() 
                 + parameters.get(7)*S.getDeliveryTimeWindowAntecipation() + parameters.get(2) * S.getTotalRouteTimeChargeBanlance()
         + parameters.get(4) * S.getNumberOfVehicles());
-
+        
         //---------------------------------------------------------------------------------------------------------------
         // Aggregation using RP
         //---------------------------------------------------------------------------------------------------------------

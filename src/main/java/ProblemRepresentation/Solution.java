@@ -8,7 +8,8 @@ import java.text.*;
 import java.util.*;
 
 public class Solution implements Comparable<Solution> {
-
+    
+    private List<Double> objectives = new ArrayList<>();
     private Set<Route> setOfRoutes;
     private double objectiveFunction;
     private long totalDistance;//f1

@@ -57,7 +57,7 @@ public class HierarchicalCluster {
         }
     }
 
-    public HierarchicalCluster(int numberOfClusters, double[][] data) {
+    public HierarchicalCluster(double[][] data, int numberOfClusters) {
         this.data = data;
         this.numberOfClusters = numberOfClusters;
         this.clusters = new ArrayList<>();
@@ -97,7 +97,7 @@ public class HierarchicalCluster {
     public List<List<Integer>> getTransfomationList() {
         return transformationList;
     }
-    
+
     private List<List<Double>> readData() throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         List<List<Double>> listData = new ArrayList<>();

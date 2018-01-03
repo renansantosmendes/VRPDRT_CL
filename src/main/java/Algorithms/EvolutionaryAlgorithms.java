@@ -157,9 +157,9 @@ public class EvolutionaryAlgorithms {
                         requestList, loadIndexList, timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
 
                 int numberOfClusters = 2;
-//                HierarchicalCluster inicialHC = new HierarchicalCluster(, numberOfClusters);
-//                inicialHC.reduce();
-//                System.out.println(inicialHC.getTransfomationList());
+                HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population), numberOfClusters);
+                inicialHC.reduce();
+                System.out.println(inicialHC.getTransfomationList());
 
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
@@ -288,6 +288,29 @@ public class EvolutionaryAlgorithms {
             e.printStackTrace();
         }
         return hypervolume;
+    }
+
+    public static double[][] getMatrixOfObjetives(List<Solution> population) {
+        int rows = population.size();
+        int columns = 9;
+        double[][] matrix = new double[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            //for (int j = 0; j < columns; j++) {
+            
+            //}
+            matrix[i][0] = population.get(i).getTotalDistance();
+            matrix[i][1] = population.get(i).getTotalDeliveryDelay();
+            matrix[i][2] = population.get(i).getTotalRouteTimeChargeBanlance();
+            matrix[i][3] = population.get(i).getNumberOfNonAttendedRequests();
+            matrix[i][4] = population.get(i).getNumberOfVehicles();
+            matrix[i][5] = population.get(i).getTotalTravelTime();
+            matrix[i][6] = population.get(i).getTotalWaintingTime();
+            matrix[i][7] = population.get(i).getDeliveryTimeWindowAntecipation();
+            matrix[i][8] = population.get(i).getTotalOccupationRate();
+        }
+
+        return matrix;
     }
 
     private static void saveCurrentPopulation(List<Solution> population, int actualGeneration, String folderName,
