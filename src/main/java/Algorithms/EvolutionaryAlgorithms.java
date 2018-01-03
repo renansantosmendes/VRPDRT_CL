@@ -159,7 +159,7 @@ public class EvolutionaryAlgorithms {
                 int numberOfClusters = 2;
                 HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population), numberOfClusters);
                 inicialHC.reduce();
-                System.out.println(inicialHC.getTransfomationList());
+                inicialHC.getTransfomationList().forEach(System.out::println);
 
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
@@ -207,6 +207,11 @@ public class EvolutionaryAlgorithms {
                 while (actualGeneration < maximumNumberOfGenerations) {
                     saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
+
+                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(population), numberOfClusters);
+                    hc.reduce();
+                    hc.getTransfomationList().forEach(System.out::println);
+
                     fileWithSolutions.addAll(nonDominatedSolutions);
                     nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
                     fitnessEvaluationForMultiObjectiveOptimization(offspring);
@@ -297,7 +302,7 @@ public class EvolutionaryAlgorithms {
 
         for (int i = 0; i < rows; i++) {
             //for (int j = 0; j < columns; j++) {
-            
+
             //}
             matrix[i][0] = population.get(i).getTotalDistance();
             matrix[i][1] = population.get(i).getTotalDeliveryDelay();

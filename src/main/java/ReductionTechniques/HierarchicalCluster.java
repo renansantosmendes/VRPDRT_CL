@@ -61,6 +61,12 @@ public class HierarchicalCluster {
         this.data = data;
         this.numberOfClusters = numberOfClusters;
         this.clusters = new ArrayList<>();
+        this.numberOfRows = data.length;
+        this.numberOfColumns = 9;
+        
+       // createMatrix();
+        calculateSilimarity();
+        calculateDissilimarity();
     }
 
     public HierarchicalCluster(String fileName, int numberOfClusters) throws IOException {

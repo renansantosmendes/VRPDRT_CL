@@ -8,8 +8,8 @@ import java.text.*;
 import java.util.*;
 
 public class Solution implements Comparable<Solution> {
-    
-    private List<Double> objectives = new ArrayList<>();
+
+    private List<Double> objectives;
     private Set<Route> setOfRoutes;
     private double objectiveFunction;
     private long totalDistance;//f1
@@ -63,6 +63,7 @@ public class Solution implements Comparable<Solution> {
         deliveryTimeWindowAntecipation = -1;
         totalRouteTimeChargeBanlance = -1;
         totalOccupationRate = -1;
+        objectives = new ArrayList<>();
 
         totalDistanceNormalized = -1;
         totalDeliveryDelayNormalized = -1;
@@ -104,6 +105,7 @@ public class Solution implements Comparable<Solution> {
         deliveryTimeWindowAntecipation = solution.getDeliveryTimeWindowAntecipation();
         totalRouteTimeChargeBanlance = solution.getTotalRouteTimeChargeBanlance();
         totalOccupationRate = solution.getTotalOccupationRate();
+        objectives.addAll(solution.getObjectives());
 
         totalDistanceNormalized = solution.getTotalDistanceNormalized();
         totalDeliveryDelayNormalized = solution.getTotalDeliveryDelayNormalized();
@@ -141,7 +143,8 @@ public class Solution implements Comparable<Solution> {
         setTotalWaintingTime(solution.getTotalWaintingTime());
         setDeliveryTimeWindowAntecipation(solution.getDeliveryTimeWindowAntecipation());
         setTotalOccupationRate(solution.getTotalOccupationRate());
-
+        setObjectives(solution.getObjectives());
+        
         setTotalDistanceNormalized(solution.getTotalDistanceNormalized());
         setTotalDeliveryDelayNormalized(solution.getTotalDeliveryDelayNormalized());
         setTotalRouteTimeChargeBanlanceNormalized(solution.getTotalRouteTimeChargeBanlanceNormalized());
@@ -391,6 +394,10 @@ public class Solution implements Comparable<Solution> {
         return crowdDistance;
     }
 
+    public List<Double> getObjectives() {
+        return objectives;
+    }
+
     public void setTempoExtraTotal(int tempo) {
         this.tempoExtraTotal = tempo;
     }
@@ -462,6 +469,10 @@ public class Solution implements Comparable<Solution> {
     public void setNonAttendedRequestsList(List<Request> listaNaoAtendimento) {
         this.nonAttendedRequestsList.clear();
         this.nonAttendedRequestsList.addAll(new LinkedList<Request>(listaNaoAtendimento));
+    }
+
+    public void setObjectives(List<Double> objectives) {
+        this.objectives = objectives;
     }
 
     public List<Integer> getLinkedRouteList() {
@@ -590,30 +601,30 @@ public class Solution implements Comparable<Solution> {
 //        String stringWithObjectives = totalDistance + "\t" + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance
 //                + "\t" + numberOfNonAttendedRequests + "\t" + numberOfVehicles + "\t" + totalTravelTime + "\t"
 //                + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
-        String stringWithObjectives = aggregatedObjective1 + "\t" + aggregatedObjective2 + "\t" + totalDistance + "\t" + 
-                totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance  + "\t" + numberOfNonAttendedRequests + "\t" +
-                numberOfVehicles;
-                // + "\t" + totalTravelTime + "\t"  + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
+        String stringWithObjectives = aggregatedObjective1 + "\t" + aggregatedObjective2 + "\t" + totalDistance + "\t"
+                + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t"
+                + numberOfVehicles;
+        // + "\t" + totalTravelTime + "\t"  + totalWaintingTime + "\t" + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
 
         return stringWithObjectives;
     }
-    
+
     public String getStringWithAllNonReducedObjectives() {
 
-        String stringWithObjectives = totalDistance + "\t" + 
-                totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance  + "\t" + numberOfNonAttendedRequests + "\t" +
-                numberOfVehicles + "\t" + totalTravelTime + "\t"  + totalWaintingTime + "\t" + 
-                deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
+        String stringWithObjectives = totalDistance + "\t"
+                + totalDeliveryDelay + "\t" + totalRouteTimeChargeBanlance + "\t" + numberOfNonAttendedRequests + "\t"
+                + numberOfVehicles + "\t" + totalTravelTime + "\t" + totalWaintingTime + "\t"
+                + deliveryTimeWindowAntecipation + "\t" + totalOccupationRate + "\t";
 
         return stringWithObjectives;
     }
-    
+
     public String getStringWithAllNonReducedObjectivesForCSVFile() {
 
-        String stringWithObjectives = totalDistance + "," + 
-                totalDeliveryDelay + "," + totalRouteTimeChargeBanlance  + "," + numberOfNonAttendedRequests + "," +
-                numberOfVehicles + "," + totalTravelTime + ","  + totalWaintingTime + "," + 
-                deliveryTimeWindowAntecipation + "," + totalOccupationRate + "\t";
+        String stringWithObjectives = totalDistance + ","
+                + totalDeliveryDelay + "," + totalRouteTimeChargeBanlance + "," + numberOfNonAttendedRequests + ","
+                + numberOfVehicles + "," + totalTravelTime + "," + totalWaintingTime + ","
+                + deliveryTimeWindowAntecipation + "," + totalOccupationRate + "\t";
 
         return stringWithObjectives;
     }
