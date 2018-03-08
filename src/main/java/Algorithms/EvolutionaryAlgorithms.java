@@ -393,6 +393,7 @@ public class EvolutionaryAlgorithms {
                     //saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
                     fileWithSolutions.addAll(nonDominatedSolutions);
+                    
                     HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
                     hc.setCorrelation(CorrelationType.KENDALL).reduce()
                             .getTransfomationList().forEach(System.out::println);

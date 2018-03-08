@@ -61,6 +61,9 @@ public class HierarchicalCluster {
         this.data = data;
         this.numberOfClusters = numberOfClusters;
         this.clusters = new ArrayList<>();
+//        createMatrix();
+//        calculateSilimarity();
+//        calculateDissilimarity();
     }
 
     public HierarchicalCluster(String fileName, int numberOfClusters) throws IOException {
@@ -244,7 +247,6 @@ public class HierarchicalCluster {
                 destinationMatrix[i][j] = sourceMatrix[i][j];
             }
         }
-        //printSimilarity(length);
     }
 
     public List<Integer> findMinDissimilarity(int rows, int columns) {
@@ -307,11 +309,11 @@ public class HierarchicalCluster {
     }
 
     public HierarchicalCluster reduce() {
-        createMatrix();
-        calculateSilimarity();
-        this.printSimilarity();
-        calculateDissilimarity();
-        
+        if(this.data == null){
+            createMatrix();
+            calculateSilimarity();
+            calculateDissilimarity();
+        }
         Matrix m = new Matrix(this.data);
         int numberOfColumns = this.numberOfColumns;
         List<List<Integer>> columns = new ArrayList<>();

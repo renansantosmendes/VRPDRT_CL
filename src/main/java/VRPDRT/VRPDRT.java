@@ -99,31 +99,6 @@ public class VRPDRT {
         parameters.add(1.0);//1
         parameters.add((double) numberOfRequests * numberOfNodes * requestTimeWindows);//
 
-//        //PCA 1
-//        parameters.add(0.4856772);
-//        parameters.add(0.4871690);
-//        parameters.add(0.4256377);
-//        parameters.add(0.3744812);
-//        parameters.add(0.4531891);
-//        //PCA 2
-//        parameters.add(-0.2753961);
-//        parameters.add(0.1072986);
-//        parameters.add(-0.1810329);
-//        parameters.add(0.3744812);
-//        parameters.add(-0.3644025);
-//        
-//        //PCA 1 - test
-//        parameters.add(0.0025);
-//        parameters.add(0.0);
-//        parameters.add(0.25);
-//        parameters.add(0.0);
-//        parameters.add(0.25);
-//        //PCA 2 - test
-//        parameters.add(0.0);
-//        parameters.add(0.35);
-//        parameters.add(0.05);
-//        parameters.add(0.80);
-//        parameters.add(0.0);
         nadirPoint.add(10000000.0);
         nadirPoint.add(10000000.0);
         System.out.println("Nadir Point = " + nadirPoint);
@@ -139,7 +114,7 @@ public class VRPDRT {
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
-        new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
+//        new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
     }
 
 }
