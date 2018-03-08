@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import static Algorithms.Algorithms.*;
 import AlgorithmsResults.ResultsGraphicsForConvergence;
+import ReductionTechniques.CorrelationType;
 import ReductionTechniques.HierarchicalCluster;
 import java.text.DecimalFormat;
 import org.jfree.chart.JFreeChart;
@@ -339,9 +340,12 @@ public class EvolutionaryAlgorithms {
 
                 int numberOfClusters = 2;
                 HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
-                inicialHC.reduce();
-                inicialHC.getTransfomationList().forEach(System.out::println);
+                inicialHC.setCorrelation(CorrelationType.KENDALL).reduce()
+                        .getTransfomationList().forEach(System.out::println);
 
+//                HierarchicalCluster inicialHC = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
+//                inicialHC.reduce();
+//                inicialHC.getTransfomationList().forEach(System.out::println);
                 //normalizeObjectiveFunctionsValues(population);
                 //normalizeObjectiveFunctions(population);
                 normalizeObjectiveFunctionsForSolutions(population);
@@ -389,11 +393,10 @@ public class EvolutionaryAlgorithms {
                     //saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
                     fileWithSolutions.addAll(nonDominatedSolutions);
-                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(fileWithSolutions, parameters), 
-                            numberOfClusters);
-                    hc.reduce();
-                    hc.getTransfomationList().forEach(System.out::println);
-//                    hc.printMatrixData();
+                    HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
+                    hc.setCorrelation(CorrelationType.KENDALL).reduce()
+                            .getTransfomationList().forEach(System.out::println);
+//                  
                     nonDominatedFrontiersSortingAlgorithm(offspring, nonDominatedFronts);
                     fitnessEvaluationForMultiObjectiveOptimization(offspring);
                     parentsAndOffspring.clear();
@@ -488,7 +491,7 @@ public class EvolutionaryAlgorithms {
         }
         return matrix;
     }
-    
+
     public static double[][] getMatrixOfObjetives(List<Solution> population, List<Double> parameters) {
         int rows = population.size();
         int columns = population.get(0).getObjectives().size();
@@ -496,7 +499,7 @@ public class EvolutionaryAlgorithms {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                matrix[i][j] = population.get(i).getObjectives().get(j)*parameters.get(j);
+                matrix[i][j] = population.get(i).getObjectives().get(j) * parameters.get(j);
             }
         }
         return matrix;

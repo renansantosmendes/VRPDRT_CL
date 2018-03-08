@@ -139,7 +139,7 @@ public class VRPDRT {
 //                numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList,
 //                timeBetweenNodes, distanceBetweenNodes, timeWindows, currentTime, lastNode);
         //new GoogleStaticMap(new NodeDAO(nodesData).getListOfNodes(), adjacenciesData, nodesData).getStaticMapForInstance();
-        //new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
+        new SolutionGeneratorForAggregationTree().generateSolutionsForAggregationTree(parameters);
     }
 
 }

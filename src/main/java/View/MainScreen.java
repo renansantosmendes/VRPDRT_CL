@@ -65,7 +65,6 @@ public class MainScreen extends javax.swing.JFrame {
 
         jToolBar2.setRollover(true);
 
-        jButton2.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/map.png")); // NOI18N
         jButton2.setToolTipText("Map ");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -78,7 +77,6 @@ public class MainScreen extends javax.swing.JFrame {
         });
         jToolBar2.add(jButton2);
 
-        jButton1.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/request2.png")); // NOI18N
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setPreferredSize(new java.awt.Dimension(100, 100));
@@ -90,49 +88,42 @@ public class MainScreen extends javax.swing.JFrame {
         });
         jToolBar2.add(jButton1);
 
-        jButton3.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/algorithm.png")); // NOI18N
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton3);
 
-        jButton4.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/route.png")); // NOI18N
         jButton4.setFocusable(false);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton4.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton4);
 
-        jButton5.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/settings1.png")); // NOI18N
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton5);
 
-        jButton6.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/statistics.png")); // NOI18N
         jButton6.setFocusable(false);
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton6.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton6);
 
-        jButton7.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/money.png")); // NOI18N
         jButton7.setFocusable(false);
         jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton7.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton7);
 
-        jButton8.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/logout.png")); // NOI18N
         jButton8.setFocusable(false);
         jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton8.setPreferredSize(new java.awt.Dimension(100, 100));
         jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton8);
 
-        jButton9.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/exit.png")); // NOI18N
         jButton9.setFocusable(false);
         jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton9.setPreferredSize(new java.awt.Dimension(100, 100));
@@ -157,13 +148,11 @@ public class MainScreen extends javax.swing.JFrame {
             .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
         );
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("/home/renansantos/NetBeansProjects/VRPDRTGoogleMapsAPI/src/main/java/View/Icons/transit03.jpg")); // NOI18N
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

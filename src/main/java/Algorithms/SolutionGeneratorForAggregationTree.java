@@ -30,7 +30,7 @@ public class SolutionGeneratorForAggregationTree {
 
     private String vehicleCapacities[] = {"4"};//"11""16""13" -> removed
     private String nodesDistance[] = {"s"};//m l
-    private String numberOfRequests[] = {"050"};//100,150,200,250
+    private String numberOfRequests[] = {"100"};//100,150,200,250
     private String timeWindows[] = {"10"};//05 "03"-> removed
     private String numberOfNodes = "12";
     private int numberOfInstances;
@@ -116,7 +116,7 @@ public class SolutionGeneratorForAggregationTree {
                     numberOfNodes, vehicleCapacity, setOfVehicles, listOfNonAttendedRequests, requestList, loadIndexList, timeBetweenNodes,
                     distanceBetweenNodes, timeWindows));
             //System.out.println(solution1);
-            printStreamForObjectives.print(solution1.getStringWithObjectives() + "\n");
+            printStreamForObjectives.print(solution1.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
             printStreamForSolutions.print(solution1 + "\n");
         }
     }
