@@ -147,7 +147,7 @@ public class EvolutionaryAlgorithms {
                 PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
                 PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + executionNumber + ".txt");
-
+                PrintStream saida4 = new PrintStream(folderName + "/" + fileName + "-Pareto-" + executionNumber + ".csv");
                 int maximumSize;
 
 //                inicializePopulation(population, populationSize, requests,
@@ -248,6 +248,11 @@ public class EvolutionaryAlgorithms {
                     saida3.print("\n\n");
                     actualGeneration++;
                 }
+
+                for (Solution s : fileWithSolutions) {
+                    saida4.print(s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
+                }
+
                 offspring.clear();
                 parentsAndOffspring.clear();
                 combinedPareto.addAll(fileWithSolutions);
