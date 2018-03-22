@@ -672,7 +672,7 @@ public class Solution implements Comparable<Solution> {
 
         s += "\t";
         //for(Request req : r.listaAtendimento)
-        s += listaAtendimento;// + " ";
+//        s += listaAtendimento;// + " ";
 
         s += "\t";
 //		for(Request req : listaNaoAtendimento)

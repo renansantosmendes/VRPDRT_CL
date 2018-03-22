@@ -328,6 +328,7 @@ public class EvolutionaryAlgorithms {
                 PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
                 PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + executionNumber + ".txt");
+                PrintStream saida4 = new PrintStream(folderName + "/" + fileName + "-Pareto-" + executionNumber + ".csv");
 
                 int maximumSize;
 
@@ -435,6 +436,7 @@ public class EvolutionaryAlgorithms {
                     for (Solution s : fileWithSolutions) {
                         saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
                         saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
+                        saida4.print(s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                     }
                     saida1.print("\n\n");
                     saida2.print(fileWithSolutions.size() + "\n");
