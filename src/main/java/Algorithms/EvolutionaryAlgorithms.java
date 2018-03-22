@@ -394,7 +394,7 @@ public class EvolutionaryAlgorithms {
                     //saveCurrentPopulation(population, actualGeneration, folderName, fileName);
                     dominanceAlgorithm(offspring, nonDominatedSolutions);
                     fileWithSolutions.addAll(nonDominatedSolutions);
-                    
+
                     HierarchicalCluster hc = new HierarchicalCluster(getMatrixOfObjetives(population, parameters), numberOfClusters);
                     hc.setCorrelation(CorrelationType.KENDALL).reduce()
                             .getTransfomationList().forEach(System.out::println);
@@ -436,13 +436,17 @@ public class EvolutionaryAlgorithms {
                     for (Solution s : fileWithSolutions) {
                         saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
                         saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
-                        saida4.print(s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                     }
                     saida1.print("\n\n");
                     saida2.print(fileWithSolutions.size() + "\n");
                     saida3.print("\n\n");
                     actualGeneration++;
                 }
+
+                for (Solution s : fileWithSolutions) {
+                    saida4.print(s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
+                }
+
                 offspring.clear();
                 parentsAndOffspring.clear();
                 combinedPareto.addAll(fileWithSolutions);
