@@ -138,7 +138,7 @@ public class EvolutionaryAlgorithms {
             List<Solution> combinedPareto = new ArrayList<>();
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
-            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/nsga_pareto_9fo.txt");
+            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/nsga_pareto_9fo.csv");
             PrintStream printStreamForAllObjectives2 = new PrintStream(folderName + "/nsga_pareto_reduced.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
@@ -267,7 +267,7 @@ public class EvolutionaryAlgorithms {
             for (Solution individual : finalPareto) {
                 printStreamForCombinedPareto.print(individual + "\n");
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
-                printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectives() + "\n");
+                printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                 printStreamForAllObjectives2.print(individual.getAggregatedObjective1() + "\t" + individual.getAggregatedObjective2() + "\n");
             }
 
@@ -324,7 +324,7 @@ public class EvolutionaryAlgorithms {
             List<Solution> combinedPareto = new ArrayList<>();
             PrintStream printStreamForCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado.txt");
             PrintStream printStreamForObjectiveFunctionOfCombinedPareto = new PrintStream(folderName + "/" + fileName + "-Pareto_Combinado_Funcoes_Objetivo.txt");
-            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/nsga_pareto_9fo.txt");
+            PrintStream printStreamForAllObjectives = new PrintStream(folderName + "/nsga_pareto_9fo.csv");
             PrintStream printStreamForAllObjectives2 = new PrintStream(folderName + "/nsga_pareto_reduced.txt");
             for (int executionCounter = 0; executionCounter < maximumNumberOfExecutions; executionCounter++) {
                 String executionNumber;
@@ -466,7 +466,7 @@ public class EvolutionaryAlgorithms {
             for (Solution individual : finalPareto) {
                 printStreamForCombinedPareto.print(individual + "\n");
                 printStreamForObjectiveFunctionOfCombinedPareto.print(individual.getStringWithObjectives() + "\n");
-                printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectives() + "\n");
+                printStreamForAllObjectives.print(individual.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                 printStreamForAllObjectives2.print(individual.getAggregatedObjective1() + "\t" + individual.getAggregatedObjective2() + "\n");
             }
 
