@@ -50,10 +50,10 @@ public class VRPDRT {
 
     public static void main(String[] args) throws ApiException, InterruptedException, IOException, BiffException {
         String directionsApiKey = "AIzaSyD9W0em7H723uVOMD6QFe_1Mns71XAi5JU";
-//        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
-        String filePath = "/home/rmendes/VRPDRT/";
+        String filePath = "/home/renansantos/Área de Trabalho/Excel Instances/";
+//        String filePath = "/home/rmendes/VRPDRT/";
 
-        int numberOfRequests = 150;
+        int numberOfRequests = 50;
         int requestTimeWindows = 10;
         final Integer vehicleCapacity = 4;
         String instanceSize = "s";
@@ -66,8 +66,8 @@ public class VRPDRT {
         final Integer numberOfVehicles = 50;
 
         Integer populationSize = 100;
-        Integer maximumNumberOfGenerations = 1000;
-        Integer maximumNumberOfExecutions = 30;
+        Integer maximumNumberOfGenerations = 100;
+        Integer maximumNumberOfExecutions = 1;
         double probabilityOfMutation = 0.02;
         double probabilityOfCrossover = 0.7;
         int fileSize = populationSize;

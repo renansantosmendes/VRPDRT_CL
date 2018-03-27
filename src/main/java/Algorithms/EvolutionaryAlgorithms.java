@@ -146,7 +146,7 @@ public class EvolutionaryAlgorithms {
                 executionNumber = Integer.toString(executionCounter);
                 PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
-                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + executionNumber + ".txt");
+                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-teste-" + executionNumber + ".csv");
                 PrintStream saida4 = new PrintStream(folderName + "/" + fileName + "-Pareto-" + executionNumber + ".csv");
                 int maximumSize;
 
@@ -216,7 +216,7 @@ public class EvolutionaryAlgorithms {
                     fitnessEvaluationForMultiObjectiveOptimization(parentsAndOffspring);
                     dominanceAlgorithm(parentsAndOffspring, nonDominatedSolutions);
 
-                    updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
+                    updateNSGASolutionsFileTest(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
                     normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
                     evaluateAggregatedObjectiveFunctions(parameters, fileWithSolutions);
@@ -241,7 +241,8 @@ public class EvolutionaryAlgorithms {
 
                     for (Solution s : fileWithSolutions) {
                         saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
-                        saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
+                        //saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
+                        saida3.print("\t" + s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                     }
                     saida1.print("\n\n");
                     saida2.print(fileWithSolutions.size() + "\n");
@@ -332,7 +333,7 @@ public class EvolutionaryAlgorithms {
                 executionNumber = Integer.toString(executionCounter);
                 PrintStream saida1 = new PrintStream(folderName + "/" + fileName + "-Execucao-" + executionNumber + ".txt");
                 PrintStream saida2 = new PrintStream(folderName + "/" + fileName + "-tamanho_arquivo-" + executionNumber + ".txt");
-                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-Execucao-Normalizada-" + executionNumber + ".txt");
+                PrintStream saida3 = new PrintStream(folderName + "/" + fileName + "-teste-" + executionNumber + ".csv");
                 PrintStream saida4 = new PrintStream(folderName + "/" + fileName + "-Pareto-" + executionNumber + ".csv");
 
                 int maximumSize;
@@ -415,7 +416,7 @@ public class EvolutionaryAlgorithms {
                     fitnessEvaluationForMultiObjectiveOptimization(parentsAndOffspring);
                     dominanceAlgorithm(parentsAndOffspring, nonDominatedSolutions);
 
-                    updateNSGASolutionsFile(parentsAndOffspring, fileWithSolutions, maximumSize);
+                    updateNSGASolutionsFileTest(parentsAndOffspring, fileWithSolutions, maximumSize);
                     //normalizeObjectiveFunctionsValues(fileWithSolutions);
                     normalizeObjectiveFunctionsForSolutions(fileWithSolutions);
                     evaluateAggregatedObjectiveFunctions(parameters, hc.getTransfomationList(), fileWithSolutions);
@@ -434,13 +435,13 @@ public class EvolutionaryAlgorithms {
                     normalizeObjectiveFunctionsForSolutions(offspring);
                     evaluateAggregatedObjectiveFunctions(parameters, hc.getTransfomationList(), offspring);
 
-                    System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size());
+                    System.out.println("Generation = " + actualGeneration + "\t" + fileWithSolutions.size() + "\t" + population.size());
 
                     listOfHypervolumes.add(smetric(fileWithSolutions, nadirPoint));
 
                     for (Solution s : fileWithSolutions) {
                         saida1.print("\t" + s.getAggregatedObjective1() + "\t" + s.getAggregatedObjective2() + "\n");
-                        saida3.print("\t" + s.getAggregatedObjective1Normalized() + "\t" + s.getAggregatedObjective2Normalized() + "\n");
+                        saida3.print("\t" + s.getStringWithAllNonReducedObjectivesForCSVFile() + "\n");
                     }
                     saida1.print("\n\n");
                     saida2.print(fileWithSolutions.size() + "\n");
@@ -1741,6 +1742,60 @@ public class EvolutionaryAlgorithms {
             }
         }
         fileSorting(arquivo);
+    }
+    
+    
+    
+    public static void updateNSGASolutionsFileTest(List<Solution> population, List<Solution> file, int TamMax) {
+
+        List<Solution> naoDominados = new ArrayList<>();
+        file.addAll(population);
+        removeEqualSolutions(file);
+        dominanceAlgorithm(file, naoDominados);
+        file.clear();
+        file.addAll(naoDominados);
+
+        if (file.size() > TamMax) {//reduzir arquivo
+
+            int k = (int) Math.ceil(Math.sqrt(TamMax));
+            //System.out.println(k);
+            while (file.size() > TamMax) {
+                //System.out.println("Tamanho arquivo = " + arquivo.size());
+                double dist[][] = new double[file.size()][file.size()];
+                normalizeObjectiveFunctionsValues(file);
+                evaluateDistanceBetweenSolutions(file, dist);
+                List<Double> ci = new ArrayList<>();
+                List<Double> linha = new ArrayList<>();
+                for (int i = 0; i < file.size(); i++) {
+                    for (int l = 0; l < file.size(); l++) {
+                        if (dist[i][l] != 0) {
+                            linha.add(dist[i][l]);
+                        }
+                    }
+                    Collections.sort(linha);
+                    //System.out.println(linha);
+                    double soma = 0;
+                    for (int j = 0; j < k; j++) {
+                        soma += linha.get(k);
+                    }
+                    ci.add(soma);
+                }
+                //System.out.println(ci);
+                double max = Collections.max(ci);
+                int pos = 0;
+                for (int i = 0; i < file.size(); i++) {
+                    if (max == ci.get(i)) {
+                        pos = i;
+                    }
+                }
+                file.remove(pos);
+            }
+        }else if(file.size() < TamMax){
+            population.sort(Comparator.comparing(Solution::getFitness));
+            int solutionsNumber = TamMax - file.size();
+            file.addAll(population.subList(0, solutionsNumber));
+        }
+        //fileSorting(file);
     }
 
     public static void fileSorting(List<Solution> arquivo) {
